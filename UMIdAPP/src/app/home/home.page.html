@@ -1,9 +1,11 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
+<ion-header>
+  <app-header-menu
+    [title]=view_name
+    [has_back_button]=has_back_button
+    [username]=first_name
+    (goback)="goBack($event)"
+    >
+    </app-header-menu>
 </ion-header>
 
 <ion-content [fullscreen]="true">

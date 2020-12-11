@@ -1,0 +1,35 @@
+.card {
+    margin-bottom: 15px;
+    margin-top: 20px;
+    font-style: Medium;
+    font-weight: bold;
+    font-size: 24px;
+  }
+  
+  .text_add_button { 
+    font-style: Medium;
+    font-weight: bold;
+    color: white;
+    font-size: 14px;
+  }
+  
+  .add_button {
+    height: 40px;
+    --vertical-align: middle;
+    --padding-start: 10px;
+    --padding-end: 10px;
+  }
+  
+  .type {
+    display: flex;
+    justify-content: center;
+  }
+  
+  ion-select{
+    font-size: 16px;
+    max-width: 100% !important;
+    justify-content: center;
+    color: black;
+  }
+  
+  

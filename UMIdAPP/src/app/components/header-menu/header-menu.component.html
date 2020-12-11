@@ -1,5 +1,5 @@
   <ion-toolbar class="ion-header-toolbar" *ngIf="!has_back_button">
-    <ion-title *ngIf="!has_back_button">Olá {{ username }}</ion-title>
+    <ion-title *ngIf="!has_back_button" style="color: white;">Olá {{ username }}</ion-title>
     <ion-buttons slot="end">
       <ion-button><ion-icon name="menu" style="color: white;"></ion-icon></ion-button>  
     </ion-buttons>
@@ -7,10 +7,10 @@
   
   <ion-toolbar class="ion-header-toolbar" *ngIf="has_back_button">
     <ion-buttons slot="start">
-      <ion-button><ion-icon name="arrow-back-outline"></ion-icon></ion-button>
+      <ion-button><ion-icon name="arrow-back-outline" style="color: white;"></ion-icon></ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
       <ion-button><ion-icon name="menu" style="color: white;"></ion-icon></ion-button>  
     </ion-buttons>
-    <ion-title class="ion-text-center">{{ title }}</ion-title>
+    <ion-title class="ion-text-center" style="color: white;">{{ title }}</ion-title>
   </ion-toolbar>  

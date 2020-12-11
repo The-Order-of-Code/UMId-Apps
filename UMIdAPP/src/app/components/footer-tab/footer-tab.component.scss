@@ -1,3 +1,21 @@
-ion-tab-button {
-    --color-selected: #c93347; 
+ion-segment-button {
+    --color-checked: #c93347;
+}
+
+.text_confirm { 
+    font-style: Medium;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.confirm_button {
+    height: 45px;
+    --vertical-align: middle;
+    --padding-start: 10px;
+    --padding-end: 10px;
+  }
+
+
+.popover-content {
+    --min-width: 100%;
 }

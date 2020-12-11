@@ -1,16 +1,29 @@
-<ion-tabs>
-  <ion-tab-bar slot="bottom">
-    <ion-tab-button>
-      <ion-label><br/></ion-label>
-      <ion-icon name="home"></ion-icon>
-    </ion-tab-button>
-    <ion-tab-button tab="notifications">
-      <ion-label><br/></ion-label>
-      <ion-icon name="notifications"></ion-icon>
-    </ion-tab-button>
-    <ion-tab-button tab="person-circle">
-      <ion-label><br/></ion-label>
-      <ion-icon name="person-circle"></ion-icon>
-    </ion-tab-button>
-  </ion-tab-bar>
-</ion-tabs>
+<ion-footer>
+  <ion-grid *ngIf="show_counter">
+    <ion-row style="align-items: center;">
+      <ion-col class="ion-text-center">
+        <div class="ion-text-center">
+          {{ quantity }} {{ prod_name }} {{ operation_name }}
+        </div>
+      </ion-col>
+      <ion-col>
+        <div class="ion-text-center">
+          <ion-button slot="end" color="primary" class="confirm_button"><ion-text class="text_confirm">Confirmar</ion-text></ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-toolbar>
+    <ion-segment value="paid" mode="md">
+      <ion-segment-button value="paid">
+        <ion-icon name="home"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button value="free">
+        <ion-icon name="notifications"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button value="top">
+        <ion-icon name="person-circle"></ion-icon>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-footer>

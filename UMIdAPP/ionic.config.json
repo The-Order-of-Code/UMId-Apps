@@ -1,5 +1,7 @@
 {
   "name": "UMIdAPP",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

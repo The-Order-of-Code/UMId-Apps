@@ -1,0 +1,52 @@
+<ion-virtual-scroll [items]="items" approxItemHeight="320px">
+  <ion-card *virtualItem="let item; let itemBounds = bounds;">
+    <ion-item *ngIf="card_type === 'senhas'">
+      <ion-grid>
+        <ion-row *ngIf="width < 360">
+            <ion-col size-sm="7" size="7" class="ion-text-wrap">
+              <ion-label class="card ion-text-wrap">{{ item }}</ion-label>
+            </ion-col>
+            <ion-col size-sm="5" size="5" class="ion-text-end" text-center>
+              <ion-row>
+                <ion-button color="dark">
+                  <ion-select interface="popover" placeholder="Tipo">
+                    <ion-select-option value="normal">Normal</ion-select-option>
+                    <ion-select-option value="simples">Simples</ion-select-option>
+                  </ion-select>
+                </ion-button>
+              </ion-row>
+              <ion-row>
+                <ion-button color="success" class="add_button"><ion-text class="text_add_button">Adicionar</ion-text></ion-button>
+              </ion-row>
+            </ion-col>
+        </ion-row>
+        <ion-row *ngIf="width >= 360">
+          <ion-col size-sm="8" size="8" class="ion-text-wrap">
+            <ion-label class="card ion-text-wrap">{{ item }}</ion-label>
+          </ion-col>
+          <ion-col size-sm="4" size="4" class="ion-text-end" text-center>
+            <ion-row *ngIf="card_type === 'senhas'">
+              <ion-button color="dark">
+                <ion-select interface="popover" placeholder="Tipo">
+                  <ion-select-option value="nes">Normal</ion-select-option>
+                  <ion-select-option value="nes">Simples</ion-select-option>
+                </ion-select>
+              </ion-button>
+            </ion-row>
+            <ion-row>
+              <ion-button color="success" class="add_button"><ion-text class="text_add_button">Adicionar</ion-text></ion-button>
+            </ion-row>
+          </ion-col>
+      </ion-row>
+    </ion-grid>
+    </ion-item>
+
+    <ion-item *ngIf="card_type === 'slots'">
+      <ion-label class="card ion-text-wrap">{{ item }}</ion-label>
+      <ion-button color="success" class="add_button" slot="end"><ion-text class="text_add_button">Adicionar</ion-text></ion-button>
+    </ion-item>
+
+    
+
+</ion-card>
+</ion-virtual-scroll>

@@ -28,8 +28,8 @@
             <ion-row *ngIf="card_type === 'senhas'">
               <ion-button color="dark">
                 <ion-select interface="popover" placeholder="Tipo">
-                  <ion-select-option value="nes">Normal</ion-select-option>
-                  <ion-select-option value="nes">Simples</ion-select-option>
+                  <ion-select-option value="normal">Normal</ion-select-option>
+                  <ion-select-option value="simples">Simples</ion-select-option>
                 </ion-select>
               </ion-button>
             </ion-row>
@@ -46,7 +46,14 @@
       <ion-button color="success" class="add_button" slot="end"><ion-text class="text_add_button">Adicionar</ion-text></ion-button>
     </ion-item>
 
+    <ion-item *ngIf="item === 'comprar senhas' || item === 'senha'">
+      <ion-label class="main_menu ion-text-wrap">{{ item }} </ion-label>
+      <app-icons [icon_name]=item (output)="childMsg($event)" slot="end" class=""></app-icons>
+    </ion-item>
+
     
+
+
 
 </ion-card>
 </ion-virtual-scroll>

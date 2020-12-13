@@ -1,4 +1,5 @@
-import { Component, OnInit, Input , Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input , Output, EventEmitter, ViewChild } from '@angular/core';
+import { IconsComponent } from '../icons/icons.component';
 
 @Component({
   selector: 'app-cards',
@@ -10,11 +11,15 @@ export class CardsComponent implements OnInit {
   @Input() items: any;
   @Output() eventEmitter = new EventEmitter();
   width: number;
+  icons: string;
+
   constructor() { 
+    this.icons="verificar senha";
     this.width = window.innerWidth;
   }
 
   ngOnInit() {}
+
 
   goBack(){
     this.eventEmitter.emit('back');

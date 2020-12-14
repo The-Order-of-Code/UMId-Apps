@@ -4,7 +4,7 @@
       <ion-grid>
         <ion-row *ngIf="width < 360">
             <ion-col size-sm="7" size="7" class="ion-text-wrap">
-              <ion-label class="card ion-text-wrap">{{ item }}</ion-label>
+              <ion-label class="card ion-text-wrap" color="medium">{{ item }}</ion-label>
             </ion-col>
             <ion-col size-sm="5" size="5" class="ion-text-end" text-center>
               <ion-row>
@@ -22,7 +22,7 @@
         </ion-row>
         <ion-row *ngIf="width >= 360">
           <ion-col size-sm="8" size="8" class="ion-text-wrap">
-            <ion-label class="card ion-text-wrap">{{ item }}</ion-label>
+            <ion-label class="card ion-text-wrap" color="medium" >{{ item }}</ion-label>
           </ion-col>
           <ion-col size-sm="4" size="4" class="ion-text-end" text-center>
             <ion-row *ngIf="card_type === 'senhas'">
@@ -41,15 +41,23 @@
     </ion-grid>
     </ion-item>
 
-    <ion-item *ngIf="card_type === 'slots'">
-      <ion-label class="card ion-text-wrap">{{ item }}</ion-label>
+    <ion-item *ngIf="card_type === 'slots_reservas'">
+      <ion-label class="card ion-text-wrap" color="medium">{{ item }}</ion-label>
       <ion-button color="success" class="add_button" slot="end"><ion-text class="text_add_button">Adicionar</ion-text></ion-button>
     </ion-item>
 
-    <ion-item *ngIf="item === 'comprar senhas' || item === 'senha'">
-      <ion-label class="main_menu ion-text-wrap">{{ item }} </ion-label>
-      <app-icons [icon_name]=item (output)="childMsg($event)" slot="end" class=""></app-icons>
+    <ion-item *ngIf="card_type == 'main menu'">
+      <ion-label class="main_menu ion-text-wrap" color="medium">{{ item.name }} </ion-label>
+      <app-icons [icon_name]=item.icon_name (output)="childMsg($event)" slot="end" class=""></app-icons>
     </ion-item>
+
+
+    <ion-item *ngIf="card_type == 'reservations'">
+      <ion-label class="main_menu ion-text-wrap" color="medium" >{{ item.name }} </ion-label>
+      <app-icons [icon_name]=item.icon_name (output)="childMsg($event)" slot="end" class=""></app-icons>
+    </ion-item>
+
+
 
     
 

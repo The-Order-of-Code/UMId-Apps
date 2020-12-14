@@ -1,0 +1,36 @@
+
+ 
+  <ion-header>
+    <ion-toolbar>
+      <div class="information-pay">
+
+
+        <ion-grid>
+          <ion-row style="align-items: center;" id='line'>
+            <ion-col class="ion-text-right" id="header">{{ text_pay }}</ion-col>
+            <ion-col class="ion-text-left" id="header">{{ total_value }}</ion-col>
+          </ion-row>
+          <ion-row style="align-items: center;" id='line'>
+            <ion-col class="description" id="header" class="ion-text-center">{{ title_description }}</ion-col>
+            <ion-col class="count_item" id="header" class="ion-text-center">{{ title_count }}</ion-col>
+            <ion-col class="value" id="header" class="ion-text-center">{{ title_value }}</ion-col>
+          </ion-row>
+        </ion-grid>
+
+      </div>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-virtual-scroll [items]="items" approxItemHeight="320px">
+      <ion-grid>
+        <ion-row>
+          <ion-col class="element">{{ item }}</ion-col>
+          <ion-col class="element">{{ item }}</ion-col>
+          <ion-col class="element">{{ item }}</ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-virtual-scroll>
+  
+  </ion-content>
+
+

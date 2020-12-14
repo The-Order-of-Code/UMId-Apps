@@ -13,6 +13,17 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+
+  <ion-grid *ngIf="show_pay" >
+    <ion-row id='line'>
+      <ion-col class="text_select">{{ text_select }}</ion-col>
+    </ion-row>
+    <ion-row >
+       <ion-col class="option"><img src="../../../assets/icon/mbway.svg"  ng-click="nextpage()" class="image">
+       <img src="../../../assets/icon/paypal.svg"  ng-click="nextpage()" class="image"></ion-col>
+    </ion-row>
+  </ion-grid>
+
   <ion-toolbar>
     <ion-segment value="paid" mode="md">
       <ion-segment-button value="paid">

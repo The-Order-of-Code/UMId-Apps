@@ -4,7 +4,7 @@ ion-segment-button {
 
 .text_confirm { 
     font-style: Medium;
-    font-weight: bold;
+    font-weight: bold; 
     font-size: 16px;
 }
 
@@ -18,4 +18,31 @@ ion-segment-button {
 
 .popover-content {
     --min-width: 100%;
+}
+
+.text_select{
+    font-size: 18px;
+    color:#989AA2 ;
+    text-align: center;
+    margin-left: 30px;
+    font-family: Roboto-Regular!important;
+    
+}
+.image{
+    width:135px ;
+    margin-left: 33px;
+    margin-bottom: 24px ;
+    height: 100%;
+
+}
+
+.option{
+    display: flex; /* coloca as imagens uma ao lado da outra */
+    
+    justify-content: center; /* alinha as imagens no centro da tela */
+
+    
+}
+.menu{
+    background-color:#4A4949 ;
 }

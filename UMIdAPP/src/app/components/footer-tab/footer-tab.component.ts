@@ -6,7 +6,9 @@ import { Component, OnInit, Input , Output, EventEmitter } from '@angular/core';
   styleUrls: ['./footer-tab.component.scss'],
 })
 export class FooterTabComponent implements OnInit {
-  @Input() show_counter: any;
+  @Input() show_counter: any; 
+  @Input() show_pay: any; 
+  @Input() text_select:any;
   @Input() quantity: any;
   @Input() prod_name: any;
   @Input() operation_name: any;
@@ -21,6 +23,9 @@ export class FooterTabComponent implements OnInit {
 
   goBack(){
     this.eventEmitter.emit('back');
+  }
+  nextpage(){
+    console.log('teste')
   }
 
 }

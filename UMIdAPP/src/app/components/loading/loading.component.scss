@@ -1,0 +1,81 @@
+.bottom {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0;
+  
+    text-align: center;
+    color: var(--ion-color-dark);
+  
+    font-family: 'Apercu Regular';
+    font-style: normal;
+    font-size: 12px;
+  
+    padding-bottom: 21px;
+  
+    z-index: 1;
+    position: fixed;
+  }
+  
+  .logo {
+    width: 25%;
+    margin: 15px 5px;
+  }
+  
+  .info {
+    font-style: Regular;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 20px;
+    text-align: center;
+  
+    margin: 20px auto;
+    width: 60%;
+  
+    color: var(ion-color-dark);
+  }
+  
+  .container {
+    width: 100px;
+    margin: 37% 57%;
+    position: relative;
+  }
+  
+  .spinner-wraper {
+    transform: translate(-50%, -50%);
+  }
+  
+  .spinner {
+    @media (min-width: 361px) {
+      transform: scale(5);
+    }
+  
+    @media (max-width: 360px) {
+      transform: scale(4);
+    }
+    color: #2292a4;
+  }
+  
+  path {
+    stroke: currentColor;
+    stroke-width: 1px;
+  }
+  
+  .icon-wraper {
+    position: absolute;
+    right: 117%;
+    top: -20%;
+  }
+  
+  .icon {
+    @media (min-width: 361px) {
+      transform: scale(4);
+    }
+  
+    @media (max-width: 360px) {
+      transform: scale(3);
+    }
+  }
+  

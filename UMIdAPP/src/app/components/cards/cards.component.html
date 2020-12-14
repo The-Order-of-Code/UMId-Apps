@@ -1,5 +1,5 @@
 <ion-virtual-scroll [items]="items" approxItemHeight="320px">
-  <ion-card *virtualItem="let item; let itemBounds = bounds;">
+  <ion-card *virtualItem="let item; let itemBounds = bounds;" color="light">
     <ion-item *ngIf="card_type === 'senhas'">
       <ion-grid>
         <ion-row *ngIf="width < 360">
@@ -51,15 +51,135 @@
       <app-icons [icon_name]=item.icon_name (output)="childMsg($event)" slot="end" class=""></app-icons>
     </ion-item>
 
+    <div *ngIf="card_type == 'salas_disponiveis'">
+      <ion-item lines="none" color="light">
+        <ion-icon name="calendar-outline" size="large" class="reservation_card" color="medium"></ion-icon>
+          <ion-label style="margin-bottom: 0px;">
+            <ion-card-header style="margin-bottom: 10px;">
+              <ion-card-subtitle mode="md">{{ item.room_name }} </ion-card-subtitle>
+              <ion-text class="card_schedule ion-text-wrap" color="medium"> {{ updateDate(item.date) }} </ion-text>
+            </ion-card-header>
+          </ion-label>
+      </ion-item>
+      <ion-card-content>
+          <ion-button color="primary" slot="start" style="height: 45px; width: 100%;"><ion-text>Reservar</ion-text></ion-button>
+      </ion-card-content>
+    </div>
 
-    <ion-item *ngIf="card_type == 'reservations'">
-      <ion-label class="main_menu ion-text-wrap" color="medium" >{{ item.name }} </ion-label>
-      <app-icons [icon_name]=item.icon_name (output)="childMsg($event)" slot="end" class=""></app-icons>
-    </ion-item>
+    <div *ngIf="card_type == 'proximas_reservas'">
+      <ion-item lines="none" color="light">
+        <ion-icon name="calendar-outline" size="large" class="reservation_card" color="medium"></ion-icon>
+          <ion-label style="margin-bottom: 0px;">
+            <ion-card-header style="margin-bottom: 10px;">
+              <ion-card-subtitle mode="md">{{ item.room_name }} </ion-card-subtitle>
+              <ion-text class="card_schedule ion-text-wrap" color="medium"> {{ nextReservations(item.begin_date, item.end_date) }} </ion-text>
+            </ion-card-header>
+          </ion-label>
+      </ion-item>
+      <ion-card-content *ngIf="nextReservations(item.begin_date, item.end_date) == 'A decorrer'">
+        <div *ngIf="item.check_in">
+          <ion-button color="primary" slot="start" style="height: 45px; width: 100%;"><ion-text>Check-out</ion-text></ion-button>
+        </div> 
+        <div *ngIf="!item.check_in">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-button color="danger" expand="full"><ion-text>Cancelar</ion-text></ion-button>
+              </ion-col>
+              <ion-col>
+                <ion-button color="success" expand="full"><ion-text color="dark" >Check-in</ion-text></ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>  
+      </ion-card-content>
+      <ion-card-content *ngIf="nextReservations(item.begin_date, item.end_date) != 'A decorrer'">
+        <div *ngIf="!isNearReservation(item.begin_date)">
+          <ion-button color="danger" slot="start" style="height: 45px; width: 100%;"><ion-text>Cancelar</ion-text></ion-button>
+        </div>
+        <div *ngIf="isNearReservation(item.begin_date)">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-button color="danger" expand="full"><ion-text>Cancelar</ion-text></ion-button>
+              </ion-col>
+              <ion-col>
+                <ion-button color="success" expand="full"><ion-text color="dark" >Check-in</ion-text></ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-card-content>
+    </div>
 
+    <div *ngIf="card_type == 'check_in'">
+      <ion-item lines="none" color="light">
+        <ion-icon name="calendar-outline" size="large" class="reservation_card" color="medium"></ion-icon>
+          <ion-label style="margin-bottom: 0px;">
+            <ion-card-header style="margin-bottom: 10px;">
+              <ion-card-subtitle mode="md">{{ item.room_name }} </ion-card-subtitle>
+              <ion-text class="card_schedule ion-text-wrap" color="medium"> {{ nextReservations(item.begin_date, item.end_date) }} </ion-text>
+            </ion-card-header>
+          </ion-label>
+      </ion-item>
+      <ion-card-content *ngIf="nextReservations(item.begin_date, item.end_date) == 'A decorrer'">
+        <div *ngIf="!item.check_in">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-button color="danger" expand="full"><ion-text>Cancelar</ion-text></ion-button>
+              </ion-col>
+              <ion-col>
+                <ion-button color="success" expand="full"><ion-text color="dark" >Check-in</ion-text></ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>  
+      </ion-card-content>
+      <ion-card-content *ngIf="nextReservations(item.begin_date, item.end_date) != 'A decorrer'">
+        <div *ngIf="isNearReservation(item.begin_date)">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-button color="danger" expand="full"><ion-text>Cancelar</ion-text></ion-button>
+              </ion-col>
+              <ion-col>
+                <ion-button color="success" expand="full"><ion-text color="dark" >Check-in</ion-text></ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-card-content>
+    </div>
 
+    <div *ngIf="card_type == 'check_out'">
+      <ion-item lines="none" color="light">
+        <ion-icon name="calendar-outline" size="large" class="reservation_card" color="medium"></ion-icon>
+          <ion-label style="margin-bottom: 0px;">
+            <ion-card-header style="margin-bottom: 10px;">
+              <ion-card-subtitle mode="md">{{ item.room_name }} </ion-card-subtitle>
+              <ion-text class="card_schedule ion-text-wrap" color="medium"> {{ nextReservations(item.begin_date, item.end_date) }} </ion-text>
+            </ion-card-header>
+          </ion-label>
+      </ion-item>
+      <ion-card-content *ngIf="nextReservations(item.begin_date, item.end_date) == 'A decorrer'">
+        <div *ngIf="item.check_in">
+          <ion-button color="primary" slot="start" style="height: 45px; width: 100%;"><ion-text>Check-out</ion-text></ion-button>
+        </div>
+      </ion-card-content>
+    </div>
 
-    
+    <div *ngIf="card_type == 'room_reservation'">
+      <ion-item lines="none" color="light">
+        <ion-icon name="calendar-outline" size="large" class="reservation_card" color="medium"></ion-icon>
+          <ion-label style="margin-bottom: 0px;">
+            <ion-card-header style="margin-bottom: 10px;">
+              <ion-card-subtitle mode="md">{{ item.room_name }} </ion-card-subtitle>
+              <ion-text class="card_schedule ion-text-wrap" color="medium"> {{ updateDate(item.date) }} </ion-text>
+            </ion-card-header>
+          </ion-label>
+      </ion-item>
+    </div>
 
 
 

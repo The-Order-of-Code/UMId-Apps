@@ -1,0 +1,21 @@
+<div class="circle"></div>
+
+<div class="icon-wraper">
+  <ion-icon name="{{ icon_name }}" class="icon"></ion-icon>
+</div>
+
+<div class="info">
+  <span class="quote">
+    {{ failure_quote }}
+  </span>
+  <div *ngIf="failure_code">
+    <a (click)="failure_code_show = !failure_code_show">Mais informações</a>
+    <p *ngIf="failure_code_show">{{ failure_code }}</p>
+  </div>
+</div>
+
+<div class="bottom">
+  <ion-button color="white"  (click)="goBack()">
+    Voltar
+  </ion-button>
+</div>

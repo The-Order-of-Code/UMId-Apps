@@ -24,9 +24,9 @@
     <ion-virtual-scroll [items]="items" approxItemHeight="320px">
       <ion-grid>
         <ion-row>
-          <ion-col class="element">{{ item }}</ion-col>
-          <ion-col class="element">{{ item }}</ion-col>
-          <ion-col class="element">{{ item }}</ion-col>
+          <ion-col class="element">{{ item.description }}</ion-col>
+          <ion-col class="element">{{ item.count }}</ion-col>
+          <ion-col class="element">{{ item.value }}</ion-col>
         </ion-row>
       </ion-grid>
     </ion-virtual-scroll>

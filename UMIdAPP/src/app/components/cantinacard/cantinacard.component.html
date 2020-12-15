@@ -1,0 +1,10 @@
+<ion-virtual-scroll [items]="items" approxItemHeight="320px">
+  <ion-card *virtualItem="let item; let itemBounds = bounds;" color="light">
+    <ion-item *ngIf="card_type == 'cantina menu'">
+      <ion-label class="main_menu ion-text-wrap" color="medium">{{ item.name }} </ion-label>
+      <ion-icon name="{{item.icon_name}}" size="large" color="medium" class="icon_min"></ion-icon>
+      <!--app-icons [icon_name]=item.icon_name (output)="childMsg($event)" slot="end" class=""></app-icons-->
+    </ion-item>
+
+  </ion-card>
+</ion-virtual-scroll>

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-qrcode',
+  selector: 'app-qrcode', 
   templateUrl: './qrcode.component.html',
   styleUrls: ['./qrcode.component.scss'],
 })

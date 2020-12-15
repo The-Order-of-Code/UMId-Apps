@@ -1,6 +1,7 @@
   <ion-virtual-scroll [items]="items">
 
     <ion-card *virtualItem="let item" color="light">
+      
       <div *ngIf="(card_type === 'payments' || card_type === 'paid')">
         <ion-item lines="none" color="light">
         <ion-grid>
@@ -33,23 +34,23 @@
                     </ion-row>
                   </ion-grid>
                  
-                  <ion-card-subtitle mode="md" class="card_schedule ion-text-wrap" color="medium" class="text_subtitle"> {{ item.n_propinas }}
+                  <ion-card-subtitle mode="md" class="text_subtitle ion-text-wrap" color="medium" > {{ item.n_propinas }}
                   </ion-card-subtitle>
-                  <ion-card-subtitle mode="md" class="card_schedule ion-text-wrap" color="medium" class="text_subtitle"> {{ item.ano }}
+                  <ion-card-subtitle mode="md" class="text_subtitle ion-text-wrap" color="medium" > {{ item.ano }}
                   </ion-card-subtitle>
-                  <ion-card-subtitle mode="md" class="card_schedule ion-text-wrap" color="medium" >
+                  <ion-card-subtitle mode="md" class="text_subtitle ion-text-wrap" color="medium" >
 
                     <ion-col>
                       <ion-icon name="calendar-outline" size="large" color="medium" class="icon_min"></ion-icon>
+                      <ion-col class="text_valid" class="text_subtitle">{{ item.valid }} </ion-col>
                     </ion-col>
-                    <ion-col class="text_valid" class="text_subtitle">{{ item.valid }} </ion-col>
                   </ion-card-subtitle>
                   </ion-card-header>
               </ion-row>
             </ion-grid>
           </ion-row>
           <ion-row align-items-center>
-            <ion-button  color= "danger" class="bottom" (click)="goPay()" *ngIf="card_type === 'payments' ">
+            <ion-button style="--background:#D1281B"  class="bottom" (click)="goPay()" *ngIf="card_type === 'payments' ">
               Pagar
             </ion-button>
           </ion-row>

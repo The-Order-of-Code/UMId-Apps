@@ -9,13 +9,25 @@
 
 <ion-content>
 
-  <app-cards
+  <!--app-cards
   [card_type]=card_type
   [items]=items
   (eventEmitter)="goBack($event)"
   >
-  </app-cards>
+  </app-cards-->
+
+  <app-searchticks
+  [card_type]=card_type
+  [items]=items
+  ></app-searchticks>
+
+  <!--app-cantinacard
+  [card_type]=card_type
+  [items]=items
+  ></app-cantinacard-->
+
   
+    
 </ion-content>
       
 <app-footer-tab 

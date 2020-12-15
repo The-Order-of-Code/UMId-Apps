@@ -38,8 +38,7 @@ ion-card-content {
     margin-left: 10%;
     align-content: center;
     border-radius: 4px;
-   
-    background: #D1281B;
+    --background:##D1281B;
     
     
   }
@@ -56,6 +55,13 @@ ion-card-content {
       font-weight: normal;
   }
 
+
+  .text_alert{
+    font-size: 14px;
+    font-style: "Regular";
+    font-weight: bold;
+    color: #D1281B;
+}
 
   .icon_min{
       width: 15px;

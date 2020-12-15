@@ -1,0 +1,69 @@
+<ion-header>
+    <app-header-menu
+      [title]=view_name
+      [has_back_button]=has_back_button
+      [username]=first_name
+      (goback)="goBack($event)">
+      </app-header-menu>
+  </ion-header>
+
+
+  <!--div class="bar-header">
+    <ion-toolbar color="white">
+      <ion-buttons class="menu" (click)="openMenu()">
+        <ion-icon name="menu-sharp" color="primary"></ion-icon>
+      </ion-buttons>
+    </ion-toolbar> 
+  </div-->
+
+  <ion-content>
+   
+
+<!--app-payments 
+  [text_pay]=text_pay
+  [total_value]=total_value
+  [title_description]=title_description
+  [title_count]=title_count
+  [title_value]=title_value
+  [items] = items
+
+  (eventEmitter)="goBack($event)"
+></app-payments--> 
+
+
+<!--app-cards
+[card_type]=card_type
+[items]=items 
+(eventEmitter)="goBack($event)"
+>
+</app-cards-->
+
+<!--app-qrcode
+  [createdCode] = createdCode
+  [title] = title
+></app-qrcode-->
+
+  <!--app-success
+  [icon_name]=icon_name
+  [success_quote]=success_quote
+  >
+</app-success-->
+  <!--app-loading
+  [icon_name]=icon_name
+  [message]=message
+  ></app-loading-->
+
+  <app-failure
+  [icon_name]=icon_name
+  [failure_quote]=failure_quote
+  ></app-failure>
+
+</ion-content>
+<app-footer-tab 
+  [show_pay]=show_pay
+  [text_select]=text_select
+  [quantity]=quantity
+  [prod_name]=prod_name
+  [operation_name]=operation_name
+  (eventEmitter)="goBack($event)"
+></app-footer-tab>

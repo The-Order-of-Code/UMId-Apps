@@ -1,0 +1,181 @@
+ion-card {
+    box-shadow: 0 !important;
+    border-top: 30px solid  #88181c;
+    border-bottom: 30px solid #88181c;
+    border-left: 7px solid  #88181c;
+    border-right: 7px solid  #88181c; 
+    padding:15px;
+}
+
+.pad_left {
+    padding-left: 7px;
+}
+.school_ios_name_small { 
+    margin-top: 14px;
+    font-size: 14px;
+    font-weight: bold;
+    font-style: Medium;
+}
+
+.school_android_name_small { 
+    margin-top: 14px;
+    font-size: 18px;
+    font-weight: bold;
+    font-style: Medium;
+}
+
+
+.school_android_name_huge { 
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    font-style: Medium;
+}
+
+.school_android_name_super_huge { 
+    margin-top: 25px;
+    font-size: 22px;
+    font-weight: bold;
+    font-style: Medium;
+}
+
+.school_ios_name_huge { 
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    font-style: Medium;
+}
+
+.school_ios_name_super_huge { 
+    margin-top: 25px;
+    font-size: 20px;
+    font-weight: bold;
+    font-style: Medium;
+}
+
+.photo_ios_small {  
+    height: 120px;
+    width: 100px;
+    display: block;
+}
+
+.photo_ios_huge {  
+    height: 140px;
+    width: 120px;
+    display: block;
+}
+
+.photo_ios_super_huge {  
+    height: 160px;
+    width: 140px;
+    display: block;
+}
+
+.photo_android_small {  
+    height: 140px;
+    width: 120px;
+    display: block;
+}
+
+.photo_android_huge {
+    height: 160px;
+    width: 140px;
+    display: block; 
+}
+
+.photo_android_super_huge {
+    height: 180px;
+    width: 160px;
+    display: block; 
+}
+
+.align_photo{
+    display: flex;
+    justify-content: center;
+}
+
+.attribute_ios_name_small {
+    color: var(--ion-color-custom);
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.attribute_ios_value_small {
+    font-size: 16px;
+    font-weight: normal;
+}
+
+.attribute_ios_name_huge {
+    color: var(--ion-color-custom);
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.attribute_ios_value_small {
+    font-size: 18px;
+    font-weight: normal;
+}
+
+.attribute_ios_name_super_huge {
+    color: var(--ion-color-custom);
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.attribute_ios_value_super_huge {
+    font-size: 20px;
+    font-weight: normal;
+}
+
+.attribute_android_name_small {
+    color: var(--ion-color-custom);
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.attribute_android_value_small {
+    font-size: 18px;
+    font-weight: normal;
+}
+
+.attribute_android_name_huge {
+    color: var(--ion-color-custom);
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.attribute_android_value_huge {
+    font-size: 20px;
+    font-weight: normal;
+}
+
+.attribute_android_name_super_huge {
+    color: var(--ion-color-custom);
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.attribute_android_value_super_huge {
+    font-size: 22px;
+    font-weight: normal;
+}
+
+.ion-color-custom {
+    --ion-color-custom: #78797c;
+    --ion-color-custom-rgb: 152,154,162;
+    --ion-color-custom-contrast: #3C3B3B;
+    --ion-color-custom-contrast-rgb: 0,0,0;
+    --ion-color-custom-shade: #86888f;
+    --ion-color-custom-tint: #dadada;
+}
+
+@media (prefers-color-scheme: dark) {
+    .ion-color-custom {  
+        --ion-color-custom: #e7e7e7;
+        --ion-color-custom-rgb: 152,154,162;
+        --ion-color-custom-contrast: #3C3B3B;
+        --ion-color-custom-contrast-rgb: 0,0,0;
+        --ion-color-custom-shade: #86888f;
+        --ion-color-medium_custom-tint: #dadada;
+    }
+}

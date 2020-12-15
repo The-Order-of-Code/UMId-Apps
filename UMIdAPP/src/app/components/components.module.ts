@@ -4,6 +4,7 @@ import { HeaderMenuComponent } from './header-menu/header-menu.component';
 import { FooterTabComponent } from './footer-tab/footer-tab.component';
 import { CardsComponent } from './cards/cards.component';
 import { IconsComponent } from './icons/icons.component';
+import { IdCardComponent } from './id-card/id-card.component';
 import { IonicModule } from '@ionic/angular';
 
 @NgModule({
@@ -13,12 +14,14 @@ import { IonicModule } from '@ionic/angular';
         HeaderMenuComponent,
         CardsComponent,
         IconsComponent,
+        IdCardComponent,
     ],
     exports: [
         FooterTabComponent,
         HeaderMenuComponent,
         CardsComponent,
         IconsComponent,
+        IdCardComponent,
     ],
   })
   export class ComponentsModule {}

@@ -9,28 +9,57 @@
 
 <ion-content>
 
-  <!--app-cards
+<!-- <app-cards
   [card_type]=card_type
   [items]=items
   (eventEmitter)="goBack($event)"
   >
-  </app-cards-->
+  </app-cards> -->
 
-  <app-searchticks
-  [card_type]=card_type
+
+  <!--app-id-card></app-id-card-->
+
+  <!--app-loading
+    [icon_name]= icon_name
+    [message] = message
+  ></app-loading-->
+
+  <!--app-payments
+    [text_pay]= text_pay
+    [total_value]= total_value
+    [title_description]= title_description
+    [title_count]=title_count
+    [title_value]= title_value
+    [items]=items
+  ></app-payments-->
+
+  <!--app-qrcode
+   [title]= title
+   [createdCode]=createdCode
+  ></app-qrcode-->
+
+  <!--app-failure
+   [icon_name]=icon_name
+   [failure_quote]=failure_quote
+  ></app-failure-->
+
+  <!--app-permit
+    [info]= info
+    [icon_name]= icon_name
+    [sub_info]= sub_info 
+  ></app-permit-->
+
+  <app-cantinacard
   [items]=items
-  ></app-searchticks>
-
-  <!--app-cantinacard
   [card_type]=card_type
-  [items]=items
-  ></app-cantinacard-->
-
+  ></app-cantinacard>
   
     
 </ion-content>
       
 <app-footer-tab 
+   [show_pay]= show_pay
+   [text_select]=text_select
   [show_counter]=show_counter
   [quantity]=quantity
   [prod_name]=prod_name

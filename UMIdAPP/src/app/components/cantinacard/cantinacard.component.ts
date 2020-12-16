@@ -8,6 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class CantinacardComponent implements OnInit {
   @Input() items:any; 
   @Input() card_type:any;
+ 
 
   constructor() { }
 

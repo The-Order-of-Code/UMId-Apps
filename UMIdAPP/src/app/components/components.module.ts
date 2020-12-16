@@ -12,7 +12,10 @@ import {LoadingComponent} from './loading/loading.component';
 import {SearchticksComponent} from './searchticks/searchticks.component';
 import {CantinacardComponent} from './cantinacard/cantinacard.component';
 import {SenhasComponent} from './senhas/senhas.component';
+import {PermitComponent} from './permit/permit.component';
 
+import { IconsComponent } from './icons/icons.component';
+import { IdCardComponent } from './id-card/id-card.component';
 import { IonicModule } from '@ionic/angular';
 
 
@@ -20,6 +23,7 @@ import { IonicModule } from '@ionic/angular';
     imports: [CommonModule, IonicModule,NgxQRCodeModule],
     declarations: [
         FooterTabComponent,
+        PermitComponent,
         HeaderMenuComponent,
         CardsComponent,
         SenhasComponent,
@@ -30,10 +34,13 @@ import { IonicModule } from '@ionic/angular';
         QrcodeComponent,
         SuccessComponent,
         FailureComponent,
+        IconsComponent,
+        IdCardComponent,
     ],
     exports: [
         FooterTabComponent,
         HeaderMenuComponent,
+        PermitComponent,
         SenhasComponent,
         SearchticksComponent,
         CardsComponent,
@@ -43,6 +50,8 @@ import { IonicModule } from '@ionic/angular';
         QrcodeComponent,
         SuccessComponent,
         FailureComponent,
+        IconsComponent,
+        IdCardComponent,
     ],
   })
   export class ComponentsModule {}

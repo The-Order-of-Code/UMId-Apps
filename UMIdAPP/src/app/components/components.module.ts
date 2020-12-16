@@ -13,7 +13,9 @@ import {SearchticksComponent} from './searchticks/searchticks.component';
 import {CantinacardComponent} from './cantinacard/cantinacard.component';
 import {SenhasComponent} from './senhas/senhas.component';
 import {PermitComponent} from './permit/permit.component';
-import {NotifyComponent} from './notify/notify.component'
+import {NotifyComponent} from './notify/notify.component';
+import {InformationComponent} from './information/information.component'
+
 
 import { IconsComponent } from './icons/icons.component';
 import { IdCardComponent } from './id-card/id-card.component';
@@ -24,6 +26,7 @@ import { IonicModule } from '@ionic/angular';
     imports: [CommonModule, IonicModule,NgxQRCodeModule],
     declarations: [
         FooterTabComponent,
+        InformationComponent,
         PermitComponent,
         NotifyComponent,
         HeaderMenuComponent,
@@ -42,6 +45,7 @@ import { IonicModule } from '@ionic/angular';
     exports: [
         FooterTabComponent,
         HeaderMenuComponent,
+        InformationComponent,
         PermitComponent,
         NotifyComponent,
         SenhasComponent,

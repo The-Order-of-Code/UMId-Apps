@@ -13,6 +13,7 @@ import {SearchticksComponent} from './searchticks/searchticks.component';
 import {CantinacardComponent} from './cantinacard/cantinacard.component';
 import {SenhasComponent} from './senhas/senhas.component';
 import {PermitComponent} from './permit/permit.component';
+import {NotifyComponent} from './notify/notify.component'
 
 import { IconsComponent } from './icons/icons.component';
 import { IdCardComponent } from './id-card/id-card.component';
@@ -24,6 +25,7 @@ import { IonicModule } from '@ionic/angular';
     declarations: [
         FooterTabComponent,
         PermitComponent,
+        NotifyComponent,
         HeaderMenuComponent,
         CardsComponent,
         SenhasComponent,
@@ -41,6 +43,7 @@ import { IonicModule } from '@ionic/angular';
         FooterTabComponent,
         HeaderMenuComponent,
         PermitComponent,
+        NotifyComponent,
         SenhasComponent,
         SearchticksComponent,
         CardsComponent,

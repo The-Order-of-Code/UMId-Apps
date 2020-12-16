@@ -261,6 +261,13 @@ export class HomePage {
     // this.items.push({title:"Consultar senha",icon_name:"ticket",sub_icon_name:"search"})
     // this.items.push({title:"Comprar senha",icon_name:"ticket",sub_icon_name:"wallet"})
 
+    // A view da notificação
+    this.items.push({icon_name:"restaurant",descripton:"Amanhã deve-se utilizar sua senha do dia, para não perdê-la.", type:"Urgente"})
+    this.items.push({icon_name:"wallet",descripton:"Pagamento da sua propina referente ao mês de janeiro vence daqui a 10 dias.", type:"Atenção"})
+    this.items.push({icon_name:"library",descripton:"Sua reserva da sala 2 campus Gualtar as 14 horas iniciará dentre 10 mins.", type:"Urgente"})
+    this.items.push({icon_name:"restaurant",descripton:"Foi atualizado seu número de senhas da cantina.", type:"Informativo"})
+    
+    this.card_type='notify'
 
 
     

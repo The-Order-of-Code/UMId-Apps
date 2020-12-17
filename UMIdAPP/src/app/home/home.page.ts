@@ -240,8 +240,8 @@ export class HomePage {
     // this.text_select = "Selecione o meio de pagamento:"
 
     // A view do qrcode
-    // this.title = "Utilize o código QR Code para  utilizar a sua senha."
-    // this.createdCode = "Filipa é a melhor programadora"
+    // this.title = "Utilize o código QR Code para  debitar uma senha para sua refeição."
+    // this.createdCode = "Equipa The order of code."
     
     // A view de sucesso
     // this.icon_name = "ticket"
@@ -263,15 +263,16 @@ export class HomePage {
     // this.items.push({title:"Comprar senha",icon_name:"ticket",sub_icon_name:"wallet"})
 
     // A view da notificação
-    // this.items.push({icon_name:"restaurant",descripton:"Amanhã deve-se utilizar sua senha do dia, para não perdê-la.", type:"Urgente"})
-    // this.items.push({icon_name:"wallet",descripton:"Pagamento da sua propina referente ao mês de janeiro vence daqui a 10 dias.", type:"Atenção"})
-    // this.items.push({icon_name:"library",descripton:"Sua reserva da sala 2 campus Gualtar as 14 horas iniciará dentre 10 mins.", type:"Urgente"})
-    // this.items.push({icon_name:"restaurant",descripton:"Foi atualizado seu número de senhas da cantina.", type:"Informativo"})
-    // this.card_type='notify'
+    this.view_name = "Notificações";
+    this.items.push({icon_name:"restaurant",descripton:"Amanhã deve-se utilizar sua senha do dia, para não perdê-la.", type:"Urgente"})
+    this.items.push({icon_name:"wallet",descripton:"Pagamento da sua propina referente ao mês de janeiro vence daqui a 10 dias.", type:"Atenção"})
+    this.items.push({icon_name:"library",descripton:"Sua reserva da sala 2 campus Gualtar as 14 horas iniciará dentre 10 mins.", type:"Urgente"})
+    this.items.push({icon_name:"restaurant",descripton:"Foi atualizado seu número de senhas da cantina.", type:"Informativo"})
+    this.card_type='notify'
 
 
     // A view para informações
-    this.text = "Para reduzir o desperdício alimentar, a Universidade do Minho oferece um novo tipo de senhas, as senhas do dia.\n As senhas do dia podem ser senhas simples ou completas. Fica à tua escolha.  Nota que tens de consumir a senha no dia que escolheste para a refeição. Caso não tenhas consumido no dia, a senha deixa de estar disponível para ser consumida.  "
+    //this.text = "Para reduzir o desperdício alimentar, a Universidade do Minho oferece um novo tipo de senhas, as senhas do dia.\n As senhas do dia podem ser senhas simples ou completas. Fica à tua escolha.  Nota que tens de consumir a senha no dia que escolheste para a refeição. Caso não tenhas consumido no dia, a senha deixa de estar disponível para ser consumida.  "
 
 
     

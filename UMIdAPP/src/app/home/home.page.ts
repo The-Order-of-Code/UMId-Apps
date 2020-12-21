@@ -37,16 +37,15 @@ export class HomePage {
     // this.first_name = "Joana";
     // this.has_back_button = true;
 
-
     // cartão simples para cada sala (view da procura)
-    this.has_back_button = true;
-    this.card_type = "room_reservation";
-    this.show_counter = false;
-    this.quantity = 2;
-    let available_begin_date = new Date();
-    available_begin_date.setDate(available_begin_date.getDate());
-    console.log(available_begin_date.toISOString())
-    this.items.push({name: "reserva", icon_name: 'calendario', room_name: "Sala 4", date: available_begin_date.toISOString() })
+    // this.has_back_button = true;
+    // this.card_type = "room_reservation";
+    // this.show_counter = false;
+    // this.quantity = 2;
+    // let available_begin_date = new Date();
+    // available_begin_date.setDate(available_begin_date.getDate());
+    // console.log(available_begin_date.toISOString())
+    // this.items.push({name: "reserva", icon_name: 'calendario', room_name: "Sala 4", date: available_begin_date.toISOString() })
 
     // check-out  
     // this.view_name = "Check-out";

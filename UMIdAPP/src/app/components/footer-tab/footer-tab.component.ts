@@ -11,9 +11,7 @@ export class FooterTabComponent implements OnInit {
   @Input() prod_name: any;
   @Input() operation_name: any;
   @Output() eventEmitter = new EventEmitter();
-  constructor() { 
-    console.log(this.prod_name);
-  }
+  constructor() {}
 
   ngOnInit() {
     

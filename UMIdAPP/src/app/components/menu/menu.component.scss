@@ -2,20 +2,23 @@
     margin-top: 16px;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 10px;
 
     z-index: 999;
     height: 106px;
     width: 100px;
   }
+  .ion-row{
+    align-items: center;
+
+  } 
 
 .text-header{
-  text-align: center;
+  margin-left: auto;
+  margin-bottom: 10px;
+  margin-right: auto;
 }
-.center {
-    text-align: center;
-    align-content: center;
-   
-  }
+
 
 
 .text {
@@ -68,7 +71,7 @@
     text-align: center;
     color: var(--ion-color-dark);
   
-    font-family: 'Apercu Regular';
+    font-style: "Medium";
     font-style: normal;
     font-size: 12px;
   

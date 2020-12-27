@@ -263,17 +263,33 @@ export class HomePage {
     // this.items.push({title:"Comprar senha",icon_name:"ticket",sub_icon_name:"wallet"})
 
     // A view da notificação
-    this.view_name = "Notificações";
-    this.items.push({icon_name:"restaurant",descripton:"Amanhã deve-se utilizar sua senha do dia, para não perdê-la.", type:"Urgente"})
-    this.items.push({icon_name:"wallet",descripton:"Pagamento da sua propina referente ao mês de janeiro vence daqui a 10 dias.", type:"Atenção"})
-    this.items.push({icon_name:"library",descripton:"Sua reserva da sala 2 campus Gualtar as 14 horas iniciará dentre 10 mins.", type:"Urgente"})
-    this.items.push({icon_name:"restaurant",descripton:"Foi atualizado seu número de senhas da cantina.", type:"Informativo"})
-    this.card_type='notify'
+    // this.view_name = "Notificações";
+    // this.items.push({icon_name:"restaurant",descripton:"Amanhã deve-se utilizar sua senha do dia, para não perdê-la.", type:"Urgente"})
+    // this.items.push({icon_name:"wallet",descripton:"Pagamento da sua propina referente ao mês de janeiro vence daqui a 10 dias.", type:"Atenção"})
+    // this.items.push({icon_name:"library",descripton:"Sua reserva da sala 2 campus Gualtar as 14 horas iniciará dentre 10 mins.", type:"Urgente"})
+    // this.items.push({icon_name:"restaurant",descripton:"Foi atualizado seu número de senhas da cantina.", type:"Informativo"})
+    // this.card_type='notify'
+
+
 
 
     // A view para informações
     //this.text = "Para reduzir o desperdício alimentar, a Universidade do Minho oferece um novo tipo de senhas, as senhas do dia.\n As senhas do dia podem ser senhas simples ou completas. Fica à tua escolha.  Nota que tens de consumir a senha no dia que escolheste para a refeição. Caso não tenhas consumido no dia, a senha deixa de estar disponível para ser consumida.  "
+    
 
+    // A view para proprinas 
+    // this.card_type = "paid";
+    // this.items.push({value:87.15,n_propinas:"3° PRESTAÇÃO DE PROPINAS",ano:"(2020/2021) - (PÓS-GRADUAÇÃO)",valid:"Até 10/12/2020"});
+    // this.items.push({value:87.15,n_propinas:"4° PRESTAÇÃO DE PROPINAS",ano:"(2020/2021) - (PÓS-GRADUAÇÃO)",valid:"Até 10/01/2021"});
+
+    // A view para  consultar senhas 
+    //this.card_type="consultar senhas";
+    // this.card_type="comprar senhas"; // A view para comprar senhas 
+    // this.items.push({count:8,type_ticket:"Senha completa.",descripton:"Dá-te direito ao prato principal, sopa, uma bebida e sobremesa."});
+    // this.items.push({count:2,type_ticket:"Senha prato principal.",descripton:"Dá-te direito ao prato principal e uma bebida."});
+    // this.items.push({count:2,type_ticket:"Senha do dia.",descripton:"Dá-te direito ao prato principal, sopa, uma bebida e sobremesa.",date:"24-01-2020",selected:"1 senhas adicionadas"});
+
+    
 
     
 

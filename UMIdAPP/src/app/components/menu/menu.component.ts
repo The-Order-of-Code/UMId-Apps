@@ -33,6 +33,8 @@ export class MenuComponent {
     private menu: MenuController,
  
   ) {
+    this.name = "Joana Teles Morais";
+    this.profile = "Estudante";
     console.log(this.name)
 
     console.log(this.profile)

@@ -3,8 +3,8 @@
     <ion-toolbar>
       <ion-grid>
         <ion-row>
-          <ion-avatar  class="photo center">
-            <img  [src]="photo" />
+          <ion-avatar  class="photo ">
+            <img  src="../../assets/photo.svg" />
           </ion-avatar>
         </ion-row>
         <ion-row class="center">
@@ -30,11 +30,12 @@
 
         <ion-item button (click)="changePIN()">
           <ion-label class="text"> Alterar código PIN </ion-label>
-          <ion-icon
+          <!--ion-icon
             src="assets/icon/pencil.svg" 
             stroke-width="4"
             slot="end"
-          ></ion-icon>
+          ></ion-icon-->
+          <ion-icon name="pencil" size="large" class="search-icon um-color pencil-icon"></ion-icon>
         </ion-item>
         <!-- TODO: CHECK IF WORKS -->
         <ion-item button *ngIf="biometry" (click)="changeAuth()">

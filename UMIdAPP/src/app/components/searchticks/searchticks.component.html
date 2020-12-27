@@ -13,22 +13,12 @@
                   <ion-grid>
                     <ion-row>
                       <ion-col>
-                        <ion-card-subtitle mode="md" class="text_title">{{ item.value}} </ion-card-subtitle>
+                        <ion-card-subtitle mode="md" class="text_title">{{ item.value}} € </ion-card-subtitle>
                       </ion-col>
                       <ion-col>
                         
                         <div class="paid"  *ngIf="card_type === 'paid' ">
-                          <ion-grid>
-                            <ion-row>
-                              <ion-col>
-                                <ion-icon name="key" size="large" class="icon_min" color="#ffffff"></ion-icon>
-                              </ion-col>
-                              <ion-col>Pago</ion-col>
-                              
-
-                            </ion-row>
-
-                          </ion-grid>
+                                <ion-icon name="checkmark"  class="icon_min" color = "#ffffff" ></ion-icon>PAGO
                           </div>
                       </ion-col>
                     </ion-row>
@@ -50,7 +40,7 @@
             </ion-grid>
           </ion-row>
           <ion-row align-items-center>
-            <ion-button style="--background:#D1281B"  class="bottom" (click)="goPay()" *ngIf="card_type === 'payments' ">
+            <ion-button style="--background:#8D3731"  class="bottom" (click)="goPay()" *ngIf="card_type === 'payments' ">
               Pagar
             </ion-button>
           </ion-row>

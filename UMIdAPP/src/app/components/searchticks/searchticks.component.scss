@@ -18,14 +18,16 @@ ion-card-content {
   }
 
   .paid {
-    height: 40px;
-    width: 100px;
+    height: 20px;
+    width: 48px;
     align-items: center;
     border-radius: 4px;
     text-align: right;
-    font-style: normal;
-    font-weight: normal;
+    font-size: 10px;
+    font-style: "Medium";
+    font-weight: "Medium";
     background-color: green;
+    color: aliceblue;
   }
 
 

@@ -1,0 +1,60 @@
+
+
+<ion-content  padding>
+  
+    <ion-grid>
+      <ion-row><img src="./../../../../assets/icon/um.png" id="imgPlacement"  style="align-items: center"></ion-row>
+      <ion-row><ion-label class="title">Universidade do Minho</ion-label></ion-row>
+      <ion-row><ion-label class="subtitle">Bem vindo à aplicação UMId</ion-label></ion-row>
+      <ion-row><ion-label class="subsubtitle">Por favor insira as suas credenciais 
+        de acesso ao portal </ion-label></ion-row>
+    </ion-grid>
+  
+  <form #form="ngForm" (ngSubmit)="login(form)">
+    <ion-grid class="grid">
+      <ion-row color="primary" justify-content-center>
+        <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
+          <div padding>
+           
+             <ion-row><ion-label class="inputText">Número mecanográfico</ion-label></ion-row>
+              <ion-row>
+                  <ion-input
+                  class="inputElement"
+                    name="number_student"
+                    type="text"
+                    placeholder="Número mecanográfico"
+                    ngModel
+                    required
+                  ></ion-input>
+              </ion-row>
+          
+              <ion-row><ion-label class="inputText">Palavra passe</ion-label></ion-row>
+              <ion-row>
+              <ion-input
+              class="inputElement"
+                name="password"
+                type="text"
+                placeholder="Palavra passe"
+                ngModel
+                required
+              ></ion-input>
+              </ion-row>
+            
+          </div>
+          <div padding>
+            <ion-button
+              size="large"
+              type="submit"
+              [disabled]="form.invalid"
+              expand="block"
+              >Entrar</ion-button
+            >
+          </div>
+          <ion-item *ngIf="fail_flag" color="danger">
+            <ion-label class="maj_box"> <b> {{ message }} </b> </ion-label>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>

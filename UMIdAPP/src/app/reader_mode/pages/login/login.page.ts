@@ -70,7 +70,7 @@ export class LoginPage implements OnInit {
         if (card_info.status == 200) {
           this.fail_flag = false;
           console.log(card_info.data)
-          this.router.navigate(['/pin', { url: card_info.data }]);
+          //this.router.navigate(['/pin', { url: card_info.data }]);
         }
       },
       (err) => {

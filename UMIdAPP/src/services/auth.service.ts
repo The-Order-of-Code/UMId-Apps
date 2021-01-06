@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HTTP } from '@ionic-native/http/ngx';
-
+import * as consts from 'src/common/general/constants';
 @Injectable({
   providedIn: 'root'
 })
@@ -43,7 +43,7 @@ export class AuthService {
 
     return this.http.post(
       
-      'http://192.168.1.2:8000/general/all/',
+      'http://'+ consts.ip_backend +':8000/general/all/',
       {
         csr:csr,
       },

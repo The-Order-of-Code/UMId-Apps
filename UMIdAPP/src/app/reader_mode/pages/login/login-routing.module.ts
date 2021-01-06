@@ -8,10 +8,7 @@ const routes: Routes = [
     path: '',
     component: LoginPage
   },
-  {
-    path: 'pin',
-    loadChildren: () => import('./pin/pin.module').then( m => m.PinPageModule)
-  }
+  
 ];
 
 @NgModule({

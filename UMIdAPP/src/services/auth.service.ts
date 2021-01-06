@@ -43,7 +43,7 @@ export class AuthService {
 
     return this.http.post(
       
-      'http://127.0.0.1:8000/general/all/',
+      'http://192.168.1.2:8000/general/all/',
       {
         csr:csr,
       },

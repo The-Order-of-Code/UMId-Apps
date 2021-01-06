@@ -19,6 +19,10 @@ const routes: Routes = [
     path: 'instructions',
     loadChildren: () => import('./reader_mode/pages/instructions/instructions.module').then( m => m.InstructionsPageModule)
   },
+  {
+    path: 'pin-auth',
+    loadChildren: () => import('./reader_mode/pages/pin-auth/pin-auth.module').then( m => m.PinAuthPageModule)
+  },
 ];
 
 @NgModule({

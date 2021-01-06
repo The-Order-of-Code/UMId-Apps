@@ -1,0 +1,216 @@
+<ion-content>
+  <div *ngIf="!infoAutentication">
+    <form #form="ngForm">
+      <ion-input
+        class="in"
+        #input
+        name="pin"
+        type="tel"
+        inputmode="numeric"
+        [(ngModel)]="receivedPin"
+        clearInput="true"
+        required
+        (ionChange)="onPinChange($event)"
+        maxlength="6"
+        minlength="6"
+      ></ion-input>
+    </form>
+  </div>
+  <div *ngIf="authenticated && alteration" class="cancel">
+    <ion-buttons class="back" slot="start" (click)="goBack()">
+      <ion-icon
+        class="icon"
+        name="close"
+        defaultHref="/home"
+      ></ion-icon>
+    </ion-buttons>
+    <span class="text back" (click)="goBack()">Cancel</span>
+  </div>
+
+  <div class="top">
+ 
+   
+  </div>
+  <div *ngIf="!authenticated" class="progressBar">
+    <ion-progress-bar
+      class="progress"
+      *ngIf="!confirmed && !pin"
+      value="0.10"
+      color="success"
+    ></ion-progress-bar>
+    <ion-progress-bar
+      class="progress"
+      *ngIf="!confirmed && pin && !infoAutentication"
+      value="0.25"
+      color="success"
+    ></ion-progress-bar>
+    <ion-progress-bar
+      class="progress"
+      *ngIf="infoAutentication"
+      value="0.40"
+      color="success"
+    ></ion-progress-bar>
+    <ion-icon class="progress1" src="/assets/icon/auth/1.svg"></ion-icon>
+    <ion-icon class="progress2" src="/assets/icon/auth/2.svg"></ion-icon>
+    <ion-icon class="progress3" src="/assets/icon/auth/check.svg"></ion-icon>
+  </div>
+
+  <ion-grid *ngIf="authenticated || !infoAutentication ">
+    <ion-row>
+      <ion-col *ngIf="!authenticated" class="text spacing-text">
+        <span *ngIf="!confirmed && !pin">
+          Definir o seu código de acesso à aplicação</span
+        >
+        <span *ngIf="!confirmed && pin">
+          Confirme o seu código de acesso à aplicação</span
+        >
+      </ion-col>
+      <ion-col *ngIf="authenticated" class="text spacing-text center">
+        <span *ngIf="confirmed && authenticated">
+          Insira o seu código PIN para aceder</span
+        >
+        <span *ngIf="!confirmed && !verified && !pin">
+          Insira o novo código de acesso à aplicação</span
+        >
+        <span *ngIf="!confirmed && !verified && pin">
+          Insira novamente o novo código de acesso à aplicação</span
+        >
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col *ngIf="!authenticated" class="spacing-text text">
+        <span *ngIf="!confirmed && !pin"> Definir PIN</span>
+        <span *ngIf="!confirmed && pin"> Confirmar PIN</span>
+        <span *ngIf="confirmed && verified"> Inserir PIN</span>
+      </ion-col>
+      <ion-col *ngIf="authenticated" class="spacing-text text center">
+        <span *ngIf="confirmed && authenticated"> Inserir PIN</span>
+        <span *ngIf="!confirmed && !verified && !pin"> Inserir PIN</span>
+        <span *ngIf="!confirmed && !verified && pin"> Inserir PIN</span>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div *ngIf="!authenticated" class="h-margin" (click)="setFocus()">
+          <ion-icon
+            class="number"
+            *ngIf="pinSize > 0; else empty"
+            name="radio-button-on-outline"
+          ></ion-icon>
+          <ion-icon
+            class="number"
+            *ngIf="pinSize > 1; else empty"
+            name="radio-button-on-outline"
+          ></ion-icon>
+          <ion-icon
+            class="number"
+            *ngIf="pinSize > 2; else empty"
+            name="radio-button-on-outline"
+          ></ion-icon>
+          <ion-icon
+            class="number"
+            *ngIf="pinSize > 3; else empty"
+            name="radio-button-on-outline"
+          ></ion-icon>
+          <ion-icon
+            class="number"
+            *ngIf="pinSize > 4; else empty"
+            name="radio-button-on-outline"
+          ></ion-icon>
+          <ion-icon
+            class="number"
+            *ngIf="pinSize > 5; else empty"
+            name="radio-button-on-outline"
+          ></ion-icon>
+        </div>
+        <div *ngIf="authenticated" class="h-margin center" (click)="setFocus()">
+          <ion-icon
+            class="number"
+            *ngIf="pinSize > 0; else empty"
+            name="radio-button-on-outline"
+          ></ion-icon>
+          <ion-icon
+            class="number"
+            *ngIf="pinSize > 1; else empty"
+            name="radio-button-on-outline"
+          ></ion-icon>
+          <ion-icon
+            class="number"
+            *ngIf="pinSize > 2; else empty"
+            name="radio-button-on-outline"
+          ></ion-icon>
+          <ion-icon
+            class="number"
+            *ngIf="pinSize > 3; else empty"
+            name="radio-button-on-outline"
+          ></ion-icon>
+          <ion-icon
+            class="number"
+            *ngIf="pinSize > 4; else empty"
+            name="radio-button-on-outline"
+          ></ion-icon>
+          <ion-icon
+            class="number"
+            *ngIf="pinSize > 5; else empty"
+            name="radio-button-on-outline"
+          ></ion-icon>
+        </div>
+        <ng-template #empty>
+          <ion-icon class="number" name="radio-button-off-outline"></ion-icon>
+        </ng-template>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="error">
+      <ion-col>
+        <ion-item color="sucess" lines="none">
+          <ion-icon
+            class="warning"
+            color="danger"
+            slot="start"
+            name="alert-circle-outline"
+          ></ion-icon>
+          <ion-label class="text error" color="danger"
+            >Código PIN errado</ion-label
+          >
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <grid *ngIf="infoAutentication">
+    <ion-row>
+      <ion-col class="inf">
+        <span class="text"
+          >Para importar a sua Identificação Digital da Universidade do Minho faça a sua autenticação
+          com a seu número mecanografico e palavra passe utilizado para aceder o portal da UM
+        </span>
+      </ion-col>
+    </ion-row>
+  </grid>
+</ion-content>
+
+<ion-footer>
+  <ion-button
+    class="text next"
+    expand="block"
+    (click)="authFingerPrint()"
+    full
+    *ngIf="confirmed && authenticated && fingerprint"
+    >Usar Biometria</ion-button
+  >
+  <ion-button
+    *ngIf="!infoAutentication"
+    class="text next"
+    expand="block"
+    (click)="processForm()"
+    full
+    >Confirmar</ion-button
+  >
+  <ion-button
+    *ngIf="infoAutentication"
+    class="text autenticar"
+    expand="block"
+    (click)="authenticate()"
+    full
+    >Autenticação</ion-button
+  >
+</ion-footer>

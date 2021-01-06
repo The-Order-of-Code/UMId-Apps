@@ -56,11 +56,14 @@
   </div>
 
   <ion-grid *ngIf="authenticated || !infoAutentication ">
+    <div style="text-align: center;">
     <ion-row>
       <ion-col *ngIf="!authenticated" class="text spacing-text">
-        <span *ngIf="!confirmed && !pin">
+        
+        <span *ngIf="!confirmed && !pin" style="margin:auto; display:table;">
           Definir o seu código de acesso à aplicação</span
         >
+      
         <span *ngIf="!confirmed && pin">
           Confirme o seu código de acesso à aplicação</span
         >
@@ -77,7 +80,9 @@
         >
       </ion-col>
     </ion-row>
-    <ion-row>
+  </div>
+    
+    <ion-row class="textLegend">
       <ion-col *ngIf="!authenticated" class="spacing-text text">
         <span *ngIf="!confirmed && !pin"> Definir PIN</span>
         <span *ngIf="!confirmed && pin"> Confirmar PIN</span>
@@ -89,7 +94,7 @@
         <span *ngIf="!confirmed && !verified && pin"> Inserir PIN</span>
       </ion-col>
     </ion-row>
-    <ion-row>
+    <ion-row >
       <ion-col>
         <div *ngIf="!authenticated" class="h-margin" (click)="setFocus()">
           <ion-icon
@@ -160,6 +165,7 @@
         </ng-template>
       </ion-col>
     </ion-row>
+ 
     <ion-row *ngIf="error">
       <ion-col>
         <ion-item color="sucess" lines="none">

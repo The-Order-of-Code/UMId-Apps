@@ -22,9 +22,23 @@ export class IdCardComponent implements OnInit {
       this.platform = 'ios';
     } 
     else this.platform = 'android';
-    this.photo = 'data:image/jpeg;base64,' + this.card_info.portrait;
+    console.log(this.card_info);
+    this.photo = 'data:image/jpeg;base64,' + this.card_info.user.picture;
   }
 
+  calcAge(birthDate) {
+    return Math.floor((Date.now() - new Date(birthDate).getTime()) / 3.15576e+10);
+  }
+
+  translate(type){
+    switch(type){
+      case 'STUDENT':
+        return 'Estudante';
+      case 'Employee':
+        return 'Funcionário';
+      default: return '';
+    }
+  }
   goBack(){
     this.eventEmitter.emit('back');
   }

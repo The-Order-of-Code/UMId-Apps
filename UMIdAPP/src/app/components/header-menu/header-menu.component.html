@@ -7,7 +7,7 @@
   
   <ion-toolbar class="ion-header-toolbar" mode="md" *ngIf="has_back_button">
     <ion-buttons slot="start">
-      <ion-button><ion-icon name="arrow-back-outline" size="large" style="color: white;"></ion-icon></ion-button>
+      <ion-button (click)='goBack($event)'><ion-icon name="arrow-back-outline" size="large" style="color: white;"></ion-icon></ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
       <ion-button><ion-icon name="menu" size="large" style="color: white;"></ion-icon></ion-button>  

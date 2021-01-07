@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { NavController} from '@ionic/angular';
+import * as SecureStorage from '../../common/general/secureStorage.js';
 
 @Component({
   selector: 'app-home',
@@ -31,14 +34,27 @@ export class HomePage {
 
   card_info: Object;
 
-  constructor() {
+  dataLoaded: boolean = false;
+
+  constructor(
+    private activateRoute: ActivatedRoute,
+    public navCtrl: NavController,
+    private ngZone: NgZone
+  ) {
+  }
+
+  ngOnDestroy() {
+    this.items = [];
+  }
+  
+  ngOnInit() {
     /**
      * só um pequeno exemplo para testar
      */
     // this.view_name = "Comprar senhas";
     // this.first_name = "Joana";
     // this.has_back_button = true;
-
+  
     // template para a visualização do cartão de identificação.
     // this.view_name = "Ver Cartão";
     // this.has_back_button = true;
@@ -56,8 +72,8 @@ export class HomePage {
     //   number: 82145,
     //   user_type: "Estudante"
     // };
-
-
+  
+  
     // cartão simples para cada sala (view da procura)
     // this.has_back_button = true;
     // this.card_type = "room_reservation";
@@ -67,7 +83,7 @@ export class HomePage {
     // available_begin_date.setDate(available_begin_date.getDate());
     // console.log(available_begin_date.toISOString())
     // this.items.push({name: "reserva", icon_name: 'calendario', room_name: "Sala 4", date: available_begin_date.toISOString() })
-
+  
     // check-out  
     // this.view_name = "Check-out";
     // this.has_back_button = true;
@@ -81,8 +97,8 @@ export class HomePage {
     // end_date.setHours(20);
     // end_date.setMinutes(20);
     // this.items.push({name: "reserva", icon_name: 'calendario', room_name: "Sala 4", begin_date: begin_date.toISOString() , end_date: end_date.toISOString(), check_in: true})
-
-
+  
+  
     // check-in  
     // this.view_name = "Check-in";
     // this.has_back_button = true;
@@ -96,8 +112,8 @@ export class HomePage {
     // end_date.setHours(20);
     // end_date.setMinutes(20);
     // this.items.push({name: "reserva", icon_name: 'calendario', room_name: "Sala 4", begin_date: begin_date.toISOString() , end_date: end_date.toISOString(), check_in: false})
-
-
+  
+  
     // próximas reservas
     // this.view_name = "Próximas reservas";
     // this.has_back_button = true;
@@ -127,7 +143,7 @@ export class HomePage {
     // available_begin_date.setDate(available_begin_date.getDate() + 2)
     // this.items.push({name: "reserva", icon_name: 'calendario', room_name: "Sala 3", date: available_begin_date.toISOString() })
     
-
+  
     // Senhas promocionais 
     // this.view_name = "Senha do dia";
     // this.has_back_button = true;
@@ -142,8 +158,8 @@ export class HomePage {
     // this.items.push("19/01/2020")
     // this.items.push("19/01/2020")
     // this.items.push("19/01/2020")
-
-
+  
+  
     // Reservas
     // this.view_name = "Reservar";
     // this.has_back_button = true;
@@ -159,32 +175,55 @@ export class HomePage {
     // this.items.push("16:30h - 17:00h")
     // this.items.push("17:00h - 17:30h")
     // this.items.push("17:30h - 18:00h")
-
-
-    // Menu inicial estudante
-    // this.first_name = "Joana";
-    // this.has_back_button = false;
-    // this.show_counter = false;
-    // this.card_type = "main menu";
-    // this.items.push({name: "Cantina", icon_name: 'cantina'});
-    // this.items.push({name: "Reserva de salas de estudo", icon_name: 'biblioteca'});
-    // this.items.push({name: "Apresentar identificação", icon_name: 'cartao'});
-    // this.items.push({name: "Pagamentos", icon_name: 'carteira'});
-    // this.items.push({name: "Ver cartão", icon_name: 'perfil'});
-
-
-    // Menu inicial funcionário cantina
-    // this.first_name = "Joana";
-    // this.has_back_button = false;
-    // this.show_counter = false;
-    // this.card_type = "main menu";
-    // this.items.push({name: "Verificar senha", icon_name: 'verificar senha'});
-    // this.items.push({name: "Verificar identificação", icon_name: 'verificar identidade'});
-    // this.items.push({name: "Cantina", icon_name: 'cantina'});
-    // this.items.push({name: "Apresentar identificação", icon_name: 'cartao'});
-    // this.items.push({name: "Ver cartão", icon_name: 'perfil'});
-
-
+    this.activateRoute.paramMap.subscribe(
+      (paramMap) => {
+        if (!paramMap.has('user_info')) {
+          return;
+        }
+        else {
+          const user_info = paramMap.get('user_info');
+          console.log(user_info);
+          const ss = SecureStorage.instantiateSecureStorage();
+          SecureStorage.get('user',ss).then((result)=>{
+            const user = JSON.parse(result);
+            console.log(user);
+            switch (user.user.userType) {
+              case 'STUDENT':
+                // Menu inicial estudante
+                  this.first_name = user.user.first_name;
+                  this.has_back_button = false;
+                  this.show_counter = false;
+                  this.card_type = "main menu";
+                  this.items.push({name: "Cantina", icon_name: 'cantina', url: '/canteen'});
+                  this.items.push({name: "Reserva de salas de estudo", icon_name: 'biblioteca',url: '/library'});
+                  this.items.push({name: "Apresentar identificação", icon_name: 'cartao', url: '/show-id'});
+                  this.items.push({name: "Pagamentos", icon_name: 'carteira', url: '/payments'});
+                  this.items.push({name: "Ver cartão", icon_name: 'perfil', url: '/card-page', args: {user: result}});
+                  this.dataLoaded = true;
+                break;
+              case 'EMPLOYEE':
+                // Menu inicial funcionário cantina
+                this.first_name = user.user.first_name;
+                this.has_back_button = false;
+                this.show_counter = false;
+                this.card_type = "main menu";
+                this.items.push({name: "Verificar senha", icon_name: 'verificar senha'});
+                this.items.push({name: "Verificar identificação", icon_name: 'verificar identidade'});
+                this.items.push({name: "Cantina", icon_name: 'cantina'});
+                this.items.push({name: "Apresentar identificação", icon_name: 'cartao'});
+                this.items.push({name: "Ver cartão", icon_name: 'perfil'});
+                this.dataLoaded = true;
+                break;
+              default: break;
+            }
+          })
+          console.log(this.items);
+        }
+      }
+    );
+  
+  
+  
     // Menu inicial funcionário biblioteca
     // this.first_name = "Joana";
     // this.has_back_button = false;
@@ -196,8 +235,8 @@ export class HomePage {
     // this.items.push({name: "Reserva de salas de estudo", icon_name: 'biblioteca'});
     // this.items.push({name: "Apresentar identificação", icon_name: 'cartao'});
     // this.items.push({name: "Ver cartão", icon_name: 'perfil'});
-
-
+  
+  
     // Menu inicial professor
     // this.first_name = "Joana";
     // this.has_back_button = false;
@@ -208,9 +247,19 @@ export class HomePage {
     // this.items.push({name: "Reserva de salas de estudo", icon_name: 'biblioteca'});
     // this.items.push({name: "Apresentar identificação", icon_name: 'cartao'});
     // this.items.push({name: "Ver Cartão", icon_name: 'perfil'});
-
   }
   
+
+  nextPage(_event){
+    console.log(_event);
+    const ev = JSON.parse(_event);
+    console.log(ev)
+    if(ev.args){
+      this.navCtrl.navigateRoot([ev.url, ev.args]);
+    }
+    else this.navCtrl.navigateRoot([ev.url]);
+  }
+
   goBack(_event) {
     console.log(_event);
   }

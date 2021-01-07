@@ -8,25 +8,12 @@
 </ion-header>
 
 <ion-content>
-
-  <div *ngIf='dataLoaded'>
-    <app-cards
-      [card_type]=card_type
-      [items]=items
-      (nextPageEventEmitter)="nextPage($event)"
-      (eventEmitter)="goBack($event)"
-      >
-      </app-cards>
-  </div>
-
-
-  <!-- <app-id-card
+   <app-id-card
    [card_info]=card_info
    (eventEmitter)="goBack($event)"
-  ></app-id-card> -->
-  
+  ></app-id-card>
 </ion-content>
-      
+
 <app-footer-tab 
   [show_counter]=show_counter
   [quantity]=quantity
@@ -34,6 +21,3 @@
   [operation_name]=operation_name
   (eventEmitter)="goBack($event)"
 ></app-footer-tab>
-
-
-

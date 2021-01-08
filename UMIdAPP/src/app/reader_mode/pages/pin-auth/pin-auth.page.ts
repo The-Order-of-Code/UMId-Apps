@@ -92,7 +92,7 @@ export class PinAuthPage implements AfterViewInit, OnInit{
           this.verified = true;
           if (!this.authenticated) this.checkFingerPrint();
           else {
-            this.navCtrl.navigateRoot(['/home', { mdl_info: 1 }]);
+            this.navCtrl.navigateRoot(['/home', { user_info: 1 }]);
           }
         } else {
           this.router.navigate([
@@ -109,7 +109,7 @@ export class PinAuthPage implements AfterViewInit, OnInit{
             this.toastMessage('Código PIN errado.');
           } else {
             this.events.publish('fingerprint_done', {});
-            this.navCtrl.navigateRoot(['/home', { mdl_info: 1 }]);
+            this.navCtrl.navigateRoot(['/home', { user_info: 1 }]);
           }
         },
         () => {
@@ -229,7 +229,7 @@ export class PinAuthPage implements AfterViewInit, OnInit{
       .then((result) => {
         if (this.authenticated) {
           this.events.publish('fingerprint_done', {});
-          this.navCtrl.navigateRoot(['/home', { mdl_info: 1 }]);
+          this.navCtrl.navigateRoot(['/home', { user_info: 1 }]);
         } else {
           this.events.publish('fingerprint_done', {});
           this.infoAutentication = true;
@@ -279,6 +279,6 @@ export class PinAuthPage implements AfterViewInit, OnInit{
    * Voltar para a Home em caso de alteração do pin
    */
   goBack() {
-    this.navCtrl.navigateRoot(['/home', { mdl_info: 1 }]);
+    this.navCtrl.navigateRoot(['/home', { user_info: 1 }]);
   }
 }

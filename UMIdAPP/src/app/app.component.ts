@@ -5,7 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { DarkThemeService } from '../services/dark-theme.service';
 import * as SecureStorage from '../common/general/secureStorage.js';
-
+import {NavController} from '@ionic/angular';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -20,7 +20,8 @@ export class AppComponent {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private displayMode: DarkThemeService
+    private displayMode: DarkThemeService,
+    public navCtrl: NavController,
   ) {
     this.initializeApp();
   }
@@ -39,8 +40,8 @@ export class AppComponent {
           this.statusBar.styleDefault();
           this.splashScreen.hide();
         }
-      );
-    });
+        );
+      });
   }
 
   translate(type){

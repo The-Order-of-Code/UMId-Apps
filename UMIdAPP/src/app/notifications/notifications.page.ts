@@ -30,5 +30,5 @@ export class NotificationsPage implements OnInit {
   goBack(_event){
     this.router.navigate(['/home',{ user_info: 1}]);
   }
-
+  
 }

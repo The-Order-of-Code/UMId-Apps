@@ -85,6 +85,34 @@
 
   --ion-toolbar-background: #ffffff;
   --ion-item-background: #f4f5f8;
+
+  --ion-font-size-text: 16px;
+  --ion-line-height-text: 16px;
+
+  --ion-font-size-caption: 12px;
+  --ion-line-height-caption: 16px;
+
+  --ion-margin-between-sections-big: 36px;
+  --ion-margin-between-sections-small: 28px;
+
+  --ion-margin-top-botoom-big: 28px;
+  --ion-margin-top-botoom-small: 20px;
+
+  --ion-margin-between-sections-elements-big: 20px;
+  --ion-margin-between-sections-elements-small: 16px;
+
+  --ion-margin-between-elements-atoms-big: 16px;
+  --ion-margin-between-elements-atoms-small: 12px;
+
+  --ion-margin-inside-atoms-big: 8px;
+  --ion-margin-inside-atoms-small: 6px;
+
+  --ion-margin-less-4-elements-big: 52px;
+  --ion-margin-less-4-elements-small: 36px;
+
+  --ion-margin-less-2-elements-big: 160px;
+  --ion-margin-less-2-elements-small: 120px;
+
 }
 
 @media (prefers-color-scheme: dark) {
@@ -250,4 +278,6 @@
 
     --ion-card-background: #383838;
   }
+
+  
 }

@@ -17,9 +17,8 @@ export class CardPagePage implements OnInit {
   has_back_button: boolean;
 
   show_counter: boolean;
-
-  first_name: string;
-
+  
+  segment: string;
   constructor(
     private activateRoute: ActivatedRoute,
     private router: Router,
@@ -29,6 +28,7 @@ export class CardPagePage implements OnInit {
     this.view_name = "Ver Cartão";
     this.has_back_button = true;
     this.show_counter = false;
+    this.segment = 'profile';
     this.activateRoute.paramMap.subscribe(
       (paramMap) => {
         console.log(paramMap);

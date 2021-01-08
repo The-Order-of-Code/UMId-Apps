@@ -1,4 +1,5 @@
 import { Component, OnInit, Input , Output, EventEmitter } from '@angular/core';
+import { MenuController } from '@ionic/angular';
 
 @Component({
   selector: 'app-header-menu',
@@ -11,11 +12,16 @@ export class HeaderMenuComponent implements OnInit {
   @Input() has_back_button: any;
   @Input() username: any;
   @Output() goback = new EventEmitter();
-  constructor() { }
+  constructor(private menu: MenuController) { }
 
   ngOnInit() {
     console.log(this.title);
   }
+
+  openMenu() {
+    this.menu.open();
+  }
+
 
   goBack(){
     this.goback.emit('back');

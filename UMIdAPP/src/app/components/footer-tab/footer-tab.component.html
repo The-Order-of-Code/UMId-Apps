@@ -14,14 +14,14 @@
     </ion-row>
   </ion-grid>
   <ion-toolbar>
-    <ion-segment value="paid" mode="md">
-      <ion-segment-button value="paid">
+    <ion-segment value="paid" mode="md" (ionChange)="segmentChanged($event)" value="{{ segment }}">
+      <ion-segment-button value="home">
         <ion-icon name="home"></ion-icon>
       </ion-segment-button>
-      <ion-segment-button value="free">
+      <ion-segment-button value="notifications">
         <ion-icon name="notifications"></ion-icon>
       </ion-segment-button>
-      <ion-segment-button value="top">
+      <ion-segment-button value="profile" >
         <ion-icon name="person-circle"></ion-icon>
       </ion-segment-button>
     </ion-segment>

@@ -36,6 +36,8 @@ export class HomePage {
 
   dataLoaded: boolean = false;
 
+  segment: string;
+
   constructor(
     private activateRoute: ActivatedRoute,
     public navCtrl: NavController,
@@ -185,6 +187,7 @@ export class HomePage {
           console.log(user_info);
           const ss = SecureStorage.instantiateSecureStorage();
           SecureStorage.get('user',ss).then((result)=>{
+            this.segment='home';
             const user = JSON.parse(result);
             console.log(user);
             switch (user.user.userType) {

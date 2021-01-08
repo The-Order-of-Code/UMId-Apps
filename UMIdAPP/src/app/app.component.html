@@ -1,3 +1,6 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <app-menu [photo]=photo
+  [name]=name
+  [userType]=userType></app-menu>
+  <ion-router-outlet id="menu-content"></ion-router-outlet>
 </ion-app>

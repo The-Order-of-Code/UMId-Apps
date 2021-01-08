@@ -34,7 +34,7 @@ export class IdCardComponent implements OnInit {
     switch(type){
       case 'STUDENT':
         return 'Estudante';
-      case 'Employee':
+      case 'EMPLOYEE':
         return 'Funcionário';
       default: return '';
     }

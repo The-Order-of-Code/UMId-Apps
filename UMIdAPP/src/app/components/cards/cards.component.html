@@ -62,7 +62,22 @@
           </ion-label>
       </ion-item>
       <ion-card-content>
-          <ion-button color="primary" slot="start" style="height: 45px; width: 100%;"><ion-text>Reservar</ion-text></ion-button>
+          <ion-button color="primary" slot="start" style="height: 45px; width: 100%;" (click)="nextPage($event,item)"><ion-text>Reservar</ion-text></ion-button>
+      </ion-card-content>
+    </div>
+
+    <div *ngIf="card_type == 'reservar_sala'">
+      <ion-item lines="none" color="light">
+        <ion-icon name="calendar-outline" size="large" class="reservation_card" color="medium"></ion-icon>
+          <ion-label style="margin-bottom: 0px;">
+            <ion-card-header style="margin-bottom: 10px;">
+              <ion-card-subtitle mode="md">{{ item.room_name }} </ion-card-subtitle>
+              <ion-text class="card_schedule ion-text-wrap" color="medium"> {{ updateDate(item.date) }} </ion-text>
+            </ion-card-header>
+          </ion-label>
+      </ion-item>
+      <ion-card-content>
+        <ion-button color="primary" slot="start" style="height: 45px; width: 100%;" (click)="nextPage($event,item)"><ion-text>Procurar</ion-text></ion-button>
       </ion-card-content>
     </div>
 

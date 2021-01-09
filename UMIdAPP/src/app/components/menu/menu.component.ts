@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone, ChangeDetectorRef, Input } from '@angular/core';
+import { Component, OnInit, NgZone, ChangeDetectorRef } from '@angular/core';
 
 import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
@@ -6,8 +6,10 @@ import { Platform } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
 import { MenuController } from '@ionic/angular';
 import * as SecureStorage from '../../../common/general/secureStorage.js';
+import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
 import { Storage } from '@ionic/storage';
 import { InAppBrowser, InAppBrowserOptions } from '@ionic-native/in-app-browser/ngx';
+import { Events } from '../../../common/general/events';
 
 
 @Component({
@@ -17,13 +19,15 @@ import { InAppBrowser, InAppBrowserOptions } from '@ionic-native/in-app-browser/
 })
 export class MenuComponent implements OnInit {
   
-  @Input() photo: any;
-  @Input() name: any;
-  @Input() userType: any;
+  photo: any;
+  name: any;
+  userType: any;
   dataLoaded: boolean = false;
   view_name: string;
   has_back_button: boolean;
   first_name: string;
+  fingerprint: boolean = false;
+  biometry: boolean = false;
 
   options : InAppBrowserOptions = {
     location : 'yes',//Or 'no' 
@@ -50,15 +54,50 @@ export class MenuComponent implements OnInit {
     private platform: Platform,
     private storage: Storage,
     private menu: MenuController,
-    private iab: InAppBrowser
+    private iab: InAppBrowser,
+    public events: Events
   ) { }
 
   ngOnInit(){
-    this.view_name = 'Menu';
-    this.has_back_button = true;
-    this.dataLoaded = true;
+    this.events.subscribe('fingerprint_done', () => {
+      this.view_name = 'Menu';
+      this.has_back_button = true;
+      this.dataLoaded = true;
+      console.log('listened event: fingerprint event');
+      this.storage.get('fingerprint').then((result) => {
+        FingerprintAIO.isAvailable().then((has_biometry) => {
+          console.log(result);
+          this.fingerprint = result;
+          this.biometry = true;
+          if (!this.fingerprint){
+            console.log(result);
+            this.fingerprint = false;
+          }
+          const ss = SecureStorage.instantiateSecureStorage();
+          SecureStorage.get('user', ss).then( 
+            (card) => {
+              const user = JSON.parse(card).user;
+              this.name=user.fullName;
+              this.userType=this.translate(user.userType);
+              this.photo = 'data:image/jpeg;base64,' + user.picture;
+              this.dataLoaded = true;
+            }
+          );
+        });
+      });
+    });
+
   }
 
+  translate(type){
+    switch(type){
+      case 'STUDENT':
+        return 'Estudante';
+      case 'EMPLOYEE':
+        return 'Funcionário';
+      default: return '';
+    }
+  }
 
   /**
    * Funcionalidade mudar PIN
@@ -70,11 +109,29 @@ export class MenuComponent implements OnInit {
   }
 
   /**
+   * Ativar / Desativar autenticação por biometria
+   * @memberof MenuComponent
+   */
+  changeAuth(): void {
+    this.ngZone.run(() => {
+      if (this.fingerprint) {
+        this.fingerprint = false;
+        this.storage.remove('fingerprint');
+        this.storage.set('fingerprint', false);
+      } else {
+        this.fingerprint = true;
+        this.storage.remove('fingerprint');
+        this.storage.set('fingerprint', true);
+      }
+      this.changeRef.detectChanges();
+    });
+  }
+
+  /**
    * Desassocia MDL eliminando storage e SS
    *
   */
-  
-  disassociateStudenCard(): void {
+  disassociateStudentCard(): void {
     const ss = SecureStorage.instantiateSecureStorage();
     SecureStorage.remove('user', ss);
     SecureStorage.remove('userCertificate', ss);

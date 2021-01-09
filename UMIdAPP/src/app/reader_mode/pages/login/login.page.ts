@@ -4,7 +4,8 @@ import { AuthService } from '../../../../services/auth.service';
 import { Network } from '@ionic-native/network/ngx';
 import { NavController, Platform } from '@ionic/angular';
 import * as SecureStorage from '../../../../common/general/secureStorage.js';
- 
+import { MenuController } from '@ionic/angular';
+import { Events } from '../../../../common/general/events';
 
 @Component({
   selector: 'app-login',
@@ -25,13 +26,16 @@ export class LoginPage implements OnInit {
     private router: Router,
     private ngZone: NgZone,
     public plt: Platform,
-    public navCtrl: NavController
+    public navCtrl: NavController,
+    private menu: MenuController,
+    private events: Events
   ) {
    
   }
 
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.menu.enable(false);
     // check if we already did the association
     const ss = SecureStorage.instantiateSecureStorage();
     SecureStorage.get('user', ss).then( 
@@ -64,7 +68,7 @@ export class LoginPage implements OnInit {
    * @memberof LoginPage
    */
   login(form): void {
-   
+    
     this.authService.login(form.value['number_student'], form.value['password']).then(
       (card_info) => {
         if (card_info.status == 200) {
@@ -78,7 +82,10 @@ export class LoginPage implements OnInit {
           //SecureStorage.set('tickets', card_info_data.userHash,ss),
           //SecureStorage.set('reservations', card_info_data.userHash,ss),
           SecureStorage.set('userCertificate', card_info_data.userCertificate,ss)]).then(
-            () => this.router.navigate(['/home', { user_info: 1 }])
+            () => {
+              this.events.publish('fingerprint_done', {});
+              this.router.navigate(['/home', { user_info: 1 }])
+            }
           );
         }
       },

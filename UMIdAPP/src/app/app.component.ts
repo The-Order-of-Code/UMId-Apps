@@ -30,12 +30,7 @@ export class AppComponent {
     this.platform.ready().then(() => {
       const ss = SecureStorage.instantiateSecureStorage();
       SecureStorage.get('user', ss).then( 
-        (card) => {
-          const user = JSON.parse(card).user;
-          this.name=user.fullName;
-          this.userType=this.translate(user.userType);
-          this.photo = 'data:image/jpeg;base64,' + user.picture;
-          this.dataLoaded = true;
+        () => {
           this.displayMode.toggleDisplayMode();
           this.statusBar.styleDefault();
           this.splashScreen.hide();

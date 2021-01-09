@@ -21,7 +21,7 @@
 }
 
 .back {
-  color: var(--ion-color-primary) !important;
+  color: var(--ion-color-medium) !important;
   float: left !important;
   z-index: 4;
 }
@@ -183,7 +183,6 @@ ion-footer {
 .cancel {
   padding-top: 15px;
   padding-left: 10px;
-  background-color: white;
   margin-top: 0px;
   color: var(--ion-color-primary) !important;
 }

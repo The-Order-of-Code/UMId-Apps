@@ -1,6 +1,6 @@
-import { Component, NgZone } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NavController} from '@ionic/angular';
+import { MenuController, NavController} from '@ionic/angular';
 import * as SecureStorage from '../../common/general/secureStorage.js';
 
 @Component({
@@ -41,15 +41,12 @@ export class HomePage {
   constructor(
     private activateRoute: ActivatedRoute,
     public navCtrl: NavController,
-    private ngZone: NgZone
+    private menu: MenuController,
   ) {
-  }
-
-  ngOnDestroy() {
-    this.items = [];
   }
   
   ngOnInit() {
+    this.menu.enable(true);
     /**
      * só um pequeno exemplo para testar
      */
@@ -183,6 +180,7 @@ export class HomePage {
           return;
         }
         else {
+          this.items = [];
           const user_info = paramMap.get('user_info');
           console.log(user_info);
           const ss = SecureStorage.instantiateSecureStorage();
@@ -197,8 +195,8 @@ export class HomePage {
                   this.has_back_button = false;
                   this.show_counter = false;
                   this.card_type = "main menu";
-                  this.items.push({name: "Cantina", icon_name: 'cantina', url: '/canteen'});
-                  this.items.push({name: "Reserva de salas de estudo", icon_name: 'biblioteca',url: '/library'});
+                  this.items.push({name: "Cantina", icon_name: 'cantina', url: '/canteen', args: {userType: user.user.userType}});
+                  this.items.push({name: "Reserva de salas de estudo", icon_name: 'biblioteca',url: '/library', args: {userType: user.user.userType}});
                   this.items.push({name: "Apresentar identificação", icon_name: 'cartao', url: '/show-id'});
                   this.items.push({name: "Pagamentos", icon_name: 'carteira', url: '/payments'});
                   this.items.push({name: "Ver cartão", icon_name: 'perfil', url: '/card-page', args: {user: result}});
@@ -212,7 +210,7 @@ export class HomePage {
                 this.card_type = "main menu";
                 this.items.push({name: "Verificar senha", icon_name: 'verificar senha'});
                 this.items.push({name: "Verificar identificação", icon_name: 'verificar identidade'});
-                this.items.push({name: "Cantina", icon_name: 'cantina'});
+                this.items.push({name: "Cantina", icon_name: 'cantina', url: '/canteen', args: {userType: user.user.userType}});
                 this.items.push({name: "Apresentar identificação", icon_name: 'cartao'});
                 this.items.push({name: "Ver cartão", icon_name: 'perfil'});
                 this.dataLoaded = true;

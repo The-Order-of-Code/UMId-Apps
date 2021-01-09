@@ -35,6 +35,14 @@ const routes: Routes = [
     path: 'splash',
     loadChildren: () => import('./splash/splash.module').then( m => m.SplashPageModule)
   },
+  {
+    path: 'canteen',
+    loadChildren: () => import('./canteen/canteen.module').then( m => m.CanteenPageModule)
+  },
+  {
+    path: 'library',
+    loadChildren: () => import('./library/library.module').then( m => m.LibraryPageModule)
+  }
 ];
 
 @NgModule({

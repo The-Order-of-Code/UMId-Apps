@@ -1,0 +1,64 @@
+  .card {
+    margin-bottom: 10px;
+    margin-top: 20px;
+    font-style: Medium; 
+    font-weight: bold;
+    font-size: 22px;
+  }
+
+  .text_add_button { 
+    font-style: Medium;
+    font-weight: bold;
+    color: white;
+    font-size: 14px;
+  }
+  
+  .add_button {
+    height: 40px;
+    --vertical-align: middle;
+    --padding-start: 10px;
+    --padding-end: 10px;
+  }
+  
+  .type {
+    display: flex;
+    justify-content: center;
+  }
+  
+  ion-select{
+    font-size: 16px;
+    max-width: 100% !important;
+    justify-content: center;
+    color: black;
+  }
+
+  .main_menu {
+    margin-bottom: 15px;
+    margin-top: 20px;
+    font-style: Medium;
+    font-weight: bold;
+    font-size: 22px;
+  }
+  
+  .reservation_card {
+    margin-bottom: 10px;
+    margin-top: 10px;
+    margin-right: 10px;
+    margin-left: 10px;
+    height: 80px;
+    width: 80px;
+  }
+
+  ion-card-subtitle {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  ion-card-content {
+    margin-top: 0px;
+  }
+
+  .card_schedule{
+    font-size: 15px;
+  }

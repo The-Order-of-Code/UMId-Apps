@@ -1,0 +1,40 @@
+<ion-footer class="ion-no-border">
+  <ion-grid *ngIf="show_counter">
+    <ion-row *ngIf="show_counter" style="align-items: center;">
+      <ion-col class="ion-text-center">
+        <div class="ion-text-center" color="medium">
+          {{ quantity }} {{ prod_name }} {{ operation_name }}
+        </div>
+      </ion-col>
+      <ion-col>
+        <div class="ion-text-center">
+          <ion-button slot="end" color="primary" class="confirm_button"><ion-text class="text_confirm">Confirmar</ion-text></ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid *ngIf="show_pay" >
+    <ion-row id='line'>
+      <ion-col class="text_select">{{ text_select }}</ion-col>
+    </ion-row>
+    <ion-row >
+       <ion-col class="option"><img src="../../../assets/icon/mbway.svg"  ng-click="nextpage()" class="image">
+       <img src="../../../assets/icon/paypal.svg"  ng-click="nextpage()" class="image"></ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-toolbar>
+    <ion-segment value="paid" mode="md">
+      <ion-segment-button value="paid">
+        <ion-icon name="home"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button value="free">
+        <ion-icon name="notifications"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button value="top">
+        <ion-icon name="person-circle"></ion-icon>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-footer>

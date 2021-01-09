@@ -1,0 +1,537 @@
+<ion-card color="light" *ngIf="platform == 'android'">
+  <ion-grid mode="ios">
+    <ion-row style="display: flex; justify-content: center;" *ngIf="width > 375 && width < 400">
+      <img style="height: 60px; width: 60px;" src="../../assets/uminho.svg"/>
+      <ion-text class="school_android_name_huge pad_left ion-text-wrap">
+        Universidade do Minho
+      </ion-text> 
+    </ion-row>
+    <ion-row style="display: flex; justify-content: center;" *ngIf="width <= 375">
+      <img style="height: 50px; width: 50px;" src="../../assets/uminho.svg"/>
+      <ion-text class="school_android_name_small pad_left ion-text-wrap">
+        Universidade do Minho
+      </ion-text> 
+    </ion-row>
+    <ion-row style="display: flex; justify-content: center;" *ngIf="width >= 400">
+      <img style="height: 70px; width: 70px;" src="../../assets/uminho.svg"/>
+      <ion-text class="school__android_name_super_huge pad_left ion-text-wrap">
+        Universidade do Minho
+      </ion-text> 
+    </ion-row>
+    <div *ngIf="width <= 375">
+      <ion-row style="margin-top: 10px;">
+        <ion-col>
+          <ion-row>
+            <ion-text class="attribute_android_name_small">
+              Nome 
+            </ion-text>
+          </ion-row>
+          <ion-row style="margin-top: 5px;">
+            <ion-text class="attribute_android_value_small">
+              Filipa Correia Parente 
+            </ion-text> 
+          </ion-row>
+          <ion-row style="margin-top: 20px;">
+            <ion-text class="attribute_android_name_small">
+              Número de aluno 
+            </ion-text>
+          </ion-row>
+          <ion-row style="margin-top: 5px;">
+            <ion-text class="attribute_android_value_small">
+              82145
+            </ion-text> 
+          </ion-row>
+        </ion-col>
+        <ion-col>
+          <ion-row class="align_photo">
+            <img class="photo_android_small" *ngIf="photo" [src]="photo" />
+          </ion-row>
+          <ion-row class="align_photo" style="margin-top: 5px;">
+            <ion-text style="font-weight: bold;" color="medium" class="ion-text-center">
+              Estudante
+            </ion-text>
+          </ion-row>
+        </ion-col>  
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-row>
+            <ion-text class="attribute_android_name_small">
+              Curso 
+            </ion-text>
+          </ion-row>
+          <ion-row style="margin-top: 5px;">
+            <ion-text class="attribute_android_value_small">
+              MIEINF - Mestrado Integrado em Engenharia Informática
+            </ion-text>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+      <ion-row style="margin-top: 5px;">
+        <ion-col>
+          <ion-row>
+            <ion-text class="attribute_android_name_small">
+              Ano 
+            </ion-text>
+          </ion-row>
+          <ion-row style="margin-top: 5px;">
+            <ion-text class="attribute_android_value_small">
+              5°
+            </ion-text>
+          </ion-row>
+        </ion-col>
+        <ion-col>
+          <ion-row>
+            <ion-text class="attribute_android_name_small">
+              Idade 
+            </ion-text>
+          </ion-row>
+          <ion-row style="margin-top: 5px;">
+            <ion-text class="attribute_android_value_small">
+              22
+            </ion-text>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+    </div>
+
+    <div *ngIf="width > 375 && width < 400">
+      <ion-row style="margin-top: 10px;">
+        <ion-col>
+          <ion-row>
+            <ion-text class="attribute_android_name_huge">
+              Nome 
+            </ion-text>
+          </ion-row>
+          <ion-row style="margin-top: 5px;">
+            <ion-text class="attribute_android_value_huge">
+              Filipa Correia Parente 
+            </ion-text> 
+          </ion-row>
+          <ion-row style="margin-top: 20px;">
+            <ion-text class="attribute_android_name_huge">
+              Número de aluno 
+            </ion-text>
+          </ion-row>
+          <ion-row style="margin-top: 5px;">
+            <ion-text class="attribute_android_value_huge">
+              82145
+            </ion-text> 
+          </ion-row>
+        </ion-col>
+        <ion-col>
+          <ion-row class="align_photo">
+            <img class="photo_android_huge" *ngIf="photo" [src]="photo" />
+          </ion-row>
+          <ion-row class="align_photo" style="margin-top: 5px;">
+            <ion-text style="font-weight: bold;" color="medium" class="ion-text-center">
+              Estudante
+            </ion-text>
+          </ion-row>
+        </ion-col>  
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-row>
+            <ion-text class="attribute_android_name_huge">
+              Curso 
+            </ion-text>
+          </ion-row>
+          <ion-row style="margin-top: 5px;">
+            <ion-text class="attribute_android_value_huge">
+              MIEINF - Mestrado Integrado em Engenharia Informática
+            </ion-text>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+      <ion-row style="margin-top: 5px;">
+        <ion-col>
+          <ion-row>
+            <ion-text class="attribute_android_name_huge">
+              Ano 
+            </ion-text>
+          </ion-row>
+          <ion-row style="margin-top: 5px;">
+            <ion-text class="attribute_android_value_huge">
+              5°
+            </ion-text>
+          </ion-row>
+        </ion-col>
+        <ion-col>
+          <ion-row>
+            <ion-text class="attribute_android_name_huge">
+              Idade 
+            </ion-text>
+          </ion-row>
+          <ion-row style="margin-top: 5px;">
+            <ion-text class="attribute_android_value_huge">
+              22
+            </ion-text>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+    </div>
+
+    <div *ngIf="width >= 400">
+      <ion-row style="margin-top: 10px;">
+        <ion-col>
+          <ion-row>
+            <ion-text class="attribute_android_name_super_huge">
+              Nome 
+            </ion-text>
+          </ion-row>
+          <ion-row style="margin-top: 5px;">
+            <ion-text class="attribute_android_value_super_huge">
+              Filipa Correia Parente 
+            </ion-text> 
+          </ion-row>
+          <ion-row style="margin-top: 20px;">
+            <ion-text class="attribute_android_name_super_huge">
+              Número de aluno 
+            </ion-text>
+          </ion-row>
+          <ion-row style="margin-top: 5px;">
+            <ion-text class="attribute_android_value_super_huge">
+              82145
+            </ion-text> 
+          </ion-row>
+        </ion-col>
+        <ion-col>
+          <ion-row class="align_photo">
+            <img class="photo_android_super_huge" *ngIf="photo" [src]="photo" />
+          </ion-row>
+          <ion-row class="align_photo" style="margin-top: 5px;">
+            <ion-text style="font-weight: bold;" color="medium" class="ion-text-center">
+              Estudante
+            </ion-text>
+          </ion-row>
+        </ion-col>  
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-row>
+            <ion-text class="attribute_android_name_super_huge">
+              Curso 
+            </ion-text>
+          </ion-row>
+          <ion-row style="margin-top: 5px;">
+            <ion-text class="attribute_android_value_super_huge">
+              MIEINF - Mestrado Integrado em Engenharia Informática
+            </ion-text>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+      <ion-row style="margin-top: 5px;">
+        <ion-col>
+          <ion-row>
+            <ion-text class="attribute_android_name_super_huge">
+              Ano 
+            </ion-text>
+          </ion-row>
+          <ion-row style="margin-top: 5px;">
+            <ion-text class="attribute_android_value_super_huge">
+              5°
+            </ion-text>
+          </ion-row>
+        </ion-col>
+        <ion-col>
+          <ion-row>
+            <ion-text class="attribute_android_name_super_huge">
+              Idade 
+            </ion-text>
+          </ion-row>
+          <ion-row style="margin-top: 5px;">
+            <ion-text class="attribute_android_value_super_huge">
+              22
+            </ion-text>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+    </div>
+    <ion-row align-items-center *ngIf="width > 375 && width < 400">
+      <ion-text class="school_android_name_huge">
+        Escola de Engenharia
+      </ion-text> 
+    </ion-row>
+    <ion-row align-items-center *ngIf="width <= 375">
+      <ion-text class="school_android_name_small">
+        Escola de Engenharia
+      </ion-text> 
+    </ion-row>
+    <ion-row align-items-center *ngIf="width >= 400">
+      <ion-text class="school_android_name_super_huge">
+        Escola de Engenharia
+      </ion-text> 
+    </ion-row>
+  </ion-grid>
+</ion-card>
+
+
+<ion-card color="light" *ngIf="platform == 'ios'">
+  <ion-grid mode="ios">
+    <ion-row mode="ios" style="display: flex; justify-content: flex-start;" *ngIf="width > 375 && width < 400">
+      <img style="height: 60px; width: 60px;" src="../../assets/uminho.svg"/>
+      <ion-text class="school_ios_name_huge pad_left ion-text-wrap">
+        Universidade do Minho
+      </ion-text> 
+    </ion-row>
+    <ion-row style="display: flex; justify-content: center;" *ngIf="width <= 375">
+      <img style="height: 50px; width: 50px;" src="../../assets/uminho.svg"/>
+      <ion-text class="school_ios_name_small pad_left ion-text-wrap">
+        Universidade do Minho
+      </ion-text> 
+    </ion-row>
+    <ion-row style="display: flex; justify-content: center;" *ngIf="width >= 400">
+      <img style="height: 70px; width: 70px;" src="../../assets/uminho.svg"/>
+      <ion-text class="school_ios_name_super_huge pad_left ion-text-wrap">
+        Universidade do Minho
+      </ion-text> 
+    </ion-row>
+
+    <div *ngIf="width <= 375">
+      <ion-row style="margin-top: 10px;">
+        <ion-col>
+          <ion-row>
+            <ion-text class="attribute_ios_name_small">
+              Nome 
+            </ion-text>
+          </ion-row>
+          <ion-row style="margin-top: 5px;">
+            <ion-text class="attribute_ios_value_small">
+              Filipa Correia Parente 
+            </ion-text> 
+          </ion-row>
+          <ion-row style="margin-top: 20px;">
+            <ion-text class="attribute_ios_name_small">
+              Número de aluno 
+            </ion-text>
+          </ion-row>
+          <ion-row style="margin-top: 5px;">
+            <ion-text class="attribute_ios_value_small">
+              82145
+            </ion-text> 
+          </ion-row>
+        </ion-col>
+        <ion-col>
+          <ion-row class="align_photo">
+            <img class="photo_ios_small" *ngIf="photo" [src]="photo" />
+          </ion-row>
+          <ion-row class="align_photo" style="margin-top: 5px;">
+            <ion-text style="font-weight: bold;" color="medium" class="ion-text-center">
+              Estudante
+            </ion-text>
+          </ion-row>
+        </ion-col>  
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-row>
+            <ion-text class="attribute_ios_name_small">
+              Curso 
+            </ion-text>
+          </ion-row>
+          <ion-row style="margin-top: 5px;">
+            <ion-text class="attribute_ios_value_small">
+              MIEINF - Mestrado Integrado em Engenharia Informática
+            </ion-text>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+      <ion-row style="margin-top: 5px;">
+        <ion-col>
+          <ion-row>
+            <ion-text class="attribute_ios_name_small">
+              Ano 
+            </ion-text>
+          </ion-row>
+          <ion-row style="margin-top: 5px;">
+            <ion-text class="attribute_ios_value_small">
+              5°
+            </ion-text>
+          </ion-row>
+        </ion-col>
+        <ion-col>
+          <ion-row>
+            <ion-text class="attribute_ios_name_small">
+              Idade 
+            </ion-text>
+          </ion-row>
+          <ion-row style="margin-top: 5px;">
+            <ion-text class="attribute_ios_value_small">
+              22
+            </ion-text>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+    </div>
+
+    <div *ngIf="width > 375 && width < 400">
+      <ion-row style="margin-top: 10px;">
+        <ion-col>
+          <ion-row>
+            <ion-text class="attribute_ios_name_huge">
+              Nome 
+            </ion-text>
+          </ion-row>
+          <ion-row style="margin-top: 5px;">
+            <ion-text class="attribute_ios_value_huge">
+              Filipa Correia Parente 
+            </ion-text> 
+          </ion-row>
+          <ion-row style="margin-top: 20px;">
+            <ion-text class="attribute_ios_name_huge">
+              Número de aluno 
+            </ion-text>
+          </ion-row>
+          <ion-row style="margin-top: 5px;">
+            <ion-text class="attribute_ios_value_huge">
+              82145
+            </ion-text> 
+          </ion-row>
+        </ion-col>
+        <ion-col>
+          <ion-row class="align_photo">
+            <img class="photo_ios_huge" *ngIf="photo" [src]="photo" />
+          </ion-row>
+          <ion-row class="align_photo" style="margin-top: 5px;">
+            <ion-text style="font-weight: bold;" color="medium" class="ion-text-center">
+              Estudante
+            </ion-text>
+          </ion-row>
+        </ion-col>  
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-row>
+            <ion-text class="attribute_ios_name_huge">
+              Curso 
+            </ion-text>
+          </ion-row>
+          <ion-row style="margin-top: 5px;">
+            <ion-text class="attribute_ios_value_huge">
+              MIEINF - Mestrado Integrado em Engenharia Informática
+            </ion-text>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+      <ion-row style="margin-top: 5px;">
+        <ion-col>
+          <ion-row>
+            <ion-text class="attribute_ios_name_huge">
+              Ano 
+            </ion-text>
+          </ion-row>
+          <ion-row style="margin-top: 5px;">
+            <ion-text class="attribute_ios_value_huge">
+              5°
+            </ion-text>
+          </ion-row>
+        </ion-col>
+        <ion-col>
+          <ion-row>
+            <ion-text class="attribute_ios_name_huge">
+              Idade 
+            </ion-text>
+          </ion-row>
+          <ion-row style="margin-top: 5px;">
+            <ion-text class="attribute_ios_value_huge">
+              22
+            </ion-text>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+    </div>
+
+    <div *ngIf="width >= 400">
+      <ion-row style="margin-top: 10px;">
+        <ion-col>
+          <ion-row>
+            <ion-text class="attribute_ios_name_super_huge">
+              Nome 
+            </ion-text>
+          </ion-row>
+          <ion-row style="margin-top: 5px;">
+            <ion-text class="attribute_ios_value_super_huge">
+              Filipa Correia Parente 
+            </ion-text> 
+          </ion-row>
+          <ion-row style="margin-top: 20px;">
+            <ion-text class="attribute_ios_name_super_huge">
+              Número de aluno 
+            </ion-text>
+          </ion-row>
+          <ion-row style="margin-top: 5px;">
+            <ion-text class="attribute_ios_value_super_huge">
+              82145
+            </ion-text> 
+          </ion-row>
+        </ion-col>
+        <ion-col>
+          <ion-row class="align_photo">
+            <img class="photo_ios_super_huge" *ngIf="photo" [src]="photo" />
+          </ion-row>
+          <ion-row class="align_photo" style="margin-top: 5px;">
+            <ion-text style="font-weight: bold;" color="medium" class="ion-text-center">
+              Estudante
+            </ion-text>
+          </ion-row>
+        </ion-col>  
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-row>
+            <ion-text class="attribute_ios_name_super_huge">
+              Curso 
+            </ion-text>
+          </ion-row>
+          <ion-row style="margin-top: 5px;">
+            <ion-text class="attribute_ios_value_super_huge">
+              MIEINF - Mestrado Integrado em Engenharia Informática
+            </ion-text>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+      <ion-row style="margin-top: 5px;">
+        <ion-col>
+          <ion-row>
+            <ion-text class="attribute_ios_name_super_huge">
+              Ano 
+            </ion-text>
+          </ion-row>
+          <ion-row style="margin-top: 5px;">
+            <ion-text class="attribute_ios_value_super_huge">
+              5°
+            </ion-text>
+          </ion-row>
+        </ion-col>
+        <ion-col>
+          <ion-row>
+            <ion-text class="attribute_ios_name_super_huge">
+              Idade 
+            </ion-text>
+          </ion-row>
+          <ion-row style="margin-top: 5px;">
+            <ion-text class="attribute_ios_value_super_huge">
+              22
+            </ion-text>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+    </div>
+    <ion-row align-items-center *ngIf="width > 360 && width < 400">
+      <ion-text class="school_ios_name_huge">
+        Escola de Engenharia
+      </ion-text> 
+    </ion-row>
+    <ion-row align-items-center *ngIf="width <= 360">
+      <ion-text class="school_ios_name_small">
+        Escola de Engenharia
+      </ion-text> 
+    </ion-row>
+    <ion-row align-items-center *ngIf="width >= 400">
+      <ion-text class="school_ios_name_super_huge">
+        Escola de Engenharia
+      </ion-text> 
+    </ion-row>
+  </ion-grid>
+</ion-card>

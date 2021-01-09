@@ -1,0 +1,78 @@
+<ion-menu side="end" type="push" contentId="menu-content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-grid>
+        <ion-row>
+          <ion-avatar  class="photo ">
+            <img  src="../../assets/photo.svg" />
+          </ion-avatar>
+        </ion-row>
+        <ion-row class="center">
+          <ion-label class="text-header"> {{ name }} </ion-label>
+        </ion-row>
+        <ion-row>
+          <ion-label class="text-header"> {{ profile }} </ion-label>
+        </ion-row>
+        
+      </ion-grid>
+      
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <ion-grid no-padding>
+        <ion-item button (click)="changePIN()">
+          
+          <ion-label class="text"> Idioma </ion-label>
+          <ion-icon class="Logo" src="assets/icon/pt.svg"></ion-icon>
+          
+        </ion-item>
+
+        <ion-item button (click)="changePIN()">
+          <ion-label class="text"> Alterar código PIN </ion-label>
+          <!--ion-icon
+            src="assets/icon/pencil.svg" 
+            stroke-width="4"
+            slot="end"
+          ></ion-icon-->
+          <ion-icon name="pencil" size="large" class="search-icon um-color pencil-icon"></ion-icon>
+        </ion-item>
+        <!-- TODO: CHECK IF WORKS -->
+        <ion-item button *ngIf="biometry" (click)="changeAuth()">
+          <ion-label class="text"> Biometria </ion-label>
+          <ion-toggle
+            *ngIf="fingerprint"
+            slot="end"
+            checked="true"
+          ></ion-toggle>
+          <ion-toggle
+            *ngIf="!fingerprint"
+            slot="end"
+            checked="false"
+          ></ion-toggle>
+        </ion-item>
+        <ion-item button (click)="openURL()">
+          <ion-icon class="Logo" src="assets/logos/um.svg"></ion-icon>
+          <ion-icon
+            name="arrow-forward-outline"
+            color="primary"
+            slot="end"
+          ></ion-icon>
+        </ion-item>
+        <ion-item button (click)="disassociateMDL()">
+          <ion-label class="text red"> Terminar sessão </ion-label>
+          <ion-icon name="power" color="danger" slot="end"></ion-icon>
+        </ion-item>
+      </ion-grid>
+    </ion-list>
+    <!--div class="bottom">
+      <span>Powered by</span>
+      <div>
+        <img class="logoMadein" src="assets/logos/logo.png" alt="let´s id" />
+      </div>
+      <div>
+        <a>{{version}}</a>
+      </div>
+    </div-->
+  </ion-content>
+</ion-menu>

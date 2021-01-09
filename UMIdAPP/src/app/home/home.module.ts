@@ -4,14 +4,18 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { HomePage } from './home.page';
 
+import { ComponentsModule } from '../components/components.module';
 import { HomePageRoutingModule } from './home-routing.module';
+import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
+    NgxQRCodeModule,
     IonicModule,
+    ComponentsModule,
     HomePageRoutingModule
   ],
   declarations: [HomePage]

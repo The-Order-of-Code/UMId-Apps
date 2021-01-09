@@ -1,0 +1,70 @@
+.bottom {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0;
+  
+    text-align: center;
+    
+    
+    font-style: Medium;
+    font-size: 12px;
+  
+    z-index: 1;
+    position: absolute;
+    
+  }
+  
+  .info {
+    font-style: Medium;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 20px;
+    text-align: center;
+  
+    margin: 20% auto 0;
+  
+   
+  
+    div {
+      margin-top: 16px;
+    }
+  }
+
+  .sub_info{
+    margin: 70% auto 0;
+    font-weight: normal;
+  }
+  
+  .icon-wraper {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .icon {
+    @media (min-width: 361px) {
+      width: 118px;
+      height: 134px;
+    }
+  
+    @media (max-width: 360px) {
+        width: 118px;
+        height: 134px;
+    }
+  }
+  
+  .button {
+  
+    width: 133px;
+    height: 46px;
+    
+  }
+  
+  
+  .quote {
+    font-size: 17px;
+  }

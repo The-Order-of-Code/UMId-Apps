@@ -13,6 +13,8 @@
   },
   "private": true,
   "dependencies": {
+    "@angular-devkit/core": "^9.1.12",
+    "@angular-devkit/schematics": "^11.0.4",
     "@angular/common": "~10.0.0",
     "@angular/core": "~10.0.0",
     "@angular/forms": "~10.0.0",
@@ -32,6 +34,7 @@
     "cordova-plugin-fingerprint-aio": "^4.0.2",
     "cordova-plugin-network-information": "^2.0.2",
     "cordova-sqlite-storage": "^5.1.0",
+    "@techiediaries/ngx-qrcode": "^9.1.0",
     "dompurify": "^2.2.3",
     "rxjs": "~6.5.5",
     "tslib": "^2.0.0",
@@ -76,11 +79,7 @@
       "cordova-plugin-ionic-webview": {
         "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
       },
-      "cordova-plugin-ionic-keyboard": {},
-      "cordova-plugin-advanced-http": {},
-      "cordova-plugin-network-information": {},
-      "cordova-plugin-fingerprint-aio": {},
-      "cordova-sqlite-storage": {}
+      "cordova-plugin-ionic-keyboard": {}
     },
     "platforms": [
       "android",

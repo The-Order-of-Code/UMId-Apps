@@ -1,0 +1,79 @@
+
+
+
+// para os icones com o double checkmark (icones de verificação)
+
+$color-complete: #B8E986;
+$color-UM: #8D3731;
+
+$icon-size: 90px;
+$icon-border: 2px;
+
+
+.icon-stack {
+	position: relative;
+	display: flex;
+    align-items: center;
+    justify-content: flex-end;
+	width: $icon-size;
+	height: $icon-size;
+	margin-bottom: 5px;
+    margin-top: 10px;
+	
+	ion-icon {
+		flex: 1;
+		
+		&.primary-icon {
+            margin: 0 auto;
+            height: 70%;
+			width: 70%;
+			z-index: 1;
+		}
+		&.secondary-icon {
+			position: absolute;
+			right: 10%;
+			bottom: 5%;
+			height: 50%;
+			width: 45%;
+			padding: 2%;
+			z-index: 2;
+		}&.card-icon {
+			position: absolute;
+			right: 10%;
+			bottom: 12%;
+			height: 50%;
+			width: 45%;
+			padding: 2%;
+			z-index: 2;
+		}&.um-color {
+            color: $color-UM;
+        }&.search-icon {
+			position: absolute;
+			right: 10%;
+			bottom: 7%;
+			height: 60%;
+			width: 50%;
+			padding: 2%;
+			z-index: 2;
+		}
+		&.pencil-icon {
+			position: absolute;
+			right: 0%;
+			bottom: 20%;
+			height: 60%;
+			width: 50%;
+			padding: 2%;
+			z-index: 2;
+		}
+	}
+	
+}
+
+
+.simple_icon {
+	margin-bottom: 15px;
+    margin-top: 20px;
+	width: 63px;
+	height: 63px;
+	padding: 2%;
+}

@@ -8,6 +8,15 @@
 </ion-header>
 
 <ion-content>
+  
+<div *ngIf='dataLoaded'>
+  <app-cards
+    [card_type]=card_type
+    [items]=items
+    (nextPageEventEmitter)="nextPage($event)"
+    (eventEmitter)="goBack($event)">
+    </app-cards>
+</div>
 
 </ion-content>
 

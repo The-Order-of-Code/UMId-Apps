@@ -286,9 +286,39 @@
         </ion-button>
 
       </ion-item>
-
     </div>
 
+
+    <!-- Cartao para notificacacoes -->
+
+    <div *ngIf="card_type === 'notify' ">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-icon name={{item.icon_name}} size="large" class="notify_card" color="medium" style=" margin-top: 30%;"></ion-icon>
+          </ion-col>
+          <ion-col>
+            <ion-card-header style=" margin-left: -80%;">
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <ion-card-subtitle mode="md" class="text_title">Descrição</ion-card-subtitle>
+                </ion-col>
+                <ion-col>
+                  <ion-span [ngClass]="{
+                    'green': item.type === 'Informativo',
+                    'red':   item.type ===  'Urgente',
+                    'yellow': item.type === 'Atenção'}" >{{ item.type }}</ion-span>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+            <ion-card-subtitle mode="md" class="text_subtitle">{{item.descripton}}</ion-card-subtitle>
+          </ion-card-header>
+          </ion-col>
+  
+        </ion-row>
+      </ion-grid>
+      </div>
 
 
 

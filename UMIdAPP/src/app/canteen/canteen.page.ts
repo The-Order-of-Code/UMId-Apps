@@ -84,8 +84,8 @@ export class CanteenPage implements OnInit {
     else this.navCtrl.navigateRoot([ev.url]);
   }
 
-  goBack(_event) {
-    console.log(_event);
+  goBack(_event){
+    this.router.navigate(['/home',{ user_info: 1}]);
   }
 
   openMenu(): void {

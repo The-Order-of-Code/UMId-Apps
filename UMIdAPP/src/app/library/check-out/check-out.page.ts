@@ -25,7 +25,7 @@ export class CheckOutPage implements OnInit {
   card_type: string; 
 
   dataLoaded: boolean = false;
-
+  
   constructor(private router: Router) { }
 
   ngOnInit() {

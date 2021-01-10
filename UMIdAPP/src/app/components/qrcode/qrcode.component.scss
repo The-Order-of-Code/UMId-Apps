@@ -1,0 +1,47 @@
+.info {
+  font-weight: normal;
+  font-size: 20px;
+  text-align: center;
+  
+  margin: 0 auto 35px;
+  width: 70%;
+  
+  @media (min-width: 361px) {
+    margin-top: 52px;
+  }
+  
+  @media (max-width: 360px) {
+    margin-top: 36px;
+  }
+  
+  color: var(ion-color-dark);
+}
+  
+.border {
+
+  border: 18px solid #88181c;
+  border-radius: 15px;
+
+  @media (min-width: 361px) {
+    width: 192px;
+    height: 192px;
+  }
+  
+  @media (max-width: 360px) {
+    width: 144px;
+    height: 144px;
+  }
+}
+
+.center {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+
+
+  

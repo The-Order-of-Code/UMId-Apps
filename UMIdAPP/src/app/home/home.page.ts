@@ -197,7 +197,7 @@ export class HomePage {
                   this.card_type = "main menu";
                   this.items.push({name: "Cantina", icon_name: 'cantina', url: '/canteen', args: {userType: user.user.userType}});
                   this.items.push({name: "Reserva de salas de estudo", icon_name: 'biblioteca',url: '/library', args: {userType: user.user.userType}});
-                  this.items.push({name: "Apresentar identificação", icon_name: 'cartao', url: '/show-id'});
+                  this.items.push({name: "Apresentar identificação", icon_name: 'cartao', url: '/holder-ble-transfer', args: {user: result, data_name: "identificação"}});
                   this.items.push({name: "Pagamentos", icon_name: 'carteira', url: '/payments'});
                   this.items.push({name: "Ver cartão", icon_name: 'perfil', url: '/card-page', args: {user: result}});
                   this.dataLoaded = true;

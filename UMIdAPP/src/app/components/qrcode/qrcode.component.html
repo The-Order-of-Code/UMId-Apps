@@ -1,0 +1,17 @@
+<div class="info">
+  <span>
+    {{ sentence }}
+  </span>
+</div>
+
+<div class="border center" *ngIf="width > 360px">
+  <qrcode [qrdata]="createdCode" [width]="155"></qrcode>
+</div>
+
+<div class="border center" *ngIf="width <= 360px">
+  <qrcode [qrdata]="createdCode" [width]="107"></qrcode>
+</div>
+
+
+
+

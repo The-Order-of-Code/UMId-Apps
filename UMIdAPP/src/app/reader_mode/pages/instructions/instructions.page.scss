@@ -90,3 +90,25 @@ ion-button{
 ion-item{
     --background: var(--ion-background-color);
 }
+
+@media screen and (max-width: 359px) {
+    .title { 
+        font-size: 20px;
+        margin-top: 5px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .subtitle{
+        font-size: 18px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .subsubtitle{
+        font-size: 14px;
+        margin-top: 10px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}

@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { CheckInPageRoutingModule } from './check-in-routing.module';
-
+import { ComponentsModule } from '../../components/components.module';
 import { CheckInPage } from './check-in.page';
 
 @NgModule({
@@ -13,6 +13,7 @@ import { CheckInPage } from './check-in.page';
     CommonModule,
     FormsModule,
     IonicModule,
+    ComponentsModule,
     CheckInPageRoutingModule
   ],
   declarations: [CheckInPage]

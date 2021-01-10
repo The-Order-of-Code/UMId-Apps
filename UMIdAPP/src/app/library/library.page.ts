@@ -49,9 +49,9 @@ export class LibraryPage implements OnInit {
                 this.show_counter = false;
                 this.card_type = "main menu";
                 this.items.push({name: "Consultar salas disponíveis", icon_name: 'salas disponiveis', url:'/library/available-rooms'});
-                this.items.push({name: "Consultar próximas reservas", icon_name: 'proximas reservas'});
-                this.items.push({name: "Check-in", icon_name: 'check-in'});
-                this.items.push({name: "Check-out", icon_name: 'check-out'});
+                this.items.push({name: "Consultar próximas reservas", icon_name: 'proximas reservas', url:'/library/next-reservations'});
+                this.items.push({name: "Check-in", icon_name: 'check-in', url:'/library/check-in'});
+                this.items.push({name: "Check-out", icon_name: 'check-out', url:'/library/check-out'});
                 this.dataLoaded = true;
               break;
             default: break;

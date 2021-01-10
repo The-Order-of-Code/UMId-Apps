@@ -19,12 +19,10 @@
   <div *ngIf="authenticated && alteration" class="cancel">
     <ion-buttons class="back" slot="start" (click)="goBack()">
       <ion-icon
-        class="icon"
-        name="close"
-        defaultHref="/home"
+        name="arrow-back-outline" size="large" style="color: white;"
       ></ion-icon>
+      <ion-title class="text back" style="font-size: 20px;" color="light">Cancelar</ion-title>
     </ion-buttons>
-    <span class="text back" (click)="goBack()">Cancel</span>
   </div>
 
   <div class="top">
@@ -61,7 +59,7 @@
       <ion-col *ngIf="!authenticated" class="text spacing-text">
         
         <span *ngIf="!confirmed && !pin" style="margin:auto; display:table;">
-          Definir o seu código de acesso à aplicação</span
+          Defina o seu código de acesso à aplicação</span
         >
       
         <span *ngIf="!confirmed && pin">
@@ -82,13 +80,13 @@
     </ion-row>
   </div>
     
-    <ion-row class="textLegend">
-      <ion-col *ngIf="!authenticated" class="spacing-text text">
+    <ion-row>
+      <ion-col *ngIf="!authenticated" class="center center-instruction-text">
         <span *ngIf="!confirmed && !pin"> Definir PIN</span>
         <span *ngIf="!confirmed && pin"> Confirmar PIN</span>
         <span *ngIf="confirmed && verified"> Inserir PIN</span>
       </ion-col>
-      <ion-col *ngIf="authenticated" class="spacing-text text center">
+      <ion-col *ngIf="authenticated" class="center center-instruction-text">
         <span *ngIf="confirmed && authenticated"> Inserir PIN</span>
         <span *ngIf="!confirmed && !verified && !pin"> Inserir PIN</span>
         <span *ngIf="!confirmed && !verified && pin"> Inserir PIN</span>
@@ -96,66 +94,78 @@
     </ion-row>
     <ion-row >
       <ion-col>
-        <div *ngIf="!authenticated" class="h-margin" (click)="setFocus()">
+        <div *ngIf="!authenticated" class="center" (click)="setFocus()">
           <ion-icon
             class="number"
+            color="medium"
             *ngIf="pinSize > 0; else empty"
             name="radio-button-on-outline"
           ></ion-icon>
           <ion-icon
             class="number"
+            color="medium"
             *ngIf="pinSize > 1; else empty"
             name="radio-button-on-outline"
           ></ion-icon>
           <ion-icon
             class="number"
+            color="medium"
             *ngIf="pinSize > 2; else empty"
             name="radio-button-on-outline"
           ></ion-icon>
           <ion-icon
             class="number"
+            color="medium"
             *ngIf="pinSize > 3; else empty"
             name="radio-button-on-outline"
           ></ion-icon>
           <ion-icon
             class="number"
+            color="medium"
             *ngIf="pinSize > 4; else empty"
             name="radio-button-on-outline"
           ></ion-icon>
           <ion-icon
             class="number"
+            color="medium"
             *ngIf="pinSize > 5; else empty"
             name="radio-button-on-outline"
           ></ion-icon>
         </div>
-        <div *ngIf="authenticated" class="h-margin center" (click)="setFocus()">
+        <div *ngIf="authenticated" class="center" (click)="setFocus()">
           <ion-icon
             class="number"
+            color="medium"
             *ngIf="pinSize > 0; else empty"
             name="radio-button-on-outline"
           ></ion-icon>
           <ion-icon
             class="number"
+            color="medium"
             *ngIf="pinSize > 1; else empty"
             name="radio-button-on-outline"
           ></ion-icon>
           <ion-icon
             class="number"
+            color="medium"
             *ngIf="pinSize > 2; else empty"
             name="radio-button-on-outline"
           ></ion-icon>
           <ion-icon
             class="number"
+            color="medium"
             *ngIf="pinSize > 3; else empty"
             name="radio-button-on-outline"
           ></ion-icon>
           <ion-icon
             class="number"
+            color="medium"
             *ngIf="pinSize > 4; else empty"
             name="radio-button-on-outline"
           ></ion-icon>
           <ion-icon
             class="number"
+            color="medium"
             *ngIf="pinSize > 5; else empty"
             name="radio-button-on-outline"
           ></ion-icon>
@@ -187,7 +197,7 @@
       <ion-col class="inf">
         <span class="text"
           >Para importar a sua Identificação Digital da Universidade do Minho faça a sua autenticação
-          com a seu número mecanografico e palavra passe utilizado para aceder o portal da UM
+          com a seu número mecanográfico e palavra passe utilizado para aceder o portal da UM
         </span>
       </ion-col>
     </ion-row>

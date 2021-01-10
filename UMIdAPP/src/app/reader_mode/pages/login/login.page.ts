@@ -3,8 +3,9 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../../services/auth.service';
 import { Network } from '@ionic-native/network/ngx';
 import { NavController, Platform } from '@ionic/angular';
-//import * as SecureStorage from '../../../../common/general/secureStorage.js';
- 
+import * as SecureStorage from '../../../../common/general/secureStorage.js';
+import { MenuController } from '@ionic/angular';
+import { Events } from '../../../../common/general/events';
 
 @Component({
   selector: 'app-login',
@@ -25,25 +26,28 @@ export class LoginPage implements OnInit {
     private router: Router,
     private ngZone: NgZone,
     public plt: Platform,
-    public navCtrl: NavController
+    public navCtrl: NavController,
+    private menu: MenuController,
+    private events: Events
   ) {
    
   }
 
 
-  ngOnInit() {
-    // // check if we already did the association
-    // const ss = SecureStorage.instantiateSecureStorage();
-    // SecureStorage.get('card', ss).then( 
-    //   (card) => {
-    //     if (card) {
-    //       this.navCtrl.navigateRoot(['/home', { card_info: 1 }]);
-    //     }
-    //   },
-    //   () => {
-    //     SecureStorage.clear(ss);
-    //   }
-    // );
+  ngOnInit(): void {
+    this.menu.enable(false);
+    // check if we already did the association
+    const ss = SecureStorage.instantiateSecureStorage();
+    SecureStorage.get('user', ss).then( 
+      (card) => {
+        if (card) {
+          this.navCtrl.navigateRoot(['/home', { user_info: 1 }]);
+        }
+      },
+      () => {
+        SecureStorage.clear(ss);
+      }
+    );
   }
 
   /**
@@ -64,13 +68,25 @@ export class LoginPage implements OnInit {
    * @memberof LoginPage
    */
   login(form): void {
-   
+    
     this.authService.login(form.value['number_student'], form.value['password']).then(
       (card_info) => {
         if (card_info.status == 200) {
           this.fail_flag = false;
-          console.log(card_info.data)
-          //this.router.navigate(['/pin', { url: card_info.data }]);
+          let card_info_data = JSON.parse(card_info.data); 
+          console.log(card_info_data.user);
+          const ss = SecureStorage.instantiateSecureStorage();
+          Promise.all([
+          SecureStorage.set('user', JSON.stringify(card_info_data.user),ss),
+          //SecureStorage.set('userHash', card_info_data.userHash,ss),
+          //SecureStorage.set('tickets', card_info_data.userHash,ss),
+          //SecureStorage.set('reservations', card_info_data.userHash,ss),
+          SecureStorage.set('userCertificate', card_info_data.userCertificate,ss)]).then(
+            () => {
+              this.events.publish('fingerprint_done', {});
+              this.router.navigate(['/home', { user_info: 1 }])
+            }
+          );
         }
       },
       (err) => {

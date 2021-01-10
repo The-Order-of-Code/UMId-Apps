@@ -1,11 +1,15 @@
-import { Component, OnInit, NgZone, ChangeDetectorRef, Input } from '@angular/core';
+import { Component, OnInit, NgZone, ChangeDetectorRef } from '@angular/core';
 
 import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 
 import { AlertController } from '@ionic/angular';
 import { MenuController } from '@ionic/angular';
-
+import * as SecureStorage from '../../../common/general/secureStorage.js';
+import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
+import { Storage } from '@ionic/storage';
+import { InAppBrowser, InAppBrowserOptions } from '@ionic-native/in-app-browser/ngx';
+import { Events } from '../../../common/general/events';
 
 
 @Component({
@@ -13,16 +17,34 @@ import { MenuController } from '@ionic/angular';
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
 })
-export class MenuComponent {
-  @Input() name: any;
-  @Input() profile: any;
+export class MenuComponent implements OnInit {
+  
+  photo: any;
+  name: any;
+  userType: any;
+  dataLoaded: boolean = false;
+  view_name: string;
+  has_back_button: boolean;
+  first_name: string;
+  fingerprint: boolean = false;
+  biometry: boolean = false;
 
-  fingerprint: boolean;
-  message: string;
-  version: string;
-  biometry = false;
-  response = false;
-  is_updating = false;
+  options : InAppBrowserOptions = {
+    location : 'yes',//Or 'no' 
+    hidden : 'no', //Or  'yes'
+    clearcache : 'yes',
+    clearsessioncache : 'yes',
+    zoom : 'yes',//Android only ,shows browser zoom controls 
+    hardwareback : 'yes',
+    mediaPlaybackRequiresUserAction : 'no',
+    shouldPauseOnSuspend : 'no', //Android only 
+    closebuttoncaption : 'Close', //iOS only
+    disallowoverscroll : 'no', //iOS only 
+    toolbar : 'yes', //iOS only 
+    enableViewportScale : 'no', //iOS only 
+    allowInlineMediaPlayback : 'no',//iOS only 
+    presentationstyle : 'pagesheet',//iOS only    
+  };
 
   constructor(
     private changeRef: ChangeDetectorRef,
@@ -30,42 +52,52 @@ export class MenuComponent {
     public alertController: AlertController,
     private router: Router,
     private platform: Platform,
+    private storage: Storage,
     private menu: MenuController,
- 
-  ) {
-    this.name = "Joana Teles Morais";
-    this.profile = "Estudante";
-    console.log(this.name)
+    private iab: InAppBrowser,
+    public events: Events
+  ) { }
 
-    console.log(this.profile)
-   /*this.events.subscribe('fingerprint_done', () => {
+  ngOnInit(){
+    this.events.subscribe('fingerprint_done', () => {
+      this.view_name = 'Menu';
+      this.has_back_button = true;
+      this.dataLoaded = true;
+      console.log('listened event: fingerprint event');
       this.storage.get('fingerprint').then((result) => {
         FingerprintAIO.isAvailable().then((has_biometry) => {
+          console.log(result);
           this.fingerprint = result;
           this.biometry = true;
-          if (this.fingerprint)
-            this.message = 'Desativar Autenticação Biométrica';
-          else {
-            this.message = 'Ativar Autenticação Biométrica';
+          if (!this.fingerprint){
+            console.log(result);
             this.fingerprint = false;
           }
+          const ss = SecureStorage.instantiateSecureStorage();
+          SecureStorage.get('user', ss).then( 
+            (card) => {
+              const user = JSON.parse(card).user;
+              this.name=user.fullName;
+              this.userType=this.translate(user.userType);
+              this.photo = 'data:image/jpeg;base64,' + user.picture;
+              this.dataLoaded = true;
+            }
+          );
         });
       });
-    });*/
-    //this.versionApp();
+    });
+
   }
 
-  /**
-   * Funcionalidade para capturar a versão da aplicação posta no config.xml
-   * @memberof MenuComponent
-   *
-  versionApp(): void {
-    this.platform.ready().then(() => {
-      this.appVersion.getVersionNumber().then((result) => {
-        this.version = result;
-      });
-    });
-  }*/
+  translate(type){
+    switch(type){
+      case 'STUDENT':
+        return 'Estudante';
+      case 'EMPLOYEE':
+        return 'Funcionário';
+      default: return '';
+    }
+  }
 
   /**
    * Funcionalidade mudar PIN
@@ -73,7 +105,42 @@ export class MenuComponent {
    */
   changePIN(): void {
     this.router.navigate(['/pin-auth', { auth: true, alteration: true }]);
-    this.close();
+    this.menu.close();
+  }
+
+  /**
+   * Ativar / Desativar autenticação por biometria
+   * @memberof MenuComponent
+   */
+  changeAuth(): void {
+    this.ngZone.run(() => {
+      if (this.fingerprint) {
+        this.fingerprint = false;
+        this.storage.remove('fingerprint');
+        this.storage.set('fingerprint', false);
+      } else {
+        this.fingerprint = true;
+        this.storage.remove('fingerprint');
+        this.storage.set('fingerprint', true);
+      }
+      this.changeRef.detectChanges();
+    });
+  }
+
+  /**
+   * Desassocia MDL eliminando storage e SS
+   *
+  */
+  disassociateStudentCard(): void {
+    const ss = SecureStorage.instantiateSecureStorage();
+    SecureStorage.remove('user', ss);
+    SecureStorage.remove('userCertificate', ss);
+    //SecureStorage.remove('root_cert_gnr', ss);
+    SecureStorage.remove('root_cert_psp', ss);
+    this.storage.remove('pin');
+    this.storage.remove('fingerprint');
+    this.router.navigate(['/instructions']);
+    this.menu.close();
   }
 
   /**
@@ -81,111 +148,19 @@ export class MenuComponent {
    * @memberof MenuComponent
    */
   openURL(): void {
-    const url = 'https://www.imtonline.pt/';
+    const url = 'https://www.uminho.pt/';
     if (this.platform.is('ios')) {
-      //const browser = this.iab.create(url);
-      //browser.show();
+      let target = "_system";
+      this.iab.create(url,target,this.options);
     } else {
-      window.open(url, '_system', 'location=yes');
+      let target = "_system";
+      this.iab.create(url,target,this.options);
     }
   }
 
-  /**
-   * Ativar / Desativar autenticação por biometria
-   * @memberof MenuComponent
-   *
-  changeAuth(): void {
-    this.ngZone.run(() => {
-      if (this.fingerprint) {
-        this.fingerprint = false;
-        this.storage.remove('fingerprint');
-        this.storage.set('fingerprint', false);
-        this.message = 'Ativar Autenticação Biométrica';
-      } else {
-        this.fingerprint = true;
-        this.storage.remove('fingerprint');
-        this.storage.set('fingerprint', true);
-        this.message = 'Desativar Autenticação Biométrica';
-      }
-      this.changeRef.detectChanges();
-    });
-  }*/
-
-  /**
-   * Retorna o número da carta de condução (guardada na SS)
-   *
-  async getDocumentNumber(): Promise<string> {
-    const ss = SecureStorage.instantiateSecureStorage();
-    const mdl = await SecureStorage.get('mdl', ss);
-    const mdl_info = JSON.parse(mdl);
-    const mdl_data = GeneralMethods.decodeIssuerSignedItems(
-      mdl_info.mdl.nameSpaces['org.iso.18013.5.1']
-    );
-    const document_number = mdl_data['document_number'].elementValue;
-    return document_number;
-  }*/
-
-  /**
-   * Guarda a MDL na SS
-   *
-  saveMDL(mdl): void {
-    const ss = SecureStorage.instantiateSecureStorage();
-    SecureStorage.set('mdl', mdl, ss);
-  }*/
-
- 
-
-  /**
-   * Desassocia MDL eliminando storage e SS
-   *
-  disassociateMDL(): void {
-    const ss = SecureStorage.instantiateSecureStorage();
-    SecureStorage.remove('mdl', ss);
-    SecureStorage.remove('privateKey', ss);
-    SecureStorage.remove('root_cert_gnr', ss);
-    SecureStorage.remove('root_cert_psp', ss);
-    this.storage.remove('pin');
-    this.storage.remove('fingerprint');
-    this.router.navigate(['/instructions']);
-    this.close();
-  }*/
-
-  
-
-  /**
-   * Apresenta popup a informar que não existe conetividade
-   * Pode fechar, escolher dados ou escolher wifi
-   */
-  async presentConnectivityAlert(): Promise<void> {
-    const alert = await this.alertController.create({
-      header: 'Problema de conetividade',
-      message:
-        'Por favor, ligue os dados móveis ou o Wi-Fi para estabelecer conexão ao servidor.',
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-          cssClass: 'secondary',
-        },
-        {
-          text: 'Dados Móveis',
-          handler: () => {
-           // this.diagnostic.switchToMobileDataSettings();
-          },
-        },
-        {
-          text: 'Wi-Fi',
-          handler: () => {
-            //this.diagnostic.switchToWifiSettings();
-          },
-        },
-      ],
-    });
-
-    await alert.present();
-  }
-
-  close(): void {
+  goBack(){
     this.menu.close();
   }
+
+
 }

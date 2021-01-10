@@ -11,13 +11,16 @@ import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { MenuComponent } from '../app/components/menu/menu.component';
+import { MobileAccessibility } from '@ionic-native/mobile-accessibility/ngx';
+import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 
 import { HTTP } from '@ionic-native/http/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { IonicStorageModule } from '@ionic/storage';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @NgModule({
-  declarations: [AppComponent,MenuComponent],
+  declarations: [AppComponent, MenuComponent],
   entryComponents: [],
   imports: [BrowserModule, NgxQRCodeModule, IonicStorageModule.forRoot(), IonicModule.forRoot(), AppRoutingModule],
   providers: [
@@ -25,6 +28,9 @@ import { IonicStorageModule } from '@ionic/storage';
     HTTP,
     Network,
     SplashScreen,
+    InAppBrowser,
+    MobileAccessibility,
+    ScreenOrientation,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   exports:[MenuComponent],

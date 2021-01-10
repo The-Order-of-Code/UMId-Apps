@@ -1,0 +1,24 @@
+<ion-header>
+  <app-header-menu
+    [title]=view_name
+    [has_back_button]=has_back_button
+    [username]=first_name
+    (goback)="goBack($event)">
+    </app-header-menu>
+</ion-header>
+
+<ion-content>
+   <app-id-card
+   [card_info]=card_info
+   (eventEmitter)="goBack($event)"
+  ></app-id-card>
+</ion-content>
+
+<app-footer-tab 
+  [show_counter]=show_counter
+  [quantity]=quantity
+  [segment]=segment
+  [prod_name]=prod_name
+  [operation_name]=operation_name
+  (eventEmitter)="goBack($event)"
+></app-footer-tab>

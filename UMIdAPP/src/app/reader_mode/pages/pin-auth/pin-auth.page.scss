@@ -1,232 +1,232 @@
 .top {
-    margin: 0px;
+  margin: 0px;
+  background-color: var(--ion-background-color);
+  padding-top: 48px !important;
+  padding-bottom: var(--ion-margin-between-sections-big);
+  text-align: center;
+  margin-bottom: 0px !important;
+  z-index: 4;
+}
+
+.textLegend{
+  margin-left: 30%;
+  margin-right: 30%;
+  margin-top: 40%;
+}
+
+
+
+.black {
+  color: black !important;
+}
+
+.back {
+  color: var(--ion-color-medium) !important;
+  float: left !important;
+  z-index: 4;
+}
+
+p {
+  margin-top: 80px;
+  margin-bottom: 14px;
+  padding: 0px;
+}
+
+.flag {
+  font-size: 30px;
+  vertical-align: middle;
+  padding-right: 8px;
+}
+
+.title {
+  font-weight: bold !important;
+  vertical-align: middle;
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  font-size: var(--ion-font-size-caption) !important;
+  line-height: var(--ion-line-hight-caption) !important;
+  font-weight: bold !important;
+  margin-bottom: var(--ion-margin-between-sections-big);
+}
+
+.text {
+  font-family: 'Apercu Regular' !important;
+  font-style: normal;
+  font-weight: normal;
+  font-size: var(--ion-font-size-text);
+  line-height: var(--ion-line-hight-text);
+  letter-spacing: 0.01em;
+  font-feature-settings: 'tnum' on, 'lnum' on;
+  padding-bottom: 0px !important;
+}
+
+.in {
+  position: absolute;
+  color: rgba(0, 0, 0, 0);
+  caret-color: transparent;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  clip: rect(0, 0, 0, 0);
+  overflow: hidden;
+}
+
+.number {
+  margin-top: var(--ion-margin-inside-atoms-big);
+  margin-right: var(--ion-margin-inside-atoms-big);
+  height: 28px;
+  width: 31px;
+}
+
+.h-margin {
+  margin-left: 25%;
+}
+
+.spacing-text {
+  margin-right: 20px;
+  margin-left: 20px;
+  margin-top: var(--ion-margin-between-sections-big);
+}
+
+ion-row {
+  width: 100%;
+}
+
+.next {
+  color: white !important;
+  height: 44px;
+  padding: 0px !important;
+  margin: 0px;
+}
+
+.autenticar {
+  color: white !important;
+
+  height: 44px;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 50px;
+}
+
+ion-footer {
+  &.footer-md::before {
+    background-image: none;
+  }
+  margin: 0px;
+  padding: 0px;
+}
+
+.progressBar {
+  height: 10px;
+  margin-bottom: 10px;
+  background-color: var(--ion-background-color);
+  margin: 0px !important;
+}
+
+.progress {
+  margin-left: 10%;
+  margin-right: 10% !important;
+  position: relative;
+  top: 10px;
+}
+
+.progress1 {
+  float: left;
+  z-index: 10;
+  position: relative;
+  width: 20%;
+}
+.progress3 {
+  float: right;
+  z-index: 10;
+  position: relative;
+  width: 20%;
+}
+.progress2 {
+  z-index: 90;
+  position: relative;
+  width: 60%;
+}
+
+.inf {
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 46px;
+  text-align: -webkit-center;
+}
+
+.center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.center-instruction-text{
+  margin-top: 40%;
+}
+
+.error {
+  color: var(--ion-color-danger) !important;
+  font-size: var(--ion-font-size-caption) !important;
+  line-height: var(--ion-line-hight-caption) !important;
+}
+
+.warning {
+  height: 16px;
+  margin-right: 0px;
+}
+
+.cancel {
+  padding-top: 15px;
+  padding-left: 10px;
+  margin-top: 0px;
+  color: var(--ion-color-primary) !important;
+}
+
+ion-page {
+  z-index: 101;
+}
+
+@media screen and (max-width: 359px) {
+  .top {
     background-color: white;
-    padding-top: 48px !important;
-    padding-bottom: var(--ion-margin-between-sections-big);
+    padding-top: 31px;
+    padding-bottom: var(--ion-margin-between-sections-small);
     text-align: center;
-    margin-bottom: 0px !important;
-    z-index: 4;
   }
 
-  .textLegend{
-    margin-left: 30%;
-    margin-right: 30%;
-    margin-top: 40%;
-  }
-
-  
-  
-  .black {
-    color: black !important;
-  }
-  
-  .back {
-    color: var(--ion-color-primary) !important;
-    float: left !important;
-    z-index: 4;
-  }
-  
-  p {
-    margin-top: 80px;
-    margin-bottom: 14px;
-    padding: 0px;
-  }
-  
-  .flag {
-    font-size: 30px;
-    vertical-align: middle;
-    padding-right: 8px;
-  }
-  
-  .title {
-    font-weight: bold !important;
-    vertical-align: middle;
-    margin-bottom: 4px;
-  }
-  
   .subtitle {
     font-size: var(--ion-font-size-caption) !important;
     line-height: var(--ion-line-hight-caption) !important;
     font-weight: bold !important;
-    margin-bottom: var(--ion-margin-between-sections-big);
+   
+    margin-bottom: var(--ion-margin-between-sections-small);
   }
-  
-  .text {
-    font-family: 'Apercu Regular' !important;
-    font-style: normal;
-    font-weight: normal;
-    font-size: var(--ion-font-size-text);
-    line-height: var(--ion-line-hight-text);
-    letter-spacing: 0.01em;
-    font-feature-settings: 'tnum' on, 'lnum' on;
-    padding-bottom: 0px !important;
-  }
-  
-  .in {
-    position: absolute;
-    color: rgba(0, 0, 0, 0);
-    caret-color: transparent;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    border: 0;
-    padding: 0;
-    clip: rect(0, 0, 0, 0);
-    overflow: hidden;
-  }
-  
-  .number {
-    margin-top: var(--ion-margin-inside-atoms-big);
-    margin-right: var(--ion-margin-inside-atoms-big);
-    height: 28px;
-    width: 31px;
-  }
-  
-  .h-margin {
-  
-    margin-left: 25%;
-  
-  
-  }
-  
-  .spacing-text {
-    margin-right: 20px;
-    margin-left: 20px;
-    margin-top: var(--ion-margin-between-sections-big);
-  }
-  
-  ion-row {
-    width: 100%;
-  }
-  
-  .next {
-    color: white !important;
-    height: 44px;
-    padding: 0px !important;
-    margin: 0px;
-  }
-  
-  .autenticar {
-    color: white !important;
 
-    height: 44px;
-    margin-left: 20px;
-    margin-right: 20px;
-    margin-bottom: 50px;
-  }
-  
-  ion-footer {
-    &.footer-md::before {
-      background-image: none;
-    }
-    margin: 0px;
+  p {
+    margin-top: 28px;
+    margin-bottom: 10px;
     padding: 0px;
   }
-  
-  .progressBar {
-    height: 10px;
-    margin-bottom: 10px;
-    background-color: white;
-    margin: 0px !important;
+
+  .autenticar {
+    color: white !important;
+    background-color: #006494;
+    height: 36px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 16px;
   }
-  
-  .progress {
-    margin-left: 10%;
-    margin-right: 10% !important;
-    position: relative;
-    top: 10px;
-  }
-  
-  .progress1 {
-    float: left;
-    z-index: 10;
-    position: relative;
-    width: 20%;
-  }
-  .progress3 {
-    float: right;
-    z-index: 10;
-    position: relative;
-    width: 20%;
-  }
-  .progress2 {
-    z-index: 90;
-    position: relative;
-    width: 60%;
-  }
-  
+
   .inf {
     margin-left: 20px;
     margin-right: 20px;
-    margin-top: 46px;
+    margin-top: 30px;
     text-align: -webkit-center;
   }
-  
-  .center {
-    text-align: center !important;
-  }
-  
-  .error {
-    color: var(--ion-color-danger) !important;
-    font-size: var(--ion-font-size-caption) !important;
-    line-height: var(--ion-line-hight-caption) !important;
-  }
-  
-  .warning {
-    height: 16px;
-    margin-right: 0px;
-  }
-  
-  .cancel {
-    padding-top: 15px;
-    padding-left: 10px;
-    background-color: white;
-    margin-top: 0px;
-    color: var(--ion-color-primary) !important;
-  }
-  
-  ion-page {
-    z-index: 101;
-  }
-  
-  @media screen and (max-width: 359px) {
-    .top {
-      background-color: white;
-      padding-top: 31px;
-      padding-bottom: var(--ion-margin-between-sections-small);
-      text-align: center;
-    }
-  
-    .subtitle {
-      font-size: var(--ion-font-size-caption) !important;
-      line-height: var(--ion-line-hight-caption) !important;
-      font-weight: bold !important;
-     
-      margin-bottom: var(--ion-margin-between-sections-small);
-    }
-  
-    p {
-      margin-top: 28px;
-      margin-bottom: 10px;
-      padding: 0px;
-    }
-  
-    .autenticar {
-      color: white !important;
-      background-color: #006494;
-      height: 36px;
-      margin-left: 20px;
-      margin-right: 20px;
-      margin-bottom: 16px;
-    }
-  
-    .inf {
-      margin-left: 20px;
-      margin-right: 20px;
-      margin-top: 30px;
-      text-align: -webkit-center;
-    }
-  }
+}
 
-  
-  

@@ -3,13 +3,13 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: 'home',
-    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
+    path: '',
+    redirectTo: 'splash',
+    pathMatch: 'full'
   },
   {
-    path: '',
-    redirectTo: 'login',
-    pathMatch: 'full'
+    path: 'home',
+    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
   },
   {
     path: 'login',
@@ -23,6 +23,26 @@ const routes: Routes = [
     path: 'pin-auth',
     loadChildren: () => import('./reader_mode/pages/pin-auth/pin-auth.module').then( m => m.PinAuthPageModule)
   },
+  {
+    path: 'card-page',
+    loadChildren: () => import('./card-page/card-page.module').then( m => m.CardPagePageModule)
+  },
+  {
+    path: 'notifications',
+    loadChildren: () => import('./notifications/notifications.module').then( m => m.NotificationsPageModule)
+  },
+  {
+    path: 'splash',
+    loadChildren: () => import('./splash/splash.module').then( m => m.SplashPageModule)
+  },
+  {
+    path: 'canteen',
+    loadChildren: () => import('./canteen/canteen.module').then( m => m.CanteenPageModule)
+  },
+  {
+    path: 'library',
+    loadChildren: () => import('./library/library.module').then( m => m.LibraryPageModule)
+  }
 ];
 
 @NgModule({

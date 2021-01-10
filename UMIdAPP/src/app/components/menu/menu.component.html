@@ -1,44 +1,34 @@
 <ion-menu side="end" type="push" contentId="menu-content">
-  <ion-header>
-    <ion-toolbar>
-      <ion-grid>
-        <ion-row>
-          <ion-avatar  class="photo ">
-            <img  src="../../assets/photo.svg" />
-          </ion-avatar>
-        </ion-row>
-        <ion-row class="center">
-          <ion-label class="text-header"> {{ name }} </ion-label>
-        </ion-row>
-        <ion-row>
-          <ion-label class="text-header"> {{ profile }} </ion-label>
-        </ion-row>
-        
-      </ion-grid>
-      
-    </ion-toolbar>
-  </ion-header>
+  <ion-toolbar class="ion-header-toolbar" mode="md" *ngIf="has_back_button">
+    <ion-buttons slot="start">
+      <ion-button (click)='goBack()'><ion-icon name="arrow-back-outline" size="large" style="color: white;"></ion-icon></ion-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center" style="color: white; font-weight: bold;">{{ view_name }}</ion-title>
+  </ion-toolbar>  
   <ion-content>
     <ion-list>
-      <ion-grid no-padding>
-        <ion-item button (click)="changePIN()">
-          
-          <ion-label class="text"> Idioma </ion-label>
-          <ion-icon class="Logo" src="assets/icon/pt.svg"></ion-icon>
-          
+      <ion-grid>
+        <ion-item *ngIf="dataLoaded">
+          <ion-grid>
+            <ion-row class="center pad">
+              <ion-avatar  class="photo">
+                <img *ngIf="photo" [src]="photo" />
+              </ion-avatar>
+            </ion-row>
+            <ion-row class="center">
+              <ion-label class="text-header"> <ion-text style="font-weight: bold;" class="ion-text-center userType"> {{ name }} </ion-text> </ion-label>
+            </ion-row>
+            <ion-row class="center pad">
+              <ion-label class="text-header"> <ion-text style="font-weight: bold;" class="ion-text-center name"> {{ userType }} </ion-text> </ion-label>
+            </ion-row>
+          </ion-grid>
         </ion-item>
 
         <ion-item button (click)="changePIN()">
           <ion-label class="text"> Alterar código PIN </ion-label>
-          <!--ion-icon
-            src="assets/icon/pencil.svg" 
-            stroke-width="4"
-            slot="end"
-          ></ion-icon-->
           <ion-icon name="pencil" size="large" class="search-icon um-color pencil-icon"></ion-icon>
         </ion-item>
-        <!-- TODO: CHECK IF WORKS -->
-        <ion-item button *ngIf="biometry" (click)="changeAuth()">
+        <ion-item *ngIf="biometry" (click)="changeAuth()">
           <ion-label class="text"> Biometria </ion-label>
           <ion-toggle
             *ngIf="fingerprint"
@@ -52,27 +42,28 @@
           ></ion-toggle>
         </ion-item>
         <ion-item button (click)="openURL()">
-          <ion-icon class="Logo" src="assets/logos/um.svg"></ion-icon>
+          <img class="logo" src="../../../assets/uminho.svg"/>
           <ion-icon
             name="arrow-forward-outline"
-            color="primary"
+            color="medium"
             slot="end"
           ></ion-icon>
         </ion-item>
-        <ion-item button (click)="disassociateMDL()">
-          <ion-label class="text red"> Terminar sessão </ion-label>
+        <ion-item button (click)="disassociateStudentCard()">
+          <ion-label class="text" color="danger"> Terminar sessão </ion-label>
           <ion-icon name="power" color="danger" slot="end"></ion-icon>
         </ion-item>
       </ion-grid>
     </ion-list>
-    <!--div class="bottom">
+    <div class="bottom">
       <span>Powered by</span>
       <div>
-        <img class="logoMadein" src="assets/logos/logo.png" alt="let´s id" />
+        <img class="logoMadein" src="assets/logo.png" alt="let´s id" width="100"/>
       </div>
       <div>
-        <a>{{version}}</a>
+        <!-- <a>{{version}}</a> -->
+        <a class="version">0.0.1</a>
       </div>
-    </div-->
+    </div>
   </ion-content>
 </ion-menu>

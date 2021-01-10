@@ -1,4 +1,5 @@
 import { Component, OnInit, Input , Output, EventEmitter, ViewChild } from '@angular/core';
+import { NavController } from '@ionic/angular';
 import { IconsComponent } from '../icons/icons.component';
 
 @Component({
@@ -10,15 +11,16 @@ export class CardsComponent implements OnInit {
   @Input() card_type: any;
   @Input() items: any;
   @Output() eventEmitter = new EventEmitter();
+  @Output() nextPageEventEmitter = new EventEmitter();
   width: number;
   icons: string;
-  constructor() { 
+  constructor(public navCtrl: NavController) { 
     
-    this.width = window.innerWidth;
-
+    
   }
-
-  ngOnInit() {}
+  ngOnInit() {
+    this.width = window.innerWidth;
+  }
 
   timeNow(d) {
       const h = (d.getHours()<10?'0':'') + d.getHours()
@@ -80,6 +82,14 @@ export class CardsComponent implements OnInit {
     }
   }
 
+  nextPage(ev, item){
+    console.log("item",item);
+    if(item.args){
+      this.nextPageEventEmitter.emit(JSON.stringify({url: item.url, args: item.args}));
+    }
+    else this.nextPageEventEmitter.emit(JSON.stringify({url: item.url}));
+  }
+  
   goBack(){
     this.eventEmitter.emit('back');
   }

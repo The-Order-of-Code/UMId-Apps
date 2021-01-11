@@ -1,73 +1,47 @@
-
-
 .info {
-    font-family: "Medium";
-    font-weight: normal;
-    font-size: 18px;
-    width: 100%;
-    text-align: center;
-    
-    padding: 8%;
-    align-items: center;
-   
-
-  }
-
-  .line {
-    border-bottom: solid;
-    border-color: white;
-    margin-bottom: 20px;
-    border-width: 1px;
+  font-weight: normal;
+  font-size: 20px;
+  text-align: center;
   
-    margin: 0 auto;
-    width: 50%;
-  }
-
-
-
+  margin: 0 auto 35px;
+  width: 70%;
   
-.qr {
-    border: 14px solid #8D3731;
-    border-radius: 6px;
-    background-color: #FFFFFF;
-    align-items: center;
-    margin: 10px auto;
-  
-    @media (min-width: 361px) {
-      width: 192px;
-      height: 192px;
-      padding: 16px;
-    }
-  
-    @media (max-width: 360px) {
-      width: 144px;
-      height: 144px;
-      padding: 12px;
-    }
-  }
-
-  .flex-box {
-    position: absolute;
-    top: 50%; /* posiciona na metade da tela */
-    margin-top: -25px; /* e retrocede metade da altura */
-    left: 50%; /* posiciona na metade da tela */
-    margin-left: -50px; /* e retrocede metade da largura */
-    
+  @media (min-width: 361px) {
+    margin-top: 52px;
   }
   
-  .codealf {
-    border-bottom: solid;
-    border-color: #8D3731;
-    margin-bottom: 20px;
-    border-width: 2px;
-  
-    font-family: 'Apercu Regular';
-    font-style: Regular;
-    font-size: 28px;
-    line-height: 36px;
-  
-    margin: 34px auto;
-    text-align: center;
-    display: table;
+  @media (max-width: 360px) {
+    margin-top: 36px;
   }
+  
+  color: var(ion-color-dark);
+}
+  
+.border {
+
+  border: 18px solid #88181c;
+  border-radius: 15px;
+
+  @media (min-width: 361px) {
+    width: 192px;
+    height: 192px;
+  }
+  
+  @media (max-width: 360px) {
+    width: 144px;
+    height: 144px;
+  }
+}
+
+.center {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+
+
   

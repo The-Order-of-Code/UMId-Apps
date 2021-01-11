@@ -42,6 +42,14 @@ const routes: Routes = [
   {
     path: 'library',
     loadChildren: () => import('./library/library.module').then( m => m.LibraryPageModule)
+  },
+  {
+    path: 'holder-ble-transfer',
+    loadChildren: () => import('./holder_mode/holder-ble-transfer/holder-ble-transfer.module').then( m => m.HolderBleTransferPageModule)
+  },
+  {
+    path: 'payments',
+    loadChildren: () => import('./payments/payments.module').then( m => m.PaymentsPageModule)
   }
 ];
 

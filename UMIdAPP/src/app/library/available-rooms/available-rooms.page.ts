@@ -22,9 +22,6 @@ export class AvailableRoomsPage implements OnInit {
   card_type: string;
 
   dataLoaded: boolean = false;
-
-  segment: string;
-
   constructor(private router: Router) { }
 
   ngOnInit() {

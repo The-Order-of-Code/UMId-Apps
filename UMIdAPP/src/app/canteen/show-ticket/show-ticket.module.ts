@@ -4,18 +4,18 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { CheckInPageRoutingModule } from './check-in-routing.module';
+import { ShowTicketPageRoutingModule } from './show-ticket-routing.module';
 import { ComponentsModule } from '../../components/components.module';
-import { CheckInPage } from './check-in.page';
+import { ShowTicketPage } from './show-ticket.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    IonicModule,
     ComponentsModule,
-    CheckInPageRoutingModule
+    IonicModule,
+    ShowTicketPageRoutingModule
   ],
-  declarations: [CheckInPage]
+  declarations: [ShowTicketPage]
 })
-export class CheckInPageModule {}
+export class ShowTicketPageModule {}

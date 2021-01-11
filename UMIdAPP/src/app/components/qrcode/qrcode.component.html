@@ -1,36 +1,17 @@
-<ion-content class = "test">
-
-
-<ion-grid>
-  <ion-row>
-      <div class="info ">
-        <span>
-          {{ title }}
-        </span>
-      </div>
-    </ion-row>
-  <ion-row>
-      <div class="qr ">
-        <ngx-qrcode
-          [value]="createdCode"
-          qrc-version="20"
-          colorDark="#000000"
-          colorLight="#FFFFFF"
-        ></ngx-qrcode>
-      </div>
- 
-  </ion-row>
-</ion-grid>
-<!--div class="line"></div-->
-
-
-
-<!--div class="line"></div-->
-
-<!--div *ngIf="code && isCodeAlfNumeric" class="codealf">
+<div class="info">
   <span>
-    {{ code }}
+    {{ sentence }}
   </span>
-</div-->
+</div>
 
-</ion-content>
+<div class="border center" *ngIf="width > 360px">
+  <qrcode [qrdata]="createdCode" [width]="155"></qrcode>
+</div>
+
+<div class="border center" *ngIf="width <= 360px">
+  <qrcode [qrdata]="createdCode" [width]="107"></qrcode>
+</div>
+
+
+
+

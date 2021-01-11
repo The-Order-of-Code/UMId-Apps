@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { CheckInPageRoutingModule } from './check-in-routing.module';
+import { HolderBleTransferPageRoutingModule } from './holder-ble-transfer-routing.module';
 import { ComponentsModule } from '../../components/components.module';
-import { CheckInPage } from './check-in.page';
+import { HolderBleTransferPage } from './holder-ble-transfer.page';
 
 @NgModule({
   imports: [
@@ -14,8 +14,8 @@ import { CheckInPage } from './check-in.page';
     FormsModule,
     IonicModule,
     ComponentsModule,
-    CheckInPageRoutingModule
+    HolderBleTransferPageRoutingModule
   ],
-  declarations: [CheckInPage]
+  declarations: [HolderBleTransferPage]
 })
-export class CheckInPageModule {}
+export class HolderBleTransferPageModule {}

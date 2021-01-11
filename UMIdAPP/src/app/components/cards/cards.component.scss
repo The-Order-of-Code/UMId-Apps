@@ -202,3 +202,69 @@ font-style: "Medium";
 font-weight: normal;
 margin-left: 30%;
 }
+
+/* Cartoes de Pagamentos */
+
+ion-card-content {
+  margin-top: 0px;
+}
+
+ion-card-subtitle {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.pay_card {
+  margin-bottom: 10px;
+  margin-top: 10px;
+  margin-right: 10px;
+  margin-left: 10px;
+  height: 80px;
+  width: 80px;
+}
+
+.paid {
+  height: 20px;
+  width: 50px;
+  align-items: center;
+  border-radius: 4px;
+  text-align: left;
+  font-size: 10px;
+  font-style: "Medium";
+  margin-left: 80%;
+  font-weight: "Medium";
+  background-color: green;
+  color: aliceblue;
+}
+
+
+.bottomPayments {
+  width: 80%;
+  height: 46px;
+  margin-bottom: 10px;
+  margin-right: 10%;
+  margin-left: 10%;
+  align-content: center;
+  border-radius: 4px;
+  background: #D1281B;
+}
+
+.text_title{
+    font-size: 18;
+    font-style: "Medium";
+    font-weight: bold;
+}
+
+.text_subtitle{
+    font-size: 14px;
+    font-style: "Regular";
+    font-weight: normal;
+}
+
+
+.icon_min{
+    width: 15px;
+    height: 15px;
+    margin-right:5px;
+}

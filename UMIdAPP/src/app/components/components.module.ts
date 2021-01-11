@@ -19,11 +19,12 @@ import {InformationComponent} from './information/information.component'
 
 import { IconsComponent } from './icons/icons.component';
 import { IdCardComponent } from './id-card/id-card.component';
+import { QRCodeModule } from 'angularx-qrcode';
 import { IonicModule } from '@ionic/angular';
 
 
 @NgModule({
-    imports: [CommonModule, IonicModule,NgxQRCodeModule],
+    imports: [CommonModule, IonicModule, QRCodeModule],
     declarations: [
         FooterTabComponent,
         InformationComponent,
@@ -40,6 +41,7 @@ import { IonicModule } from '@ionic/angular';
         SuccessComponent,
         FailureComponent,
         IconsComponent,
+        QrcodeComponent,
         IdCardComponent,
     ],
     exports: [
@@ -58,6 +60,7 @@ import { IonicModule } from '@ionic/angular';
         SuccessComponent,
         FailureComponent,
         IconsComponent,
+        QrcodeComponent,
         IdCardComponent,
     ],
   })

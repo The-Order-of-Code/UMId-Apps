@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { NextReservationsPageRoutingModule } from './next-reservations-routing.module';
-
+import { ComponentsModule } from '../../components/components.module';
 import { NextReservationsPage } from './next-reservations.page';
 
 @NgModule({
@@ -13,6 +13,7 @@ import { NextReservationsPage } from './next-reservations.page';
     CommonModule,
     FormsModule,
     IonicModule,
+    ComponentsModule,
     NextReservationsPageRoutingModule
   ],
   declarations: [NextReservationsPage]

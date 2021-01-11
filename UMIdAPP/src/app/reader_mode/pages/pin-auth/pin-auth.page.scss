@@ -52,7 +52,6 @@ p {
 }
 
 .text {
-  font-family: 'Apercu Regular' !important;
   font-style: normal;
   font-weight: normal;
   font-size: var(--ion-font-size-text);
@@ -193,7 +192,7 @@ ion-page {
 
 @media screen and (max-width: 359px) {
   .top {
-    background-color: white;
+    background-color: var(--ion-background-color);
     padding-top: 31px;
     padding-bottom: var(--ion-margin-between-sections-small);
     text-align: center;
@@ -227,6 +226,10 @@ ion-page {
     margin-right: 20px;
     margin-top: 30px;
     text-align: -webkit-center;
+  }
+
+  .center-instruction-text{
+    margin-top: 20%;
   }
 }
 

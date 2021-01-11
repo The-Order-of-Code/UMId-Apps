@@ -1,0 +1,41 @@
+<ion-header>
+  <app-header-menu
+    [title]=view_name
+    [has_back_button]=has_back_button
+    [username]=first_name
+    (goback)="goBack($event)">
+  </app-header-menu>
+
+    <div class="options">
+      <ion-button class="bottom " (click)="options(test='payments' )" >
+        Pendentes
+      </ion-button>
+      <ion-button  class="bottom" (click)="options(test='paid' )" >
+        Pagas
+      </ion-button>
+    </div>
+
+    
+</ion-header>
+
+<ion-content>
+
+<div *ngIf='dataLoaded'>
+  <app-cards
+    [card_type]=card_type
+    [items]=items
+    (nextPageEventEmitter)="nextPage($event)"
+    (eventEmitter)="goBack($event)">
+    </app-cards>
+</div>
+
+</ion-content>
+
+<app-footer-tab 
+  [show_counter]=show_counter
+  [segment]=segment
+  [quantity]=quantity
+  [prod_name]=prod_name
+  [operation_name]=operation_name
+  (eventEmitter)="goBack($event)"
+></app-footer-tab>

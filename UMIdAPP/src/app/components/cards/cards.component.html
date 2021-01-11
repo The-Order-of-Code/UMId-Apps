@@ -276,9 +276,10 @@
         <ion-label *ngIf="item.type_ticket != 'Senha do dia.' " class="text_title_sub"> Quantidade:</ion-label>
 
         <ion-input *ngIf="item.type_ticket != 'Senha do dia.' " type="number" value="0" [min]=0></ion-input>
-        <ion-label *ngIf="item.type_ticket != 'Senha do dia.' " class="text_title_sub">  senhas</ion-label>
+        <ion-label *ngIf="item.type_ticket != 'Senha do dia.' " class="text_title_sub"> senhas</ion-label>
 
-        <ion-label *ngIf="item.type_ticket === 'Senha do dia.' " class="text_title_sub ion-text-wrap"> {{item.selected}}</ion-label>
+        <ion-label *ngIf="item.type_ticket === 'Senha do dia.' " class="text_title_sub ion-text-wrap"> {{item.selected}}
+        </ion-label>
 
         <ion-button *ngIf="item.type_ticket === 'Senha do dia.' " style="--background:#23BD61" class="bottom"
           (click)="goPay()">
@@ -295,30 +296,56 @@
       <ion-grid>
         <ion-row>
           <ion-col>
-            <ion-icon name={{item.icon_name}} size="large" class="notify_card" color="medium" style=" margin-top: 30%;"></ion-icon>
+            <ion-icon name={{item.icon_name}} size="large" class="notify_card" color="medium" style=" margin-top: 30%;">
+            </ion-icon>
           </ion-col>
           <ion-col>
             <ion-card-header style=" margin-left: -80%;">
-            <ion-grid>
-              <ion-row>
-                <ion-col>
-                  <ion-card-subtitle mode="md" class="text_title">Descrição</ion-card-subtitle>
-                </ion-col>
-                <ion-col>
-                  <ion-span [ngClass]="{
+              <ion-grid>
+                <ion-row>
+                  <ion-col>
+                    <ion-card-subtitle mode="md" class="text_title">Descrição</ion-card-subtitle>
+                  </ion-col>
+                  <ion-col>
+                    <ion-span [ngClass]="{
                     'green': item.type === 'Informativo',
                     'red':   item.type ===  'Urgente',
-                    'yellow': item.type === 'Atenção'}" >{{ item.type }}</ion-span>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-            <ion-card-subtitle mode="md" class="text_subtitle">{{item.descripton}}</ion-card-subtitle>
-          </ion-card-header>
+                    'yellow': item.type === 'Atenção'}">{{ item.type }}</ion-span>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+              <ion-card-subtitle mode="md" class="text_subtitle">{{item.descripton}}</ion-card-subtitle>
+            </ion-card-header>
           </ion-col>
-  
+
         </ion-row>
       </ion-grid>
-      </div>
+    </div>
+    <!-- Cartoes de pagamentos -->
+
+    <div *ngIf="(card_type === 'payments' || card_type === 'paid')">
+      <ion-item lines="none" color="light">
+        <ion-icon name="wallet" size="large" class="pay_card" color="medium"></ion-icon>
+        <ion-card-header style="margin-bottom: 10px;">
+            <ion-card-subtitle mode="md" class="text_title">{{ item.value}} € 
+            <div class="paid" *ngIf="card_type === 'paid' ">
+              <ion-icon name="checkmark" class="icon_min" color="#ffffff"></ion-icon>PAGO
+            </div>
+          </ion-card-subtitle>
+            <ion-card-subtitle mode="md" class="text_subtitle ion-text-wrap" color="medium"> {{ item.n_propinas }}
+            </ion-card-subtitle>
+            <ion-card-subtitle mode="md" class="text_subtitle ion-text-wrap" color="medium"> {{ item.ano }}
+            </ion-card-subtitle>
+            <ion-card-subtitle mode="md" class="text_subtitle ion-text-wrap" color="medium">
+                <ion-icon name="calendar-outline" size="large" color="medium" class="icon_min"></ion-icon>
+                <ion-label class="text_valid" class="text_subtitle">{{ item.valid }} </ion-label>
+          </ion-card-subtitle>
+        </ion-card-header>
+      </ion-item>
+      <ion-button style="--background:#8D3731" class="bottomPayments" (click)="goPay()" *ngIf="card_type === 'payments' ">
+        Pagar
+      </ion-button>
+    </div>
 
 
 

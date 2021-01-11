@@ -74,4 +74,19 @@ ion-menu{
     margin-top: 20px;
     color: var(--ion-color-dark);
 }
+
+
+@media screen and (max-width: 359px) {
+    .photo{
+        height: 100px;
+        width: 100px;
+    }
+    .text{
+        font-weight: normal;
+        font-size: 16px;
+    }
+    .pad{
+        padding-bottom: 10px;
+    }
+}
   

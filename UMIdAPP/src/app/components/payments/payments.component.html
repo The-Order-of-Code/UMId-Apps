@@ -21,16 +21,18 @@
 
   <ion-content>
     <ion-virtual-scroll [items]="items" approxItemHeight="320px">
-      <ion-item *virtualItem="let item;" style="background-color: Medium;">
-        <ion-grid>
-          <ion-row>
-            <ion-col class="element">{{ item.description }}</ion-col>
-            <ion-col class="element">{{ item.count }}</ion-col>
-            <ion-col class="element">{{ item.value }}</ion-col>
-          </ion-row>
-        </ion-grid>
-
-      </ion-item>
+      <div *ngIf="card_type === 'payments-finish' ">
+        <ion-item *virtualItem="let item;" style="background-color: Medium;">
+          <ion-grid>
+            <ion-row>
+              <ion-col class="element">{{ item.description }}</ion-col>
+              <ion-col class="element">{{ item.count }}</ion-col>
+              <ion-col class="element">{{ item.value }}</ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+      </div>
+      
     </ion-virtual-scroll>
   </ion-content>
 

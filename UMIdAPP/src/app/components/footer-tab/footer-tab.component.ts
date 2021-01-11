@@ -13,6 +13,9 @@ export class FooterTabComponent implements OnInit {
   @Input() quantity: any;
   @Input() prod_name: any;
   @Input() operation_name: any;
+  @Input() text_select:any;
+  @Input() show_pay:any;
+
   @Output() eventEmitter = new EventEmitter();
   constructor(public navCtrl: NavController) {}
 
@@ -44,8 +47,14 @@ export class FooterTabComponent implements OnInit {
   goBack(){
     this.eventEmitter.emit('back');
   }
-  nextpage(){
-    console.log('teste')
+  methodPayment(method){
+    console.log(method)
+    if(method === "paypal"){
+      // acao para o paylpal
+    }
+    else{
+      // acao para mbway
+    }
   }
 
 }

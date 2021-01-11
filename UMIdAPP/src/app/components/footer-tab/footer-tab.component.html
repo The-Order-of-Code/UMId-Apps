@@ -8,21 +8,28 @@
       </ion-col>
       <ion-col>
         <div class="ion-text-center">
-          <ion-button slot="end" color="primary" class="confirm_button"><ion-text class="text_confirm">Confirmar</ion-text></ion-button>
+          <ion-button slot="end" color="primary" class="confirm_button">
+            <ion-text class="text_confirm">Confirmar</ion-text>
+          </ion-button>
         </div>
       </ion-col>
     </ion-row>
   </ion-grid>
 
-  <ion-grid *ngIf="show_pay" >
-    <ion-row id='line'>
-      <ion-col class="text_select">{{ text_select }}</ion-col>
-    </ion-row>
-    <ion-row >
-       <ion-col class="option"><img src="../../../assets/icon/mbway.svg"  ng-click="nextpage()" class="image">
-       <img src="../../../assets/icon/paypal.svg"  ng-click="nextpage()" class="image"></ion-col>
-    </ion-row>
-  </ion-grid>
+  <div class="methods_pay">
+    <ion-grid *ngIf="show_pay">
+      <ion-row id='line'>
+        <ion-col class="text_select">{{ text_select }}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="option">
+          <img src="../../../assets/icon/mbway.svg" (click)="methodPayment(method='mbway')" class="image">
+          <img src="../../../assets/icon/paypal.svg" (click)="methodPayment(method='paypal')" class="image">
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  
 
   <ion-toolbar>
     <ion-segment value="paid" mode="md" (ionChange)="segmentChanged($event)" value="{{ segment }}">
@@ -32,7 +39,7 @@
       <ion-segment-button value="notifications">
         <ion-icon name="notifications"></ion-icon>
       </ion-segment-button>
-      <ion-segment-button value="profile" >
+      <ion-segment-button value="profile">
         <ion-icon name="person-circle"></ion-icon>
       </ion-segment-button>
     </ion-segment>

@@ -13,19 +13,19 @@ export class PaymentsComponent implements OnInit {
   @Input() title_value: string;
   @Input() items: any;
 
- @Input()  text_select:any;
+  @Input() text_select: any;
   @Output() eventEmitter = new EventEmitter();
-  constructor() { 
-    
-    
+  constructor() {
+
+
 
   }
 
   ngOnInit() {
-     
+
   }
 
-  goBack(){
+  goBack() {
     this.eventEmitter.emit('back');
   }
 }

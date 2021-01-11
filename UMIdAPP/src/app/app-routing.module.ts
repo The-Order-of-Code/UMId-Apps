@@ -50,6 +50,10 @@ const routes: Routes = [
   {
     path: 'payments',
     loadChildren: () => import('./payments/payments.module').then( m => m.PaymentsPageModule)
+  },
+  {
+    path: 'payments-finish',
+    loadChildren: () => import('./payments-finish/payments-finish.module').then( m => m.PaymentsFinishPageModule)
   }
 ];
 

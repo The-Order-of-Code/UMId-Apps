@@ -19,6 +19,10 @@ const routes: Routes = [
   {
     path: 'show-ticket',
     loadChildren: () => import('./show-ticket/show-ticket.module').then( m => m.ShowTicketPageModule)
+  },
+  {
+    path: 'choice-ticket',
+    loadChildren: () => import('./choice-ticket/choice-ticket.module').then( m => m.ChoiceTicketPageModule)
   }
 ];
 

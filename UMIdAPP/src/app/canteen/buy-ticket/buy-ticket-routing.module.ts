@@ -7,7 +7,16 @@ const routes: Routes = [
   {
     path: '',
     component: BuyTicketPage
-  }
+  },
+  {
+    path: 'buy-ticket-day',
+    loadChildren: () => import('./buy-ticket-day/buy-ticket-day.module').then( m => m.BuyTicketDayPageModule)
+  },
+  {
+    path: 'information',
+    loadChildren: () => import('./information/information.module').then( m => m.InformationPageModule)
+  },
+
 ];
 
 @NgModule({

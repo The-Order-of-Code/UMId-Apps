@@ -1,0 +1,43 @@
+<ion-header>
+  <app-header-menu
+    [title]=view_name
+    [has_back_button]=has_back_button
+    [username]=first_name
+    (goback)="goBack($event)">
+    </app-header-menu>
+</ion-header>
+
+<ion-content>
+  <div class="div-tex">
+    <ion-text class="text">
+      Para reduzir o desperdício alimentar, a Universidade do Minho oferece um novo tipo de senhas, as senhas do dia.
+    </ion-text>
+  </div>
+  <div class="div-tex">
+    <ion-text  class="text">
+      As senhas do dia podem ser senhas simples ou completas. Fica à tua escolha.
+    </ion-text>
+  </div>
+  <div class="div-tex">
+    <ion-text class="text">
+      Nota que tens de consumir a senha no dia que escolheste para a refeição. Caso não tenhas consumido no dia, a senha deixa de estar disponível para ser consumida. 
+    </ion-text>
+  </div>
+  
+  
+  <div class="div">
+    <ion-button class="bottom"  (click)="goForward()">
+      PROSSEGUIR
+    </ion-button> 
+  </div>
+
+</ion-content>
+
+<app-footer-tab
+  [show_counter]=show_counter
+  [quantity]=quantity
+  [segment]=segment
+  [prod_name]=prod_name
+  [operation_name]=operation_name
+  (eventEmitter)="goBack($event)"
+></app-footer-tab>

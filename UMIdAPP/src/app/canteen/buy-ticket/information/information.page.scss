@@ -1,0 +1,49 @@
+.div {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+
+    font-style: Medium;
+    font-size: 12px;
+    z-index: 1;
+    position: absolute;
+    margin: 10% 20px;
+}
+
+.text{
+    font-size: 18px;
+    font-style: "Medium";
+    font-weight: "normal";
+    padding: 30px;
+    margin-top: 20px;
+}
+
+.div-tex{
+    margin-top: 30px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.bottom {
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    --background:#428CFF; 
+    --color:#FFFFFF;
+
+    width: 295px;
+    height: 46;
+
+    position:0!important;
+    
+
+    
+    font-style: Medium;
+    font-size: 12px;
+    z-index: 1;
+    position: absolute;
+    margin: auto;
+}

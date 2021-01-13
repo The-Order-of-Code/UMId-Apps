@@ -52,6 +52,7 @@ export class CanteenPage implements OnInit {
                 this.show_counter = false;
                 this.card_type = "main menu";
                 this.items.push({name: "Apresentar senha", icon_name: 'senha', url: '/canteen/choice-ticket'});
+                this.items.push({name: "Permissão", icon_name: 'perfil', url: '/authorization'});
                 this.items.push({name: "Consultar senhas", icon_name: 'pesquisar senhas', url:'/canteen/search-ticket'});
                 this.items.push({name: "Comprar senhas", icon_name: 'comprar senhas', url:'/canteen/buy-ticket'});
                 this.dataLoaded = true;

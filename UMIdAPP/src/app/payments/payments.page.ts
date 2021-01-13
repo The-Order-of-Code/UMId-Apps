@@ -23,7 +23,7 @@ export class PaymentsPage implements OnInit {
   payments: Object[] = [];
   paid: Object[] = [];
 
-  constructor(private router: Router,) { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
     // A view para proprinas  

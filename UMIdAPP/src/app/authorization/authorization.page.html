@@ -1,0 +1,38 @@
+<ion-header>
+  <app-header-menu
+    [title]=view_name
+    [has_back_button]=has_back_button
+    [username]=first_name
+    (goback)="goBack($event)">
+  </app-header-menu>
+
+</ion-header>
+
+<ion-content>
+
+  <div *ngIf='dataLoaded'>
+
+    <app-permit
+    
+      [info]=info
+      [sub_info]=sub_info
+      [icon_name]=icon_name
+      [request_attributes]=request_attributes
+      [shared_other] = shared_other
+
+      (nextPageEventEmitter)="nextPage($event)"
+      (eventEmitter)="goBack($event)">
+      </app-permit>
+  
+  </div>
+
+</ion-content>
+      
+<app-footer-tab
+  [show_counter]=show_counter
+  [quantity]=quantity
+  [segment]=segment
+  [prod_name]=prod_name
+  [operation_name]=operation_name
+  (eventEmitter)="goBack($event)"
+></app-footer-tab>

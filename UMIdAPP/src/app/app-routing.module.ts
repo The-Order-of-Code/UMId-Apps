@@ -54,6 +54,10 @@ const routes: Routes = [
   {
     path: 'payments-finish',
     loadChildren: () => import('./payments-finish/payments-finish.module').then( m => m.PaymentsFinishPageModule)
+  },
+  {
+    path: 'authorization',
+    loadChildren: () => import('./authorization/authorization.module').then( m => m.AuthorizationPageModule)
   }
 ];
 

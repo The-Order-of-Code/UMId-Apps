@@ -1,37 +1,45 @@
-<ion-content class="back">
-  
+
+
   <div class="info">
     <span class="quote">
       {{ info }}
     </span>
   </div>
 
-<div class="icon-wraper" >
-  <ion-icon name="{{ icon_name }}" size="large" color="medium" class="icon"></ion-icon>
-</div>
- 
-<div class="info sub_info">
-  <span class="quote">
-    {{ sub_info }}
-  </span>
-</div>
+  <div class="icon-wraper" *ngIf="shared_other">
+    <ion-icon name="{{ icon_name }}" size="large" color="medium" class="icon"></ion-icon>
+  </div>
 
-<div class="bottom">
-  <ion-grid>
-    <ion-row>
-      <ion-col>
-        <ion-button style="--background:#D1281B" (click)="goBack()">
-        RECUSAR
-      </ion-button>
-    </ion-col>
-      <ion-col>
-        <ion-button style="--background:#428CFF" (click)="goBack()">
-          PERMITIR
-        </ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-  
-</div>
+  <div *ngIf="!shared_other">
+    <ion-card class="grid">
+      <ion-list>
+        <ion-item class="attribute" *ngFor="let requested of request_attributes">
+          {{ requested }}
+        </ion-item>
+      </ion-list>
+    </ion-card>
+  </div>
 
-</ion-content>
+  <div class="info sub_info">
+    <span class="quote">
+      {{ sub_info }}
+    </span>
+  </div>
+
+  <div class="bottom">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-button style="--background:#D1281B" (click)="goBack()">
+            RECUSAR
+          </ion-button>
+        </ion-col>
+        <ion-col>
+          <ion-button style="--background:#428CFF" (click)="goBack()">
+            PERMITIR
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+  </div>

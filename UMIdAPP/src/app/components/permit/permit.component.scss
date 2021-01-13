@@ -26,7 +26,7 @@
   
     margin: 20% auto 0;
   
-   
+
   
     div {
       margin-top: 16px;
@@ -67,4 +67,23 @@
   
   .quote {
     font-size: 17px;
+  }
+
+
+  .grid {
+    
+    margin: auto 31px;
+    text-align: justify;
+    max-height: 50vh;
+    overflow-y: scroll;
+    box-shadow: none !important;
+    
+  }
+  
+  .attribute {
+    font-family: 'Apercu Regular';
+    font-style: Regular;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 16px;
   }

@@ -329,7 +329,10 @@
         <ion-card-header style="margin-bottom: 10px;">
           <ion-card-subtitle mode="md" class="text_title">{{ item.value}} €
             <div class="paid" *ngIf="card_type === 'paid' ">
-              <ion-icon name="checkmark" class="icon_min" color="#ffffff"></ion-icon>PAGO
+                <ion-row>
+                    <ion-icon name="checkmark" class="icon_min" color="#ffffff"></ion-icon>
+                    PAGO
+                </ion-row>
             </div>
           </ion-card-subtitle>
           <ion-card-subtitle mode="md" class="text_subtitle ion-text-wrap" color="medium"> {{ item.n_propinas }}
@@ -337,8 +340,10 @@
           <ion-card-subtitle mode="md" class="text_subtitle ion-text-wrap" color="medium"> {{ item.ano }}
           </ion-card-subtitle>
           <ion-card-subtitle mode="md" class="text_subtitle ion-text-wrap" color="medium">
-            <ion-icon name="calendar-outline" size="large" color="medium" class="icon_min"></ion-icon>
-            <ion-label class="text_valid" class="text_subtitle">{{ item.valid }} </ion-label>
+              <ion-row>
+                <ion-icon name="calendar-outline" size="large" color="medium" class="icon_min"></ion-icon>
+                <ion-label class="text_valid" class="text_subtitle">{{ item.valid }} </ion-label>
+              </ion-row>
           </ion-card-subtitle>
         </ion-card-header>
       </ion-item>

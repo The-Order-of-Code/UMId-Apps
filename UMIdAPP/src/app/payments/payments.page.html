@@ -5,17 +5,18 @@
     [username]=first_name
     (goback)="goBack($event)">
   </app-header-menu>
-
-    <div class="options">
-      <ion-button class="bottom " (click)="options(card='payments' )" >
-        Pendentes
-      </ion-button>
-      <ion-button  class="bottom" (click)="options(card='paid' )" >
-        Pagas
-      </ion-button>
-    </div>
-
-    
+    <ion-row>
+      <div class="options">
+        <ion-segment>
+        <ion-segment-button class="bottom " (click)="options(card='payments' )" >
+          Pendentes
+        </ion-segment-button>
+        <ion-segment-button class="bottom" (click)="options(card='paid' )" >
+          Pagas
+        </ion-segment-button>
+      </ion-segment>
+      </div>
+    </ion-row>
 </ion-header>
 
 <ion-content>

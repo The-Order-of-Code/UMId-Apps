@@ -1,13 +1,16 @@
 .bottom{
     width: 151px;
     height: 34;
-    margin-left: 5%;
     border-radius: 5px;
-    --background:"medium" ;
+    --background:#E5E5E5 ;
     color: black;
 } 
 
 .options{
     margin-left: auto;
     margin-right: auto;
+}
+
+ion-segment-button {
+    --color-checked: #c93347;
 }

@@ -47,7 +47,7 @@
               type="submit"
               [disabled]="form.invalid"
               expand="block"
-              >Entrar</ion-button
+              >Entrar <ion-spinner *ngIf="is_submitting" style="margin-left: 10px;" name="circles"></ion-spinner></ion-button
             >
           </div>
           <ion-item *ngIf="fail_flag" color="danger">

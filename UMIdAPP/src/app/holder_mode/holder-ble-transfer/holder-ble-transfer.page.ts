@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-holder-ble-transfer',
@@ -19,8 +19,7 @@ export class HolderBleTransferPage implements OnInit {
   createdCode: string;
   data_name: string;
   dataLoaded: boolean = false;
-  router: any;
-  constructor(private activateRoute: ActivatedRoute) { }
+  constructor(private activateRoute: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
     this.activateRoute.paramMap.subscribe(

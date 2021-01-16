@@ -1,6 +1,6 @@
 
 
-  <div class="info">
+  <div class="info" style="margin-bottom: 15px;">
     <span class="quote">
       {{ info }}
     </span>
@@ -13,21 +13,22 @@
   <div *ngIf="!shared_other">
     <ion-card class="grid">
       <ion-list>
-        <ion-item class="attribute" *ngFor="let requested of request_attributes">
+        <ion-item class="attribute" lines="full" *ngFor="let requested of request_attributes">
           {{ requested }}
         </ion-item>
       </ion-list>
     </ion-card>
   </div>
 
-  <div class="info sub_info">
-    <span class="quote">
-      {{ sub_info }}
-    </span>
-  </div>
-
   <div class="bottom">
     <ion-grid>
+      <ion-row>
+        <div class="info sub_info">
+          <span class="quote">
+            {{ sub_info }}
+          </span>
+        </div>
+      </ion-row>
       <ion-row>
         <ion-col>
           <ion-button style="--background:#D1281B" (click)="goBack()">

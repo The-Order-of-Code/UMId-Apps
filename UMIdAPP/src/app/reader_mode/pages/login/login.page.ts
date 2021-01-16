@@ -6,6 +6,9 @@ import { NavController, Platform } from '@ionic/angular';
 import * as SecureStorage from '../../../../common/general/secureStorage.js';
 import { MenuController } from '@ionic/angular';
 import { Events } from '../../../../common/general/events';
+import * as ComunicationCrypto from '../../../../common/crypto/holder-mode/communicationCrypto.js';
+import * as CSR from '../../../../common/crypto/csr.js';
+import * as ReaderAuth from '../../../../common/crypto/holder-mode/readerAuth';
 
 @Component({
   selector: 'app-login',
@@ -18,6 +21,7 @@ export class LoginPage implements OnInit {
   fail_flag: boolean;
   indicative: string;
   devWidth: any;
+  is_submitting: boolean;
 
   constructor(
     private changeRef: ChangeDetectorRef,
@@ -68,51 +72,72 @@ export class LoginPage implements OnInit {
    * @memberof LoginPage
    */
   login(form): void {
-    
-    this.authService.login(form.value['number_student'], form.value['password']).then(
-      (card_info) => {
-        if (card_info.status == 200) {
-          this.fail_flag = false;
-          let card_info_data = JSON.parse(card_info.data); 
-          console.log(card_info_data.user);
-          const ss = SecureStorage.instantiateSecureStorage();
-          Promise.all([
-          SecureStorage.set('user', JSON.stringify(card_info_data.user),ss),
-          //SecureStorage.set('userHash', card_info_data.userHash,ss),
-          //SecureStorage.set('tickets', card_info_data.userHash,ss),
-          //SecureStorage.set('reservations', card_info_data.userHash,ss),
-          SecureStorage.set('userCertificate', card_info_data.userCertificate,ss)]).then(
-            () => {
-              this.events.publish('fingerprint_done', {});
-              this.router.navigate(['/home', { user_info: 1 }])
+    this.is_submitting = true;
+    this.getEntityCertificate({username: form.value['number_student'], password: form.value['password']}).then(
+      (csr) => {
+        console.log('csr: ', csr)
+        this.authService.login(form.value['number_student'], form.value['password'], csr).then(
+          (card_info) => {
+            if (card_info.status == 200) {
+              this.fail_flag = false;
+              let card_info_data = JSON.parse(card_info.data); 
+              if(card_info_data.user.userType == 'EMPLOYEE') ReaderAuth.getEntRootCertificate(form.value['number_student'], form.value['password'])
+              const ss = SecureStorage.instantiateSecureStorage();
+              Promise.all([
+                SecureStorage.set('user', JSON.stringify(card_info_data.user),ss),
+                SecureStorage.set('mso', JSON.stringify(card_info_data.mso),ss),
+                SecureStorage.set('tickets', JSON.stringify(card_info_data.tickets),ss),
+                SecureStorage.set('reservations', JSON.stringify(card_info_data.reservations),ss),
+                SecureStorage.set('userCertificate', card_info_data.userCertificate,ss)]).then(
+                () => {
+                  this.is_submitting = false;
+                  this.events.publish('fingerprint_done', {});
+                  this.router.navigate(['/home', { user_info: 1 }])
+                }
+              );
             }
-          );
-        }
-      },
-      (err) => {
-        console.error('There was an error!', err);
-        if (!this.isConnected()) {
-          this.fail_flag = true;
-          this.message = 'Verifique a conexão e tente novamente.';
-          this.changeRef.detectChanges();
-        }
-        if (err.status == 400) {
-          this.ngZone.run(() => {
-            this.fail_flag = true;
-            this.message = 'Dados Inválidos.';
-            this.changeRef.detectChanges();
-          });
-        }
-        if (err.status == 500) {
-          this.ngZone.run(() => {
-            this.fail_flag = true;
-            this.message = 'Erro na conexão com o servidor, tente novamente.';
-            this.changeRef.detectChanges();
-          });
-        }
-      }
-    );
+          },
+          (err) => {
+            console.error('There was an error!', err);
+            if (!this.isConnected()) {
+              this.fail_flag = true;
+              this.message = 'Verifique a conexão e tente novamente.';
+              this.changeRef.detectChanges();
+            }
+            if (err.status == 400) {
+              this.ngZone.run(() => {
+                this.fail_flag = true;
+                this.message = 'Dados Inválidos.';
+                this.changeRef.detectChanges();
+              });
+            }
+            if (err.status == 500) {
+              this.ngZone.run(() => {
+                this.fail_flag = true;
+                this.message = 'Erro na conexão com o servidor, tente novamente.';
+                this.changeRef.detectChanges();
+              });
+            }
+          }
+        );
+      } 
+    )
   }
+
+  /**
+   * Método de obtenção do certificado assinado pela entidade 
+   */
+  async getEntityCertificate(user) {
+    return ComunicationCrypto.generate_signing_key().then(
+      async (key) => {
+        const privKey = await ComunicationCrypto.export_key(key.privateKey)
+        const ss = SecureStorage.instantiateSecureStorage();
+        SecureStorage.set('privateKey', privKey)
+        return CSR.make_csr(key, user.username);
+    });
+  }
+
+
 }
 
 

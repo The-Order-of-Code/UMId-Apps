@@ -79,9 +79,11 @@
     box-shadow: none !important;
     
   }
+
   
   .attribute {
     font-family: 'Apercu Regular';
+    --border-color: var(--ion-color-medium);
     font-style: Regular;
     font-weight: normal;
     font-size: 12px;

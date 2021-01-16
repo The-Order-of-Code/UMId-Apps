@@ -1,359 +1,248 @@
 const CBOR = require('./cbor.js');
 const GeneralMethods = require('./general.ts');
 const COSE = require('cose-js');
-const SecureStorage = require('./secureStorage.js');
-const ReaderAuthMethods = require('../crypto/readerAuth.ts');
+const SecureStorage = require('../secureStorage.js');
+const ReaderAuthMethods = require('../../crypto/holder-mode/readerAuth.ts');
 import { getAllFields, getOver18Fields, generateToken } from './jwt';
 
 function jsonToStrMap(jsonStr) {
   return GeneralMethods.objToStrMap(JSON.parse(jsonStr));
 }
 
-function matchIndexWithIdentifier(ind) {
-  var identifier;
-  switch (ind + 1) {
-    case 1:
-      identifier = 'family_name';
-      break;
-    case 2:
-      identifier = 'given_name';
-      break;
-    case 3:
-      identifier = 'birth_date';
-      break;
-    case 4:
-      identifier = 'issue_date';
-      break;
-    case 5:
-      identifier = 'expiry_date';
-      break;
-    case 6:
-      identifier = 'issuing_country';
-      break;
-    case 7:
-      identifier = 'issuing_authority';
-      break;
-    case 8:
-      identifier = 'document_number';
-      break;
-    case 9:
-      identifier = 'administrative_number';
-      break;
-    case 10:
-      identifier = 'driving_privileges';
-      break;
-    case 11:
-      identifier = 'un_distinguishing_sign';
-      break;
-    case 12:
-      identifier = 'gender';
-      break;
-    case 13:
-      identifier = 'height';
-      break;
-    case 14:
-      identifier = 'weight';
-      break;
-    case 15:
-      identifier = 'eye_color';
-      break;
-    case 16:
-      identifier = 'hair_color';
-      break;
-    case 17:
-      identifier = 'birth_place';
-      break;
-    case 18:
-      identifier = 'resident_address';
-      break;
-    case 19:
-      identifier = 'portrait';
-      break;
-    case 20:
-      identifier = 'portrait_capture_date';
-      break;
-    case 21:
-      identifier = 'age_in_years';
-      break;
-    case 22:
-      identifier = 'age_birth_year';
-      break;
-    case 23:
-      identifier = 'age_over_18';
-      break;
-    case 24:
-      identifier = 'issuing_jurisdiction';
-      break;
-    case 25:
-      identifier = 'nationality';
-      break;
-    case 26:
-      identifier = 'resident_city';
-      break;
-    case 27:
-      identifier = 'resident_state';
-      break;
-    case 28:
-      identifier = 'resident_postal_code';
-      break;
-    case 29:
-      identifier = 'biometric_template_xx';
-      break;
-    case 30:
-      identifier = 'name_national_character';
-      break;
-    case 31:
-      identifier = 'signature_usual_mark';
-      break;
-    case 32:
-      identifier = 'online_token_xxxx';
-      break;
-    case 33:
-      identifier = 'online_url_xxxx';
-      break;
-    default:
-      identifier = null;
-      break;
+/**
+ * transforma a estrutura proveniente do backend (formato map) num map chave-valor, reconhecido por este script
+ * @param {*} user 
+ */
+function userFromBackendToKeyValueFormat(user){
+  let finalDict = {};
+  for (const [key, value] of Object.entries(user.user)) {
+    const dictKey = 'user.' + key;
+    console.log(dictkey, value);
   }
-  return identifier;
-}
+  for (const [key, value] of Object.entries(user.course)) {
+    const dictKey = 'course.' + key;
+    console.log(dictkey, value);
+  }
+
+
+} 
 
 /**
  *
- * transform mdl map into readable list to be used by createIssuerSignedItemsObj function
+ * transform user map into readable list to be used by createIssuerSignedItemsObj function
  */
-function map_to_readable_list(mdl, request_accepted_flag, use_case, isOnlineRequest) {
-  let mdl_map = jsonToStrMap(JSON.stringify(mdl));
-  console.log('mdl map: ', mdl_map);
-  var identifier,
-    value,
-    readable_list = [];
-  if (use_case == 'carta de condução' && !isOnlineRequest) {
-    for (var i = 0; i < 33; i++) {
-      identifier = matchIndexWithIdentifier(i);
-      console.log('identifier: ', identifier);
+function map_to_readable_list(
+  user,
+  request_accepted_flag,
+  request_attributes,
+  isOnlineRequest
+) {
+  let user_map = jsonToStrMap(JSON.stringify(user));
+  console.log('user map: ', user_map);
+  console.log('typeof:', typeof request_attributes, request_attributes);
+  let readable_map = {};
 
-      if (request_accepted_flag == false) {
-        value = mdl_map.get(identifier);
-        if (value == undefined) readable_list.push('data not found');
-        else readable_list.push('data request denied');
-      } else {
-        value = mdl_map.get(identifier);
-        console.log(identifier);
-        console.log(value);
-        if (value == undefined) readable_list.push('data not found');
-        else {
-          if (identifier == 'online_token_xxxx') {
-            readable_list.push(
-              Buffer.from(value, 'base64')
+  if (request_accepted_flag) {
+    if (isOnlineRequest) {
+      readable_map['ticket'] = Buffer.from(
+        user_map.get('online_token_xxxx'),
+        'base64'
+      );
+      console.log('MAPA:', readable_map);
+    } else {
+      console.log('typeof:', typeof request_attributes);
+      request_attributes.forEach((attr) => {
+        let value = user_map.get(attr);
+        if (value == undefined) {
+          readable_map[attr] = 'data not found';
+        } else {
+          if (attr == 'online_token_xxxx') {
+            readable_map[attr] = Buffer.from(value, 'base64');
+          } else {
+            readable_map[attr] = Buffer.from(
+              GeneralMethods.url_safe_base64_to_base64(value),
+              'base64'
             );
-          } else
-            readable_list.push(
-              Buffer.from(
-                GeneralMethods.url_safe_base64_to_base64(value),
-                'base64'
-              )
-            );
+          }
         }
-        console.log(readable_list);
-      }
+      });
     }
-  }
-  if (use_case == 'prova de maioridade' && !isOnlineRequest) {
-    if (request_accepted_flag == false) {
-      readable_list = ['data request denied', 'data request denied'];
+  } else {
+    if (isOnlineRequest) {
+      readable_map['ticket'] = 'data request denied';
     } else {
-      readable_list = [
-        Buffer.from(
-          GeneralMethods.url_safe_base64_to_base64(mdl_map.get('portrait')),
-          'base64'
-        ),
-        Buffer.from(
-          GeneralMethods.url_safe_base64_to_base64(mdl_map.get('age_over_18')),
-          'base64'
-        ),
-      ];
+      request_attributes.forEach((attr) => {
+        readable_map[attr] = 'data request denied';
+      });
     }
   }
 
-  if(isOnlineRequest) {
-    if (request_accepted_flag == false) {
-      readable_list = ['data request denied'];
-    } else {
-      readable_list = [
-        Buffer.from(
-          mdl_map.get('online_token_xxxx'),
-          'base64'
-        ),
-      ];
-    }
-  }
-  return readable_list;
+  console.log('readable map:', readable_map);
+  return readable_map;
 }
 
-function createIssuerSignedItemsObj(mdl, request_accepted_flag, use_case, isOnlineRequest) {
-  var i,
-    j = 0,
-    k = 0,
+function createIssuerSignedItemsObj(
+  user,
+  request_accepted_flag,
+  request_attributes,
+  isOnlineRequest
+) {
+  let j = 0,
     errors = [],
-    IssuerSignedItems = [];
-  console.log(mdl);
-  var indexes = [18, 22]; // para o caso da prova de maioridade
-  var onlineIndex = [31];
-  var mdl_parameter_values = map_to_readable_list(
-    mdl,
+    IssuerSignedItems = [];  
+
+  const user_parameter_map = map_to_readable_list(
+    user,
     request_accepted_flag,
-    use_case,
+    request_attributes,
     isOnlineRequest
   );
-  console.log(mdl_parameter_values);
-  for (i = 0; i < mdl_parameter_values.length; i++) {
-    var identifier;
-    if(isOnlineRequest) {
-      identifier = matchIndexWithIdentifier(onlineIndex[i]);
+
+  console.log('PARAMETERS:', user_parameter_map);
+  Object.entries(user_parameter_map).forEach(([key, value]) => {
+    let error_item = {};
+
+    switch (value) {
+      case 'data not returned':
+        error_item[key] = 0;
+        errors[j++] = error_item;
+        break;
+      case 'data not found':
+        error_item[key] = 2;
+        errors[j++] = error_item;
+        break;
+      case 'data request denied':
+        error_item[key] = 3;
+        errors[j++] = error_item;
+        break;
+      default:
+        console.log('INTRODUZIR', key, user, user[key]);
+        IssuerSignedItems.push(user[key]);
+        break;
     }
-    else {
-      if (use_case == 'prova de maioridade') {
-        identifier = matchIndexWithIdentifier(indexes[i]);
-      } else {
-        identifier = matchIndexWithIdentifier(i);
-      }
-    }
-    var jsonVariable = {};
-    if (mdl_parameter_values[i] == 'data not returned') {
-      jsonVariable[identifier] = 0;
-      errors[j++] = jsonVariable;
-    } else {
-      if (mdl_parameter_values[i] == 'data not found') {
-        jsonVariable[identifier] = 2;
-        errors[j++] = jsonVariable;
-      } else {
-        if (mdl_parameter_values[i] == 'data request denied') {
-          jsonVariable[identifier] = 3;
-          errors[j++] = jsonVariable;
-        } else {
-          // criar estrutura json
-          IssuerSignedItems.push(mdl[identifier]);
-        }
-      }
-    }
-  }
+  });
+
   return [IssuerSignedItems, errors];
 }
 
 export async function createMDLResponse(
   ia_signature,
-  mdl,
+  user,
   status_code,
   request_accepted_flag,
-  use_case,
+  request_attributes,
   isOnlineRequest
 ) {
-  if (isOnlineRequest && use_case == 'carta de condução') {
-    let mdl_data = GeneralMethods.decodeIssuerSignedItems(JSON.parse(mdl));
-    console.log('elementValue', mdl_data['document_number'].elementValue);
-    const fields = getAllFields();
-    const jwt = await generateToken(fields, mdl_data['document_number'].elementValue);
+  if (isOnlineRequest) {
+    let user_data = JSON.parse(user);
+    const username = user_data['username'];
+    let payload = {}
+    if(request_attributes[0] == 'ticket') {
+      payload = {
+        username: username,
+        exp: Math.round(Date.now() / 1000) + 15 * 60,
+        iat: Math.round(Date.now() / 1000),
+        type: user.type,
+        date: user.date
+      };
+      if(user.debugdate) payload['debugdate'] = user.debugdate;
+    }
+    else {
+      payload = {
+        username: username,
+        exp: Math.round(Date.now() / 1000) + 15 * 60,
+        iat: Math.round(Date.now() / 1000),
+        nameSpaces: request_attributes
+      };
+    }
+    const jwt = await generateToken(payload);
     console.log('jwt', jwt);
     ia_signature = null;
-    mdl = JSON.stringify({
-      online_token_xxxx: jwt,
+    user = JSON.stringify({
+      token: jwt,
     });
   }
-
-  if (isOnlineRequest && use_case == 'prova de maioridade') {
-    let mdl_data = GeneralMethods.decodeIssuerSignedItems(JSON.parse(mdl));
-    console.log('elementValue', mdl_data['document_number'].elementValue);
-    const fields = getOver18Fields();
-    const jwt = await generateToken(fields, mdl_data['document_number'].elementValue);
-    console.log('jwt', jwt);
-    ia_signature = null;
-    mdl = JSON.stringify({
-      online_token_xxxx: jwt,
-    });
-  }
-
-  console.log('mdl: ', mdl);
-  console.log('request flag: ', request_accepted_flag);
-  console.log('use case: ', use_case);
-  let mdl_obj = JSON.parse(mdl);
-  console.log('mdl object: ', JSON.parse(mdl));
-  let IssuerSignedItems_errors = createIssuerSignedItemsObj(
-    mdl_obj,
-    request_accepted_flag,
-    use_case,
-    isOnlineRequest
-  );
-  console.log('IssuerSignedItems_errors: ', IssuerSignedItems_errors);
-  let IssuerSignedItemsBytes = IssuerSignedItems_errors[0];
-  console.log('IssuerSignedItems: ', IssuerSignedItemsBytes);
-  let errors = IssuerSignedItems_errors[1];
-  let Cose_Mac0 = [
-    /*
-      Headers,
-      payload: null,
-      tag: ""
-      */
-  ];
-  // verificar melhor o device authentication (neste caso a ISO recomenda o uso da autenticação via MAC)
-  let DeviceAuth = {
-    deviceMac: Cose_Mac0,
-  };
-  let DeviceNameSpaces = {};
-  let DeviceNameSpacesBytes = GeneralMethods.b2str(
-    CBOR.encode(DeviceNameSpaces)
-  );
-  let DeviceSigned = {
-    nameSpaces: DeviceNameSpacesBytes, //,
-    //"deviceAuth" : DeviceAuth //Autenticação do Holder (ver melhor)
-  };
-
-  let IssuerNameSpaces = {
-    'org.iso.18013.5.1': IssuerSignedItemsBytes,
-  };
-
-  let IssuerAuth;
-
-  if (!isOnlineRequest) {
-    IssuerAuth = Buffer.from(
-      GeneralMethods.url_safe_base64_to_base64(ia_signature),
-      'base64'
+  if(request_attributes[0] != 'ticket') {
+    console.log('user: ', user);
+    console.log('request flag: ', request_accepted_flag);
+    let user_obj = JSON.parse(user);
+    console.log('user object: ', JSON.parse(user));
+    let [IssuerSignedItemsBytes, errors] = createIssuerSignedItemsObj(
+      user_obj,
+      request_accepted_flag,
+      request_attributes,
+      isOnlineRequest
     );
-  }
+    console.log('IssuerSignedItems:', IssuerSignedItemsBytes);
+    console.log('IssuerSignedItems errors:', errors);
 
-  let IssuerSigned = {
-    nameSpaces: IssuerNameSpaces, // opcional
-    issuerAuth: IssuerAuth, // Autenticação da Entidade Emissora (ver melhor)
-  };
-
-  console.log('IssuerNameSpaces: ', IssuerSigned);
-
-  let Errors = {
-    'org.iso.18013.5.1': errors,
-  };
-  var ResponseData;
-  if (errors.length == 0) {
-    ResponseData = {
-      issuerSigned: IssuerSigned, // Responded data elements signed by the issuer
-      deviceSigned: DeviceSigned, // Responded data elements signed by the mDL
+    let Cose_Mac0 = [
+      /*
+        Headers,
+        payload: null,
+        tag: ""
+        */
+    ];
+    // TODO : verificar melhor o device authentication (neste caso a ISO recomenda o uso da autenticação via MAC)
+    let DeviceAuth = {
+      deviceMac: Cose_Mac0,
     };
-  } else {
-    ResponseData = {
-      issuerSigned: IssuerSigned, // Responded data elements signed by the issuer
-      deviceSigned: DeviceSigned, // Responded data elements signed by the mDL
-      errors: Errors, // errors
+    let DeviceNameSpaces = {};
+    let DeviceNameSpacesBytes = GeneralMethods.b2str(
+      CBOR.encode(DeviceNameSpaces)
+    );
+    let DeviceSigned = {
+      nameSpaces: DeviceNameSpacesBytes, //,
+      //"deviceAuth" : DeviceAuth //Autenticação do Holder (TODO : ver melhor)
     };
+
+    let IssuerNameSpaces = {
+      'org.iso.18013.5.1': IssuerSignedItemsBytes,
+    };
+
+    let IssuerAuth;
+
+    if (!isOnlineRequest) {
+      IssuerAuth = Buffer.from(
+        GeneralMethods.url_safe_base64_to_base64(ia_signature),
+        'base64'
+      );
+    }
+
+    let IssuerSigned = {
+      nameSpaces: IssuerNameSpaces, // opcional
+      issuerAuth: IssuerAuth, // Autenticação da Entidade Emissora (TODO : ver melhor)
+    };
+
+    console.log('IssuerNameSpaces: ', IssuerSigned);
+
+    let Errors = {
+      'org.iso.18013.5.1': errors,
+    };
+    var ResponseData;
+    if (errors.length == 0) {
+      ResponseData = {
+        issuerSigned: IssuerSigned, // Responded data elements signed by the issuer
+        deviceSigned: DeviceSigned, // Responded data elements signed by the mDL
+      };
+    } else {
+      ResponseData = {
+        issuerSigned: IssuerSigned, // Responded data elements signed by the issuer
+        deviceSigned: DeviceSigned, // Responded data elements signed by the mDL
+        errors: Errors, // errors
+      };
+    }
+    let Documents = {
+      'org.iso.18013.5.1.mDL': ResponseData,
+    };
+    let OfflineResponse = {
+      version: '1.0',
+      documents: [Documents],
+      status: status_code,
+    };
+    console.log('OfflineResponse: ', OfflineResponse);
+    return CBOR.encode(OfflineResponse);
   }
-  let Documents = {
-    'org.iso.18013.5.1.mDL': ResponseData,
-  };
-  let OfflineResponse = {
-    version: '1.0',
-    documents: [Documents],
-    status: status_code,
-  };
-  console.log('OfflineResponse: ', OfflineResponse);
-  return CBOR.encode(OfflineResponse);
 }
 
 export async function getRequestOption(
@@ -408,22 +297,15 @@ export async function getRequestOption(
     );
     var request = decoded.nameSpaces['org.iso.18013.5.1'];
     var isOnlineRequest = decoded.requestInfo['isOnlineRequest'];
-    console.log('request from reader', request);
+    const request_flag = decoded.requestInfo['request_flag'];
+    console.log('Request keys from reader:', Object(request));
     var len = Object.keys(request).length;
     console.log(len);
-    if (len == 2) {
-      return {
-        entity: entity,
-        request: 1,
-        isOnlineRequest: isOnlineRequest,
-      };
-    }
-    if (len == 33) {
-      return {
-        entity: entity,
-        request: 0,
-        isOnlineRequest: isOnlineRequest,
-      };
-    }
+    return {
+      entity: entity,
+      request_attributes: request,
+      request_flag, //: len > 2 ? 0 : 1,
+      isOnlineRequest: isOnlineRequest,
+    };
   }
 }

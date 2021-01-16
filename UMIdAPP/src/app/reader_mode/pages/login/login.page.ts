@@ -81,31 +81,47 @@ export class LoginPage implements OnInit {
             if (card_info.status == 200) {
               this.fail_flag = false;
               let card_info_data = JSON.parse(card_info.data); 
-              if(card_info_data.user.userType == 'EMPLOYEE') ReaderAuth.getEntRootCertificate(form.value['number_student'], form.value['password'])
-              const ss = SecureStorage.instantiateSecureStorage();
-              Promise.all([
-                SecureStorage.set('user', JSON.stringify(card_info_data.user),ss),
-                SecureStorage.set('mso', JSON.stringify(card_info_data.mso),ss),
-                SecureStorage.set('tickets', JSON.stringify(card_info_data.tickets),ss),
-                SecureStorage.set('reservations', JSON.stringify(card_info_data.reservations),ss),
-                SecureStorage.set('userCertificate', card_info_data.userCertificate,ss)]).then(
-                () => {
-                  this.is_submitting = false;
-                  this.events.publish('fingerprint_done', {});
-                  this.router.navigate(['/home', { user_info: 1 }])
+              ReaderAuth.verifyBackendCertChain(card_info_data.userCertificate).then(
+                (verified) => {
+                  console.log(verified)
+                  if(verified) {
+                    const ss = SecureStorage.instantiateSecureStorage();
+                    Promise.all([
+                      SecureStorage.set('user', JSON.stringify(card_info_data.user),ss),
+                      SecureStorage.set('mso', JSON.stringify(card_info_data.mso),ss),
+                      SecureStorage.set('tickets', JSON.stringify(card_info_data.tickets),ss),
+                      SecureStorage.set('reservations', JSON.stringify(card_info_data.reservations),ss),
+                      SecureStorage.set('userCertificate', card_info_data.userCertificate,ss)]).then(
+                      () => {
+                        this.is_submitting = false;
+                        this.events.publish('fingerprint_done', {});
+                        this.router.navigate(['/home', { user_info: 1 }])
+                      }
+                    );
+                  }
+                  else {
+                    this.ngZone.run(() => {
+                      this.is_submitting = false;
+                      this.fail_flag = true;
+                      this.message = 'Dados inválidos. Por favor instale a nova versão da aplicação';
+                      this.changeRef.detectChanges();
+                    });
+                  }
                 }
-              );
+              )
             }
           },
           (err) => {
             console.error('There was an error!', err);
             if (!this.isConnected()) {
+              this.is_submitting = false;
               this.fail_flag = true;
               this.message = 'Verifique a conexão e tente novamente.';
               this.changeRef.detectChanges();
             }
             if (err.status == 400) {
               this.ngZone.run(() => {
+                this.is_submitting = false;
                 this.fail_flag = true;
                 this.message = 'Dados Inválidos.';
                 this.changeRef.detectChanges();
@@ -113,6 +129,7 @@ export class LoginPage implements OnInit {
             }
             if (err.status == 500) {
               this.ngZone.run(() => {
+                this.is_submitting = false;
                 this.fail_flag = true;
                 this.message = 'Erro na conexão com o servidor, tente novamente.';
                 this.changeRef.detectChanges();

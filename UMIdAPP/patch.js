@@ -53,3 +53,4 @@ fs.readFile(cose_sign_file, 'utf8', function (err,data) {
     if (err) return console.log(err);
   });
 });
+

@@ -72,23 +72,6 @@ export function decodeCert(pem) {
 }
 
 /**
- * Decode da estrutura mdl retornada pelo backend na autenticação
- * @param mdl estrutura retornada pelo backend na autenticação
- */
-export function decodeIssuerSignedItems(mdl){
-  const mdl_map = objToStrMap(mdl);
-  const obj = new Map();
-  for (const [key, value] of mdl_map.entries()){
-    const value_base64_decoded = str2ab(decode_urlsafe_base64(value));
-    const value_cbor_decoded = CBOR.decode(value_base64_decoded)
-    obj.set(key,value_cbor_decoded);
-  }
-  return strMapToObj(obj);
-}
-
-
-
-/**
  * Função responsável de transformar um arraybuffer em string base64
  * @param {*} buffer
  * @return {*} 

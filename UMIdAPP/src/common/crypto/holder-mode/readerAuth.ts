@@ -57,39 +57,21 @@ export function verifySignature(ReaderAuthStruct,ReaderAuthSignature){
   return key.verify(msgHash, sig);
 } 
 
-export async function verifyEntCertificateChain(signature){
-    var root_cert_gnr_pem, root_cert_psp_pem;
-    let ss = SecureStorage.instantiateSecureStorage();
-    let root_certs = await Promise.all([SecureStorage.get('root_cert_gnr',ss),SecureStorage.get('root_cert_psp',ss)]);
-    root_cert_gnr_pem = root_certs[0];
-    root_cert_psp_pem = root_certs[1];
+export async function verifyEntCertificateChain(signature, root_cert_pem){
     let cert_reader = GeneralMethods.decodeCert(get_Reader_DS_certificate(signature)); 
     console.log(cert_reader);
     let ocsp_verified = await OCSPService.verifyCertValidityOnOCSP(cert_reader);
     if(ocsp_verified != "revoked"){
-      let root_cert_gnr = GeneralMethods.decodeCert(root_cert_gnr_pem);
-      console.log(root_cert_gnr);
-      let root_cert_psp = GeneralMethods.decodeCert(root_cert_psp_pem);
-      console.log(root_cert_psp);
-      let trustedCertificates_GNR = [];
-      let trustedCertificates_PSP = [];
+      let root_cert_gnr = GeneralMethods.decodeCert(root_cert_pem);
+      let trustedCertificates = [];
       let certificates_to_verify = [];
       let crls = [];
     
-      trustedCertificates_GNR.push(root_cert_gnr);
+      trustedCertificates.push(root_cert_gnr);
       certificates_to_verify.push(cert_reader);
       // create chain verification engine
-      const promise_verify_GNR = new pkijs.CertificateChainValidationEngine({
-          trustedCerts: trustedCertificates_GNR,
-          certs: certificates_to_verify,
-          crls
-      }).verify().then(
-          (result) => {console.log(result);return result.resultCode;},
-          error => {console.log(error);return null;}
-      );
-      trustedCertificates_PSP.push(root_cert_psp);
-      const promise_verify_PSP = new pkijs.CertificateChainValidationEngine({
-          trustedCerts: trustedCertificates_PSP,
+      const promise_verify = new pkijs.CertificateChainValidationEngine({
+          trustedCerts: trustedCertificates,
           certs: certificates_to_verify,
           crls
       }).verify().then(
@@ -97,26 +79,35 @@ export async function verifyEntCertificateChain(signature){
           error => {console.log(error);return null;}
       );
       // verify chain
-      return [promise_verify_GNR,promise_verify_PSP];
+      return promise_verify;
     }
     else {
       return null;
     }
   }
 
-
   /**
-   * Obtenção do certificado root 
-   * @param username do funcionario
-   * @param password do funcionario
+   * verifica cadeia de certificados do Backend
+   * @param user_cert_pem certificado do user em formato PEM
    */
-  export async function getEntRootCertificate(username: string, password: string){
-    var root_cert;
-    const http = new HTTP();
-    http.useBasicAuth(username, password);
-    http.setDataSerializer('json');
-    const data = await http.sendRequest(consts.root_cert_url,{method: 'get',responseType: 'json'});
-    root_cert = data.data
-    let ss = SecureStorage.instantiateSecureStorage();
-    SecureStorage.set('root_cert',root_cert,ss);
+  export async function verifyBackendCertChain(user_cert_pem:string) {
+    let cert_user = GeneralMethods.decodeCert(user_cert_pem);
+    let root_cert_gnr = GeneralMethods.decodeCert(consts.root_cert_pem);
+      let trustedCertificates = [];
+      let certificates_to_verify = [];
+      let crls = [];
+    
+      trustedCertificates.push(root_cert_gnr);
+      certificates_to_verify.push(cert_user);
+      // create chain verification engine
+      const promise_verify = new pkijs.CertificateChainValidationEngine({
+          trustedCerts: trustedCertificates,
+          certs: certificates_to_verify,
+          crls
+      }).verify().then(
+          (result) => {console.log(result); return result.result;},
+          error => {console.log(error);return null;}
+      );
+      // verify chain
+      return promise_verify;
   }

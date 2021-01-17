@@ -12,3 +12,10 @@ export const free_times =  'http://'+ip_backend+ 'library/freeTimes/';
 
 export const root_cert_url = 'http://' + ip_backend + '/general/cacert/';
 export const auth_url = 'http://'+ ip_backend +'/general/all/';
+
+
+//Nomeclatura de senhas 
+export const completa = ['Senha completa (estudante)', 'Senha completa']
+export const simples = ['Senha prato simples (estudante)', 'Senha prato simples']
+export const completaP = ['Senha completa promocional (estudante)', 'Senha completa promocional']
+export const simplesP = ['Senha prato simples promocional (estudante)', 'Senha prato simples promocional']

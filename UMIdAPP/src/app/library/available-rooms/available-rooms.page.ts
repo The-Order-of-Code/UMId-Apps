@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-available-rooms',
@@ -22,7 +23,9 @@ export class AvailableRoomsPage implements OnInit {
   card_type: string;
 
   dataLoaded: boolean = false;
-  constructor(private router: Router) { }
+  constructor(private activateRoute: ActivatedRoute,
+    public navCtrl: NavController,
+    private router: Router) { }
 
   ngOnInit() {
     this.items = [];
@@ -34,12 +37,22 @@ export class AvailableRoomsPage implements OnInit {
     let available_begin_date = new Date();
     available_begin_date.setDate(available_begin_date.getDate());
     console.log(available_begin_date.toISOString())
-    this.items.push({name: "reserva", icon_name: 'calendario', room_name: "Sala 4", date: available_begin_date.toISOString() })
+    this.items.push({name: "reserva", icon_name: 'calendario', room_name: "Sala 4", date: available_begin_date.toISOString(), url:'/library/available-rooms/reserve'})
     available_begin_date.setDate(available_begin_date.getDate() + 1)
     this.items.push({name: "reserva", icon_name: 'calendario', room_name: "Sala 2", date: available_begin_date.toISOString() })
     available_begin_date.setDate(available_begin_date.getDate() + 2)
     this.items.push({name: "reserva", icon_name: 'calendario', room_name: "Sala 3", date: available_begin_date.toISOString() })
     this.dataLoaded = true;
+  }
+
+  nextPage(_event){
+    console.log(_event);
+    const ev = JSON.parse(_event);
+    console.log(ev)
+    if(ev.args){
+      this.navCtrl.navigateRoot([ev.url, ev.args]);
+    }
+    else this.navCtrl.navigateRoot([ev.url]);
   }
 
   goBack(_event){

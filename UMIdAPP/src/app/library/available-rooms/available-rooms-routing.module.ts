@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: AvailableRoomsPage
+  },
+  {
+    path: 'reserve',
+    loadChildren: () => import('./reserve/reserve.module').then( m => m.ReservePageModule)
   }
 ];
 

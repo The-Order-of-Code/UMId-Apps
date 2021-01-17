@@ -12,6 +12,8 @@ export class CardsComponent implements OnInit {
   @Input() items: any;
   @Output() eventEmitter = new EventEmitter();
   @Output() nextPageEventEmitter = new EventEmitter();
+  
+
   width: number;
   icons: string;
   constructor(public navCtrl: NavController) {
@@ -20,6 +22,7 @@ export class CardsComponent implements OnInit {
   }
   ngOnInit() {
     this.width = window.innerWidth;
+    
   }
 
   timeNow(d) {
@@ -82,10 +85,6 @@ export class CardsComponent implements OnInit {
     }
   }
 
-  goPay(n_propinas,value,valid) {
-    console.log('A propina n',n_propinas, ' tem valor de ',value,' vence dia ',valid);
-
-  }
 
   nextPage(ev, item) {
     console.log("item", item);

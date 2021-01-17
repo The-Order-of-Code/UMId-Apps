@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MenuController, NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-payments',
@@ -22,8 +23,14 @@ export class PaymentsPage implements OnInit {
   card_type: string;
   payments: Object[] = [];
   paid: Object[] = [];
+  n_propinas: string;
+  ano: string;
+  value: number;
 
-  constructor(private router: Router) { }
+  constructor( private activateRoute: ActivatedRoute,
+    public navCtrl: NavController,
+    private router: Router,
+    private menu: MenuController) { }
 
   ngOnInit() {
     // A view para proprinas  
@@ -33,7 +40,12 @@ export class PaymentsPage implements OnInit {
     this.has_back_button = true;
     this.options("payments");
     this.dataLoaded = true;
-    this.payments.push({ value: 87.15, n_propinas: "11° PRESTAÇÃO DE PROPINAS", ano: "(2020/2021) - (PÓS-GRADUAÇÃO)", valid: "Até 10/12/2020" });
+    
+    this.ano = "(2020/2021)"
+    this.n_propinas ="11° PRESTAÇÃO DE PROPINAS";
+    this.value = 87.15;
+    
+    this.payments.push({ value: 87.15, n_propinas: "11° PRESTAÇÃO DE PROPINAS", ano: "(2020/2021) - (PÓS-GRADUAÇÃO)", valid: "Até 10/12/2020", url: '/payments-finish'});
     this.payments.push({ value: 87.15, n_propinas: "12° PRESTAÇÃO DE PROPINAS", ano: "(2020/2021) - (PÓS-GRADUAÇÃO)", valid: "Até 10/01/2021" });
     this.paid.push({ value: 87.15, n_propinas: "1° PRESTAÇÃO DE PROPINAS", ano: "(2020/2021) - (PÓS-GRADUAÇÃO)", valid: "Até 10/12/2020" });
     this.paid.push({ value: 87.15, n_propinas: "2° PRESTAÇÃO DE PROPINAS", ano: "(2020/2021) - (PÓS-GRADUAÇÃO)", valid: "Até 10/01/2021" });
@@ -62,6 +74,16 @@ export class PaymentsPage implements OnInit {
 
   goBack(_event) {
     this.router.navigate(['/home', { user_info: 1 }]);
+  }
+
+  nextPage(_event){
+    console.log(_event);
+    const ev = JSON.parse(_event);
+    console.log(ev)
+    if(ev.args){
+      this.navCtrl.navigateRoot([ev.url, ev.args]);
+    }
+    else this.navCtrl.navigateRoot([ev.url]);
   }
 
 }

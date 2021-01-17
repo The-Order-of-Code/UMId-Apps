@@ -39,7 +39,7 @@ export class BuyTicketDayPage implements OnInit {
   }
 
   goBack(_event){
-    this.router.navigate(['/home',{ user_info: 1}]);
+    this.router.navigate(['/canteen/buy-ticket/information',{ user_info: 1}]);
   }
 
 }

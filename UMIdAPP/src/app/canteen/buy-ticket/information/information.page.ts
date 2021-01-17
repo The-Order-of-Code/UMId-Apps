@@ -32,12 +32,14 @@ export class InformationPage implements OnInit {
   }
 
   goForward(_event) {
-    this.router.navigate(['/buy-ticket-day']);
+    this.router.navigate(['/canteen/buy-ticket/buy-ticket-day']);
   }
 
   goBack(_event){
-    this.router.navigate(['/canteen',{ userType: "STUDENT"}]);
+    this.router.navigate(['/canteen/buy-ticket',{ userType: "STUDENT"}]);
   }
+
+  
 
   
 

@@ -29,6 +29,7 @@ export class PaymentsFinishPage implements OnInit {
   title_value: string;
   show_pay: boolean;
   text_select: string;
+  activateRoute: any;
 
   constructor(private router: Router,) { }
 

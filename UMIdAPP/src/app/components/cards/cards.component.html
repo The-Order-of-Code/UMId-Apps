@@ -253,7 +253,7 @@
             <ion-card-subtitle mode="md" class="text_title"> Descrição: </ion-card-subtitle>
             <ion-card-subtitle mode="md" class="text_subtitle ion-text-wrap"> {{ item.descripton }} </ion-card-subtitle>
             <ion-card-subtitle mode="md" *ngIf=" item.type_ticket === 'Senha do dia.' ">
-              <ion-label class="text_alert ion-text-wrap">Utilizar no dia {{ item.date }}</ion-label>
+              <ion-label class="text_alert ion-text-wrap">Utilize a próxima no dia {{ item.date }}</ion-label>
             </ion-card-subtitle>
           </ion-card-header>
         </ion-label>
@@ -282,7 +282,7 @@
         </ion-label>
 
         <ion-button *ngIf="item.type_ticket === 'Senha do dia.' " style="--background:#23BD61" class="bottom"
-          (click)="goPay()">
+        (click)="nextPage($event,item)">
           ADICIONAR
         </ion-button>
 
@@ -347,7 +347,7 @@
           </ion-card-subtitle>
         </ion-card-header>
       </ion-item>
-      <ion-button style="--background:#8D3731" class="bottomPayments" (click)="goPay(item.n_propinas,item.value,item.valid)"
+      <ion-button style="--background:#8D3731" class="bottomPayments" (click)="nextPage($event,item)"
         *ngIf="card_type === 'payments' ">
         Pagar
       </ion-button>

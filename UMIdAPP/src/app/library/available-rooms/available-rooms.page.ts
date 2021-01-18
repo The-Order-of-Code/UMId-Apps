@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
+import { LibraryService } from '../../../services/library.service';
+import * as SecureStorage from '../../../common/general/secureStorage.js';
+import { Network } from '@ionic-native/network/ngx';
+
 
 @Component({
   selector: 'app-available-rooms',
@@ -14,7 +18,7 @@ export class AvailableRoomsPage implements OnInit {
 
   // adicionar botao voltar para trás true -> sim, false -> nao (depende da vista)
   has_back_button: boolean;
-  
+
   // lista com items do que queremos colocar na view (designação, datas, horários, etc.)
   items: Object[] = [];
 
@@ -23,39 +27,111 @@ export class AvailableRoomsPage implements OnInit {
   card_type: string;
 
   dataLoaded: boolean = false;
+
+  teste;
+
+
   constructor(private activateRoute: ActivatedRoute,
     public navCtrl: NavController,
-    private router: Router) { }
+    private router: Router,
+    private network: Network,
+    private libraryService: LibraryService,
+    public alertController: AlertController) {
+
+  }
 
   ngOnInit() {
+
     this.items = [];
     // salas disponiveis
     this.view_name = "Salas disponíveis";
     this.has_back_button = true;
     this.show_counter = false;
     this.card_type = "salas_disponiveis";
-    let available_begin_date = new Date();
-    available_begin_date.setDate(available_begin_date.getDate());
-    console.log(available_begin_date.toISOString())
-    this.items.push({name: "reserva", icon_name: 'calendario', room_name: "Sala 4", date: available_begin_date.toISOString(), url:'/library/available-rooms/reserve'})
-    available_begin_date.setDate(available_begin_date.getDate() + 1)
-    this.items.push({name: "reserva", icon_name: 'calendario', room_name: "Sala 2", date: available_begin_date.toISOString() })
-    available_begin_date.setDate(available_begin_date.getDate() + 2)
-    this.items.push({name: "reserva", icon_name: 'calendario', room_name: "Sala 3", date: available_begin_date.toISOString() })
-    this.dataLoaded = true;
+    
+    const ss = SecureStorage.instantiateSecureStorage();
+    SecureStorage.get('dataAuth', ss).then(dataUser => {
+      const user = JSON.parse(dataUser);
+      console.log(user.username);
+      
+
+      this.libraryService.getFreeRoom(user.username, user.password).then(async (rooms) => {
+        if (rooms.status === 200) {
+          console.log('status code', 200)
+          const roomsJSON = JSON.parse(rooms.data);
+          console.log("That's right", roomsJSON);
+          console.log("That's 1", roomsJSON[0]);
+
+          for await (const element of roomsJSON) {
+            let available = await this.availableRoom(user.username, user.password, element['id']);
+            this.items.push({ name: "reserva", icon_name: 'calendario', room_name: "Sala " + element['number'], date: available.toISOString(), capacity: "Capacidade: " + element['capacity'], url: '/library/available-rooms/reserve', args: { id: element['id'], number_room:element['number'], available: available.toISOString()} });
+          } 
+            this.dataLoaded = true;
+        }
+
+      },
+        (err) => {
+          console.error('There was an error!', err);
+          if (!this.isConnected()) {
+            this.presentAlert();
+          }
+          if (err.status == 400) {
+            console.log('Dados Inválidos.');
+
+          };
+
+          if (err.status == 500) {
+            console.log('Erro na conexão com o servidor, tente novamente.');
+
+          }
+        });
+    })
+
+
   }
 
-  nextPage(_event){
+  async availableRoom(username, password, id) {
+    const freeTime = await this.libraryService.getFreeTime(username, password, id).then(result => { return result.data });
+    let freeTimeAvailable = JSON.parse(freeTime)[0][0]
+    var available = new Date(freeTimeAvailable);
+    return available
+
+  }
+
+  /**
+   * Verifica se há conexão com a internet para efetuar associação.
+   * @return {*}  {boolean} retorna se há (true) ou não (false)
+   * @memberof LoginPage
+   */
+  isConnected(): boolean {
+    const conntype = this.network.type;
+    return conntype && conntype != 'unknown' && conntype != 'none';
+  }
+
+  nextPage(_event) {
     console.log(_event);
     const ev = JSON.parse(_event);
     console.log(ev)
-    if(ev.args){
+    if (ev.args) {
       this.navCtrl.navigateRoot([ev.url, ev.args]);
     }
     else this.navCtrl.navigateRoot([ev.url]);
   }
 
-  goBack(_event){
-    this.router.navigate(['/library',{ userType: 'STUDENT'}]);
+  goBack(_event) {
+    this.router.navigate(['/home', { user_info: 1 }]);
   }
+
+  async presentAlert() {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Aviso',
+      subHeader: 'Erro de conexão',
+      message: 'Para essa funcionalidade precisas de internet, ligue wifi ou os dados moveis.',
+      buttons: ['OK']
+    });
+
+    await alert.present();
+  }
+
 }

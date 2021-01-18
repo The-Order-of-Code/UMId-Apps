@@ -20,19 +20,19 @@
     </ion-item>
     <ion-item lines="none" color="light">
       <ion-label position="floating">Data:</ion-label>
-      <ion-datetime displayFormat="DD/MM/YYYY" min="2021-01-01" max="2050-12-09"  placeholder="Select Date">
+      <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="date_reservation" min="2021-01-01" max="2050-12-09"  placeholder="Select Date">
       </ion-datetime>
     </ion-item>
     <ion-item lines="none" color="light">
       <ion-label>Hora Início:</ion-label>
-      <ion-datetime displayFormat="HH:mm" placeholder="10:00"></ion-datetime>
+      <ion-datetime displayFormat="HH:mm" [(ngModel)]="start_time" placeholder="10:00"></ion-datetime>
     </ion-item>
     <ion-item lines="none" color="light">
       <ion-label>Hora Fim:</ion-label>
-      <ion-datetime displayFormat="HH:mm" placeholder="10:30"></ion-datetime>
+      <ion-datetime displayFormat="HH:mm" [(ngModel)]="finish_time" placeholder="10:30"></ion-datetime>
     </ion-item>
     <ion-card-content>
-      <ion-button color="primary" slot="start" style="height: 45px; width: 100%;" (click)="nextPage($event,item)">
+      <ion-button color="primary" slot="start" style="height: 45px; width: 100%;" (click)="showData()">
         <ion-text>PROCURAR</ion-text>
       </ion-button>
     </ion-card-content>

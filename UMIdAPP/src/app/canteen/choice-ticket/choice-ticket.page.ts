@@ -35,8 +35,8 @@ export class ChoiceTicketPage implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
-    this.view_name = "Consultar Senhas";
-    this.card_type = "consultar senhas";
+    this.view_name = "Apresentar Senhas";
+    this.card_type = "search_tickets";
     this.has_back_button = true;
     this.show_counter = false;
 
@@ -50,8 +50,8 @@ export class ChoiceTicketPage implements OnInit {
         this.dataLoaded = true;
       }
       else{
-        this.items.push({ count: count[0], type_ticket: "Senha completa.", descripton: "Dá-te direito ao prato principal, sopa, uma bebida e sobremesa.", url: '/holder-ble-transfer', args: { user: 'STUDENT', data_name: "senha", content:"Senha completa."} });
-        this.items.push({ count: count[1], type_ticket: "Senha prato simples.", descripton: "Dá-te direito ao prato principal e uma bebida.", url: '/holder-ble-transfer', args: { data_name: "senha", content:"Senha prato principal."}  });
+        this.items.push({ count: count[0], type_ticket: "Senha completa.", descripton: "Dá-te direito ao prato principal, sopa, uma bebida e sobremesa.", url: '/holder-ble-transfer', args: { user: 'STUDENT', data_name: "senha", content:consts.completa[type]} });
+        this.items.push({ count: count[1], type_ticket: "Senha prato simples.", descripton: "Dá-te direito ao prato principal e uma bebida.", url: '/holder-ble-transfer', args: { user: 'STUDENT', data_name: "senha",  content:consts.simples[type]}  });
         this.dataLoaded = true;
       }
     })

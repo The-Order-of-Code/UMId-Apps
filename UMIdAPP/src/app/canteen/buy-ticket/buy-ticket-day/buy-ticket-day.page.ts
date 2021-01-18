@@ -31,10 +31,11 @@ export class BuyTicketDayPage implements OnInit {
     this.has_back_button = true;
     this.show_counter = true;
     this.card_type = "senhas"
-    this.dataLoaded = true;
+  
     this.operation_name = "adicionadas";
     this.items.push("15/01/2021");
     this.items.push("16/01/2021");
+    this.dataLoaded = true; 
   
   }
 

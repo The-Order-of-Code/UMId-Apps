@@ -73,17 +73,25 @@ export class LoginPage implements OnInit {
    */
   login(form): void {
     this.is_submitting = true;
-    this.getEntityCertificate({username: form.value['number_student'], password: form.value['password']}).then(
+    this.getEntityCertificate({username: form.value['username'], password: form.value['password']}).then(
       (csr) => {
         console.log('csr: ', csr)
-        this.authService.login(form.value['number_student'], form.value['password'], csr).then(
+        
+        const user = [form.value['username'],form.value['password']]
+        const dataAuth = {
+          username: user[0],
+          password: user[1]
+        }
+          
+        this.authService.login(form.value['username'], form.value['password'], csr).then(
           (card_info) => {
             if (card_info.status == 200) {
               this.fail_flag = false;
               let card_info_data = JSON.parse(card_info.data); 
-              if(card_info_data.user.userType == 'EMPLOYEE') ReaderAuth.getEntRootCertificate(form.value['number_student'], form.value['password'])
+              if(card_info_data.user.userType == 'EMPLOYEE') ReaderAuth.getEntRootCertificate(form.value['username'], form.value['password'])
               const ss = SecureStorage.instantiateSecureStorage();
               Promise.all([
+                SecureStorage.set('dataAuth', JSON.stringify(dataAuth),ss),
                 SecureStorage.set('user', JSON.stringify(card_info_data.user),ss),
                 SecureStorage.set('mso', JSON.stringify(card_info_data.mso),ss),
                 SecureStorage.set('tickets', JSON.stringify(card_info_data.tickets),ss),

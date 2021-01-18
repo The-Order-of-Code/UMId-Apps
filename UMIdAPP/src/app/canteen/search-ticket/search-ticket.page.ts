@@ -35,7 +35,7 @@ export class SearchTicketPage implements OnInit {
 
   ngOnInit() {
     this.view_name = "Consultar Senhas";
-    this.card_type = "consultar senhas";
+    this.card_type = "search_tickets";
     const ss = SecureStorage.instantiateSecureStorage();
     const type = 0;
     const interval = 2;
@@ -43,7 +43,7 @@ export class SearchTicketPage implements OnInit {
       const [count, ticketDay] = this.getData(JSON.parse(result), type, interval);
       this.items.push({ count: count[0], type_ticket: "Senha completa.", descripton: "Dá-te direito ao prato principal, sopa, uma bebida e sobremesa." });
       this.items.push({ count: count[1], type_ticket: "Senha simples.", descripton: "Dá-te direito ao prato principal e uma bebida." });
-      this.items.push({ count: count[2], type_ticket: "Senha do dia.", descripton: "Dá-te direito ao prato principal, sopa, uma bebida e sobremesa.", date: ticketDay });
+      this.items.push({ count: count[2], type_ticket: "Senha do dia.", descripton: "Esta senha é a senha promocional das duas categorias acima ", date: ticketDay });
       this.dataLoaded = true;
     })
     this.has_back_button = true;

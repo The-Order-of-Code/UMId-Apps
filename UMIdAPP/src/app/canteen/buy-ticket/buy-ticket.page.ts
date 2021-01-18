@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-buy-ticket',
@@ -27,11 +28,12 @@ export class BuyTicketPage implements OnInit {
   constructor(
     private activateRoute: ActivatedRoute,
     public navCtrl: NavController,
-    private router: Router) { }
+    private router: Router,
+    private authService: AuthService,) { }
 
   ngOnInit() {
     this.view_name = "Comprar Senhas";
-    this.card_type = "comprar senhas";
+    this.card_type = "buy_tickets";
     this.has_back_button = true;
     this.show_counter = false;
     this.items.push({ type_ticket: "Senha completa.", descripton: "Dá-te direito ao prato principal, sopa, uma bebida e sobremesa." });
@@ -48,11 +50,45 @@ export class BuyTicketPage implements OnInit {
 
   nextPage(_event){
     console.log(_event);
-    const ev = JSON.parse(_event);
+    const ev = JSON.parse(_event); 
     console.log(ev)
     if(ev.args){
       this.navCtrl.navigateRoot([ev.url, ev.args]);
     }
     else this.navCtrl.navigateRoot([ev.url]);
+  }
+
+  reciveTickets($event){
+    console.log('value from child component',$event);
+  }
+
+  buytTickets(){
+    const username = "pg39261";
+    const password = "123456";
+    const data = {
+      "username": username,
+      "tickets": [
+        {
+          "ticketType": "Senha completa (estudante)",
+          "amount": 1
+        },
+        {
+          "ticketType": "Senha prato simples (estudante)",
+          "amount": 1
+
+        },
+        {
+          "ticketType": "Senha prato simples promocional (estudante)",
+          "dates": [
+            "2021-01-18T01:28:31.164501Z",
+
+          ]
+        }
+      ]
+    }
+
+    this.authService.buyTickets(username,password,data).then(result=>{
+      console.log(result.status)
+    })
   }
 }

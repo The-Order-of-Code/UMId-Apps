@@ -7,8 +7,8 @@ import * as consts from 'src/common/general/constants';
 export class AuthService {
 
 
-  constructor(private http: HTTP) {}
-  
+  constructor(private http: HTTP) { }
+
   /**
    * Realiza o login a aplicação
    *
@@ -32,11 +32,22 @@ export class AuthService {
     this.http.setDataSerializer('json');
 
     return this.http.post(
-      
+
       consts.auth_url,
       {
-        csr:csr,
+        csr: csr,
       },
+      {}
+    );
+  }
+
+  buyTickets(username: string, password: string, tickets) {
+    this.http.setServerTrustMode('default');
+    this.http.useBasicAuth(username, password); 
+    this.http.setDataSerializer('json');
+    return this.http.post(
+      consts.add_tickets,
+      tickets,
       {}
     );
   }

@@ -18,11 +18,12 @@ import { HTTP } from '@ionic-native/http/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { IonicStorageModule } from '@ionic/storage';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent, MenuComponent],
   entryComponents: [],
-  imports: [BrowserModule, NgxQRCodeModule, IonicStorageModule.forRoot(), IonicModule.forRoot(), AppRoutingModule],
+  imports: [BrowserModule, NgxQRCodeModule, FormsModule,IonicStorageModule.forRoot(), IonicModule.forRoot(), AppRoutingModule],
   providers: [
     StatusBar,
     HTTP,

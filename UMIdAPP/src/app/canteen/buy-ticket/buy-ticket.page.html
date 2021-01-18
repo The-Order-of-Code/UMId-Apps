@@ -14,13 +14,14 @@
       [card_type]=card_type
       [items]=items
       (nextPageEventEmitter)="nextPage($event)"
-      (eventEmitter)="goBack($event)">
+      (eventEmitter)="goBack($event)"
+      (requestTickets)= "reciveTickets($event)">
       </app-cards>
   </div>
   
 </ion-content>
 
-<ion-button style="--background:#428CFF" class="bottomBuy" (click)="goBuy()">
+<ion-button style="--background:#428CFF" class="bottomBuy" (click)="buytTickets()">
         COMPRAR
 </ion-button>    
 

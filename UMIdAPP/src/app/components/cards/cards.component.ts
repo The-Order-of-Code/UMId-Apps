@@ -12,10 +12,13 @@ export class CardsComponent implements OnInit {
   @Input() items: any;
   @Output() eventEmitter = new EventEmitter();
   @Output() nextPageEventEmitter = new EventEmitter();
+  @Output() requestTickets = new EventEmitter();
   
 
   width: number;
   icons: string;
+  count_ticket;
+
   constructor(public navCtrl: NavController) {
 
 
@@ -23,6 +26,11 @@ export class CardsComponent implements OnInit {
   ngOnInit() {
     this.width = window.innerWidth;
     
+  }
+
+  do_something($event){
+    this.requestTickets.emit($event.target.value);
+
   }
 
   timeNow(d) {

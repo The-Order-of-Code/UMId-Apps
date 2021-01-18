@@ -63,7 +63,12 @@
         <ion-label style="margin-bottom: 0px;">
           <ion-card-header style="margin-bottom: 10px;">
             <ion-card-subtitle mode="md">{{ item.room_name }} </ion-card-subtitle>
+            <ion-row>
             <ion-text class="card_schedule ion-text-wrap" color="medium"> {{ updateDate(item.date) }} </ion-text>
+          </ion-row>
+          <ion-row>
+            <ion-text class="card_schedule ion-text-wrap" color="medium"> {{ item.capacity }} </ion-text>
+          </ion-row>
           </ion-card-header>
         </ion-label>
       </ion-item>
@@ -233,7 +238,7 @@
 
     <!--  Cartoes de senhas -->
 
-    <div *ngIf="card_type === 'consultar senhas' ">
+    <div *ngIf="card_type === 'search_tickets' ">
 
       <ion-item lines="none" color="transparent">
         <ion-list lines="none">
@@ -253,7 +258,7 @@
             <ion-card-subtitle mode="md" class="text_title"> Descrição: </ion-card-subtitle>
             <ion-card-subtitle mode="md" class="text_subtitle ion-text-wrap"> {{ item.descripton }} </ion-card-subtitle>
             <ion-card-subtitle mode="md" *ngIf=" item.type_ticket === 'Senha do dia.' ">
-              <ion-label class="text_alert ion-text-wrap">Utilize a próxima no dia {{ item.date }}</ion-label>
+              <ion-label class="text_alert ion-text-wrap" *ngIf=" item.count != 0 "> {{ item.date }}</ion-label>
             </ion-card-subtitle>
           </ion-card-header>
         </ion-label>
@@ -262,7 +267,7 @@
 
 
 
-    <div *ngIf="card_type === 'comprar senhas' ">
+    <div *ngIf="card_type === 'buy_tickets' ">
 
       <ion-item lines="none" color="transparent">
         <ion-icon name="ticket" class="pay_card" color="medium"></ion-icon>

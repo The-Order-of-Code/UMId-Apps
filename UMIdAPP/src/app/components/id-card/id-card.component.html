@@ -31,14 +31,24 @@
                {{ card_info.user.fullName }} 
             </ion-text> 
           </ion-row>
-          <ion-row style="margin-top: 20px;">
+          <ion-row *ngIf="card_info.user.userType == 'STUDENT'" style="margin-top: 20px;">
             <ion-text class="attribute_android_name_small">
               Número de aluno 
             </ion-text>
           </ion-row>
-          <ion-row style="margin-top: 5px;">
+          <ion-row *ngIf="card_info.user.userType == 'STUDENT'" style="margin-top: 5px;">
             <ion-text class="attribute_android_value_small">
                {{ card_info.number }}
+            </ion-text> 
+          </ion-row>
+          <ion-row *ngIf="card_info.user.userType == 'EMPLOYEE'"style="margin-top: 20px;">
+            <ion-text class="attribute_android_name_small">
+              Número mecanográfico 
+            </ion-text>
+          </ion-row>
+          <ion-row *ngIf="card_info.user.userType == 'EMPLOYEE'" style="margin-top: 5px;">
+            <ion-text class="attribute_android_value_small">
+               {{ card_info.user.username }}
             </ion-text> 
           </ion-row>
         </ion-col>
@@ -53,7 +63,7 @@
           </ion-row>
         </ion-col>  
       </ion-row>
-      <ion-row>
+      <ion-row *ngIf="card_info.user.userType == 'STUDENT'">
         <ion-col>
           <ion-row>
             <ion-text class="attribute_android_name_small">
@@ -68,7 +78,7 @@
         </ion-col>
       </ion-row>
       <ion-row style="margin-top: 5px;">
-        <ion-col>
+        <ion-col *ngIf="card_info.user.userType == 'STUDENT'">
           <ion-row>
             <ion-text class="attribute_android_name_small">
               Ano 
@@ -108,14 +118,24 @@
                {{ card_info.user.fullName }} 
             </ion-text> 
           </ion-row>
-          <ion-row style="margin-top: 20px;">
+          <ion-row *ngIf="card_info.user.userType == 'STUDENT'" style="margin-top: 20px;">
             <ion-text class="attribute_android_name_huge">
               Número de aluno 
             </ion-text>
           </ion-row>
-          <ion-row style="margin-top: 5px;">
+          <ion-row *ngIf="card_info.user.userType == 'STUDENT'" style="margin-top: 5px;">
             <ion-text class="attribute_android_value_huge">
                {{ card_info.number }}
+            </ion-text> 
+          </ion-row>
+          <ion-row *ngIf="card_info.user.userType == 'EMPLOYEE'" style="margin-top: 20px;">
+            <ion-text class="attribute_android_name_huge">
+              Número mecanográfico 
+            </ion-text>
+          </ion-row>
+          <ion-row *ngIf="card_info.user.userType == 'EMPLOYEE'" style="margin-top: 5px;">
+            <ion-text class="attribute_android_value_huge">
+               {{ card_info.user.username }}
             </ion-text> 
           </ion-row>
         </ion-col>
@@ -130,14 +150,14 @@
           </ion-row>
         </ion-col>  
       </ion-row>
-      <ion-row>
+      <ion-row *ngIf="card_info.user.userType == 'STUDENT'">
         <ion-col>
           <ion-row>
-            <ion-text class="attribute_android_name_huge">
+            <ion-text  class="attribute_android_name_huge">
               Curso 
             </ion-text>
           </ion-row>
-          <ion-row style="margin-top: 5px;">
+          <ion-row  style="margin-top: 5px;">
             <ion-text class="attribute_android_value_huge">
                {{ card_info.course.designation }}
             </ion-text>
@@ -145,7 +165,7 @@
         </ion-col>
       </ion-row>
       <ion-row style="margin-top: 5px;">
-        <ion-col>
+        <ion-col *ngIf="card_info.user.userType == 'STUDENT'">
           <ion-row>
             <ion-text class="attribute_android_name_huge">
               Ano 
@@ -185,14 +205,24 @@
                {{ card_info.user.fullName }} 
             </ion-text> 
           </ion-row>
-          <ion-row style="margin-top: 20px;">
+          <ion-row *ngIf="card_info.user.userType == 'STUDENT'" style="margin-top: 20px;">
             <ion-text class="attribute_android_name_super_huge">
               Número de aluno 
             </ion-text>
           </ion-row>
-          <ion-row style="margin-top: 5px;">
+          <ion-row *ngIf="card_info.user.userType == 'STUDENT'" style="margin-top: 5px;">
             <ion-text class="attribute_android_value_super_huge">
                {{ card_info.number }}
+            </ion-text> 
+          </ion-row>
+          <ion-row *ngIf="card_info.user.userType == 'EMPLOYEE'" style="margin-top: 20px;">
+            <ion-text class="attribute_android_name_super_huge">
+              Número mecanográfico 
+            </ion-text>
+          </ion-row>
+          <ion-row *ngIf="card_info.user.userType == 'EMPLOYEE'" style="margin-top: 5px;">
+            <ion-text class="attribute_android_value_super_huge">
+               {{ card_info.user.username }}
             </ion-text> 
           </ion-row>
         </ion-col>
@@ -207,7 +237,7 @@
           </ion-row>
         </ion-col>  
       </ion-row>
-      <ion-row>
+      <ion-row *ngIf="card_info.user.userType == 'STUDENT'">
         <ion-col>
           <ion-row>
             <ion-text class="attribute_android_name_super_huge">
@@ -222,7 +252,7 @@
         </ion-col>
       </ion-row>
       <ion-row style="margin-top: 5px;">
-        <ion-col>
+        <ion-col *ngIf="card_info.user.userType == 'STUDENT'">
           <ion-row>
             <ion-text class="attribute_android_name_super_huge">
               Ano 
@@ -248,21 +278,23 @@
         </ion-col>
       </ion-row>
     </div>
-    <ion-row align-items-center *ngIf="width > 375 && width < 400">
-      <ion-text class="school_android_name_huge">
-        {{ card_info.course.teachingResearchUnits }}
-      </ion-text> 
-    </ion-row>
-    <ion-row align-items-center *ngIf="width <= 375">
-      <ion-text class="school_android_name_small">
-        {{ card_info.course.teachingResearchUnits }}
-      </ion-text> 
-    </ion-row>
-    <ion-row align-items-center *ngIf="width >= 400">
-      <ion-text class="school_android_name_super_huge">
-        {{ card_info.course.teachingResearchUnits }}
-      </ion-text> 
-    </ion-row>
+    <div *ngIf="card_info.user.userType == 'STUDENT'">
+      <ion-row align-items-center *ngIf="width > 375 && width < 400">
+        <ion-text class="school_android_name_huge">
+          {{ card_info.course.teachingResearchUnits }}
+        </ion-text> 
+      </ion-row>
+      <ion-row align-items-center *ngIf="width <= 375">
+        <ion-text class="school_android_name_small">
+          {{ card_info.course.teachingResearchUnits }}
+        </ion-text> 
+      </ion-row>
+      <ion-row align-items-center *ngIf="width >= 400">
+        <ion-text class="school_android_name_super_huge">
+          {{ card_info.course.teachingResearchUnits }}
+        </ion-text> 
+      </ion-row>
+    </div>
   </ion-grid>
 </ion-card>
 
@@ -301,14 +333,24 @@
                {{ card_info.user.fullName }} 
             </ion-text> 
           </ion-row>
-          <ion-row style="margin-top: 20px;">
+          <ion-row *ngIf="card_info.user.userType == 'STUDENT'" style="margin-top: 20px;">
             <ion-text class="attribute_ios_name_small">
               Número de aluno 
             </ion-text>
           </ion-row>
-          <ion-row style="margin-top: 5px;">
+          <ion-row *ngIf="card_info.user.userType == 'STUDENT'" style="margin-top: 5px;">
             <ion-text class="attribute_ios_value_small">
                {{ card_info.number }}
+            </ion-text> 
+          </ion-row>
+          <ion-row *ngIf="card_info.user.userType == 'EMPLOYEE'" style="margin-top: 20px;">
+            <ion-text class="attribute_ios_name_small">
+              Número mecanográfico
+            </ion-text>
+          </ion-row>
+          <ion-row *ngIf="card_info.user.userType == 'EMPLOYEE'" style="margin-top: 5px;">
+            <ion-text class="attribute_ios_value_small">
+               {{ card_info.user.username }}
             </ion-text> 
           </ion-row>
         </ion-col>
@@ -323,14 +365,14 @@
           </ion-row>
         </ion-col>  
       </ion-row>
-      <ion-row>
+      <ion-row *ngIf="card_info.user.userType == 'STUDENT'">
         <ion-col>
           <ion-row>
-            <ion-text class="attribute_ios_name_small">
+            <ion-text  class="attribute_ios_name_small">
               Curso 
             </ion-text>
           </ion-row>
-          <ion-row style="margin-top: 5px;">
+          <ion-row  style="margin-top: 5px;">
             <ion-text class="attribute_ios_value_small">
                {{ card_info.course.designation }}
             </ion-text>
@@ -338,7 +380,7 @@
         </ion-col>
       </ion-row>
       <ion-row style="margin-top: 5px;">
-        <ion-col>
+        <ion-col *ngIf="card_info.user.userType == 'STUDENT'">
           <ion-row>
             <ion-text class="attribute_ios_name_small">
               Ano 
@@ -378,14 +420,24 @@
                {{ card_info.user.fullName }} 
             </ion-text> 
           </ion-row>
-          <ion-row style="margin-top: 20px;">
+          <ion-row *ngIf="card_info.user.userType == 'STUDENT'" style="margin-top: 20px;">
             <ion-text class="attribute_ios_name_huge">
               Número de aluno 
             </ion-text>
           </ion-row>
-          <ion-row style="margin-top: 5px;">
+          <ion-row *ngIf="card_info.user.userType == 'STUDENT'" style="margin-top: 5px;">
             <ion-text class="attribute_ios_value_huge">
                {{ card_info.number }}
+            </ion-text> 
+          </ion-row>
+          <ion-row *ngIf="card_info.user.userType == 'EMPLOYEE'" style="margin-top: 20px;">
+            <ion-text class="attribute_ios_name_huge">
+              Número mecanográfico 
+            </ion-text>
+          </ion-row>
+          <ion-row *ngIf="card_info.user.userType == 'EMPLOYEE'" style="margin-top: 5px;">
+            <ion-text class="attribute_ios_value_huge">
+               {{ card_info.user.username }}
             </ion-text> 
           </ion-row>
         </ion-col>
@@ -400,14 +452,14 @@
           </ion-row>
         </ion-col>  
       </ion-row>
-      <ion-row>
+      <ion-row *ngIf="card_info.user.userType == 'STUDENT'">
         <ion-col>
           <ion-row>
-            <ion-text class="attribute_ios_name_huge">
+            <ion-text  class="attribute_ios_name_huge">
               Curso 
             </ion-text>
           </ion-row>
-          <ion-row style="margin-top: 5px;">
+          <ion-row  style="margin-top: 5px;">
             <ion-text class="attribute_ios_value_huge">
                {{ card_info.course.designation }}
             </ion-text>
@@ -415,9 +467,9 @@
         </ion-col>
       </ion-row>
       <ion-row style="margin-top: 5px;">
-        <ion-col>
-          <ion-row>
-            <ion-text class="attribute_ios_name_huge">
+        <ion-col *ngIf="card_info.user.userType == 'STUDENT'">
+          <ion-row >
+            <ion-text  class="attribute_ios_name_huge">
               Ano 
             </ion-text>
           </ion-row>
@@ -455,14 +507,24 @@
                {{ card_info.user.fullName }} 
             </ion-text> 
           </ion-row>
-          <ion-row style="margin-top: 20px;">
+          <ion-row *ngIf="card_info.user.userType == 'STUDENT'" style="margin-top: 20px;">
             <ion-text class="attribute_ios_name_super_huge">
               Número de aluno 
             </ion-text>
           </ion-row>
-          <ion-row style="margin-top: 5px;">
+          <ion-row *ngIf="card_info.user.userType == 'STUDENT'" style="margin-top: 5px;">
             <ion-text class="attribute_ios_value_super_huge">
                {{ card_info.number }}
+            </ion-text> 
+          </ion-row>
+          <ion-row *ngIf="card_info.user.userType == 'EMPLOYEE'" style="margin-top: 20px;">
+            <ion-text class="attribute_ios_name_super_huge">
+              Número mecanográfico 
+            </ion-text>
+          </ion-row>
+          <ion-row *ngIf="card_info.user.userType == 'EMPLOYEE'" style="margin-top: 5px;">
+            <ion-text class="attribute_ios_value_super_huge">
+               {{ card_info.user.username }}
             </ion-text> 
           </ion-row>
         </ion-col>
@@ -477,14 +539,14 @@
           </ion-row>
         </ion-col>  
       </ion-row>
-      <ion-row>
+      <ion-row *ngIf="card_info.user.userType == 'STUDENT'">
         <ion-col>
           <ion-row>
             <ion-text class="attribute_ios_name_super_huge">
               Curso 
             </ion-text>
           </ion-row>
-          <ion-row style="margin-top: 5px;">
+          <ion-row  style="margin-top: 5px;">
             <ion-text class="attribute_ios_value_super_huge">
                {{ card_info.course.designation }}
             </ion-text>
@@ -494,11 +556,11 @@
       <ion-row style="margin-top: 5px;">
         <ion-col>
           <ion-row>
-            <ion-text class="attribute_ios_name_super_huge">
+            <ion-text *ngIf="card_info.user.userType == 'STUDENT'" class="attribute_ios_name_super_huge">
               Ano 
             </ion-text>
           </ion-row>
-          <ion-row style="margin-top: 5px;">
+          <ion-row *ngIf="card_info.user.userType == 'STUDENT'" style="margin-top: 5px;">
             <ion-text class="attribute_ios_value_super_huge">
                 {{ card_info.academicYear }}
             </ion-text>
@@ -518,20 +580,22 @@
         </ion-col>
       </ion-row>
     </div>
-    <ion-row align-items-center *ngIf="width > 360 && width < 400">
-      <ion-text class="school_ios_name_huge">
-        {{ card_info.course.teachingResearchUnits }}
-      </ion-text> 
-    </ion-row>
-    <ion-row align-items-center *ngIf="width <= 360">
-      <ion-text class="school_ios_name_small">
-        {{ card_info.course.teachingResearchUnits }}
-      </ion-text> 
-    </ion-row>
-    <ion-row align-items-center *ngIf="width >= 400">
-      <ion-text class="school_ios_name_super_huge">
-        {{ card_info.course.teachingResearchUnits }}
-      </ion-text> 
-    </ion-row>
+    <div *ngIf="card_info.user.userType == 'STUDENT'">
+      <ion-row align-items-center *ngIf="width > 360 && width < 400">
+        <ion-text class="school_ios_name_huge">
+          {{ card_info.course.teachingResearchUnits }}
+        </ion-text> 
+      </ion-row>
+      <ion-row align-items-center *ngIf="width <= 360">
+        <ion-text class="school_ios_name_small">
+          {{ card_info.course.teachingResearchUnits }}
+        </ion-text> 
+      </ion-row>
+      <ion-row align-items-center *ngIf="width >= 400">
+        <ion-text class="school_ios_name_super_huge">
+          {{ card_info.course.teachingResearchUnits }}
+        </ion-text> 
+      </ion-row>
+    </div>
   </ion-grid>
 </ion-card>

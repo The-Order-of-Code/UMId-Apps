@@ -12,6 +12,10 @@ export class FailureComponent {
   @Input() failure_code: string;
   failure_code_show = false;
 
+  ngOnInit(){
+    console.log(this.icon_name);
+  }
+
   goBack(): void {
     this.goback.emit('voltar');
   }

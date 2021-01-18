@@ -38,10 +38,22 @@ export class ChoiceTicketPage implements OnInit {
     const datahoje = new Date(2021, 1, 12);
     const teste = this.compareDate(datahoje);
     console.log('resultado da comparação', teste);
+    const ticket = {
+      "username": "a82145",
+      "type": "Senha completa (estudante)",
+      "date": true,
+      "debugdate": "2041-11-25T01:28:31.164501Z"
+    }
 
-    this.items.push({ count: 8, type_ticket: "Senha completa.", descripton: "Dá-te direito ao prato principal, sopa, uma bebida e sobremesa.", url: '/holder-ble-transfer', args: { user: 'STUDENT', data_name: "senha", content:"Senha completa."} });
-    this.items.push({ count: 2, type_ticket: "Senha prato principal.", descripton: "Dá-te direito ao prato principal e uma bebida.", url: '/holder-ble-transfer', args: { data_name: "senha", content:"Senha prato principal."}  });
+    const ticket1 = {
+      "username": "a82145",
+      "type": "Senha prato principal (estudante)",
+      "date": false
+    }
 
+    this.items.push({ count: 8, type_ticket: "Senha completa.", descripton: "Dá-te direito ao prato principal, sopa, uma bebida e sobremesa.", url: '/holder-ble-transfer', args: { user: JSON.stringify(ticket), data_name: "senha" , option: 1}});
+    this.items.push({ count: 2, type_ticket: "Senha prato principal.", descripton: "Dá-te direito ao prato principal e uma bebida.", url: '/holder-ble-transfer', args: { user: JSON.stringify(ticket1), data_name: "senha" , option: 1}});
+ 
     this.dataLoaded = true;
   }
 

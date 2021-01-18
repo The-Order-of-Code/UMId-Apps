@@ -1,10 +1,10 @@
 import * as asn1js from "asn1js";
-import { bufferToHexCodes } from "pvutils";
+import { bufferToHexCodes, toBase64, arrayBufferToString } from "pvutils";
 const pkijs = require("pkijs");
 const crypto = require('crypto');
 const _ = require("underscore");
 import { HTTP } from '@ionic-native/http/ngx';
-import * as GeneralMethods from '../../general/holder-mode/general';;
+import * as GeneralMethods from '../../general/holder-mode/general';
 
 let ocspReqBuffer = new ArrayBuffer(0);
 

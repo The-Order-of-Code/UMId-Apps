@@ -20,7 +20,7 @@ import { IonicModule } from '@ionic/angular';
 
 
 @NgModule({
-    imports: [CommonModule, IonicModule, QRCodeModule],
+    imports: [CommonModule, IonicModule, NgxQRCodeModule],
     declarations: [
         FooterTabComponent,
         PermitComponent,

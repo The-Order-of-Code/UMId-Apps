@@ -1,4 +1,5 @@
 /*
+ * Para consulta dessas funções https://github.com/paroga/cbor-js 
  * The MIT License (MIT)
  *
  * Copyright (c) 2014-2016 Patrick Gansterer <paroga@paroga.com>

@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-
-
 @Component({
   selector: 'app-card-page',
   templateUrl: './card-page.page.html',
@@ -17,6 +15,7 @@ export class CardPagePage implements OnInit {
   has_back_button: boolean;
 
   show_counter: boolean;
+  dataLoaded: boolean = false;
   
   segment: string;
   constructor(
@@ -39,6 +38,7 @@ export class CardPagePage implements OnInit {
           const c = paramMap.get('user');
           this.card_info = JSON.parse(c);
           console.log(this.card_info);
+          this.dataLoaded = true
           //this.first_name = this.card_info.user.first_name;
         }
       });

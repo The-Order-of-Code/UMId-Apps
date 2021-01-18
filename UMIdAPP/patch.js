@@ -4,6 +4,7 @@ const f2 = 'node_modules/aes-ccm/lib/index.js';
 const f3 = 'node_modules/@ionic-native/bluetooth-le/ngx/index.d.ts'
 const cose_sign_file = 'node_modules/cose-js/lib/common.js'
 
+
 fs.readFile(f1, 'utf8', function (err,data) {
   if (err) {
     return console.log(err);

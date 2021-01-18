@@ -58,7 +58,12 @@ const routes: Routes = [
   {
     path: 'authorization',
     loadChildren: () => import('./authorization/authorization.module').then( m => m.AuthorizationPageModule)
-  }
+  },
+  {
+    path: 'reader-ble-transfer',
+    loadChildren: () => import('./reader_mode/pages/reader-ble-transfer/reader-ble-transfer.module').then( m => m.ReaderBleTransferPageModule)
+  },
+  
 ];
 
 @NgModule({

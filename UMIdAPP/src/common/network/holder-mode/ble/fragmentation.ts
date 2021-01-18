@@ -22,14 +22,14 @@ export function splitData(arrayBuffer: ArrayBuffer) {
 
     packet = arrayBuffer.slice(init, end);
     unit = new Uint8Array(1);
-    unit.set([0]);
+    unit.set([1]);
     arrbuffer = appendBuffer(unit.buffer, packet);
 
     array.push(arrbuffer);
   }
 
   unit = new Uint8Array(1);
-  unit.set([1]);
+  unit.set([0]);
   packet = arrayBuffer.slice(size * packetSize, arrayBuffer.byteLength);
   arrbuffer = appendBuffer(unit.buffer, packet);
 

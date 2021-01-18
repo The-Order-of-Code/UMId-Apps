@@ -9,7 +9,9 @@ export class LoadingComponent implements OnInit {
   @Input() icon_name: any;
   @Input() message: any;
 
-  constructor() { }
+  constructor() { 
+    console.log(this.message)
+  }
 
   ngOnInit() {}
 

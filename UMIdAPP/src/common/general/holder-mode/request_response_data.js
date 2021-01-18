@@ -10,53 +10,34 @@ function jsonToStrMap(jsonStr) {
 }
 
 /**
- * transforma a estrutura proveniente do backend (formato map) num map chave-valor, reconhecido por este script
- * @param {*} user 
- */
-function userFromBackendToKeyValueFormat(user){
-  let finalDict = {};
-  for (const [key, value] of Object.entries(user.user)) {
-    const dictKey = 'user.' + key;
-    console.log(dictkey, value);
-  }
-  for (const [key, value] of Object.entries(user.course)) {
-    const dictKey = 'course.' + key;
-    console.log(dictkey, value);
-  }
-
-
-} 
-
-/**
  *
- * transform user map into readable list to be used by createIssuerSignedItemsObj function
+ * transform mdl map into readable list to be used by createIssuerSignedItemsObj function
  */
 function map_to_readable_list(
-  user,
+  data,
   request_accepted_flag,
   request_attributes,
   isOnlineRequest
 ) {
-  let user_map = jsonToStrMap(JSON.stringify(user));
-  console.log('user map: ', user_map);
+  let mdl_map = jsonToStrMap(JSON.stringify(data));
+  console.log('map: ', mdl_map);
   console.log('typeof:', typeof request_attributes, request_attributes);
   let readable_map = {};
 
   if (request_accepted_flag) {
     if (isOnlineRequest) {
-      readable_map['ticket'] = Buffer.from(
-        user_map.get('online_token_xxxx'),
-        'base64'
+      readable_map['token'] = Buffer.from(
+        mdl_map.get('token')
       );
-      console.log('MAPA:', readable_map);
+      console.log('MAP:', readable_map);
     } else {
       console.log('typeof:', typeof request_attributes);
       request_attributes.forEach((attr) => {
-        let value = user_map.get(attr);
+        let value = mdl_map.get(attr);
         if (value == undefined) {
           readable_map[attr] = 'data not found';
         } else {
-          if (attr == 'online_token_xxxx') {
+          if (attr == 'token') {
             readable_map[attr] = Buffer.from(value, 'base64');
           } else {
             readable_map[attr] = Buffer.from(
@@ -69,7 +50,7 @@ function map_to_readable_list(
     }
   } else {
     if (isOnlineRequest) {
-      readable_map['ticket'] = 'data request denied';
+      readable_map['token'] = 'data request denied';
     } else {
       request_attributes.forEach((attr) => {
         readable_map[attr] = 'data request denied';
@@ -82,26 +63,25 @@ function map_to_readable_list(
 }
 
 function createIssuerSignedItemsObj(
-  user,
+  mdl,
   request_accepted_flag,
   request_attributes,
   isOnlineRequest
 ) {
   let j = 0,
     errors = [],
-    IssuerSignedItems = [];  
-
-  const user_parameter_map = map_to_readable_list(
-    user,
+    IssuerSignedItems = [];
+  const mdl_parameter_map = map_to_readable_list(
+    GeneralMethods.userBackendToUserResponse(mdl),
     request_accepted_flag,
     request_attributes,
     isOnlineRequest
   );
 
-  console.log('PARAMETERS:', user_parameter_map);
-  Object.entries(user_parameter_map).forEach(([key, value]) => {
+  console.log('PARAMETERS:', mdl_parameter_map);
+  Object.entries(mdl_parameter_map).forEach(([key, value]) => {
     let error_item = {};
-
+    console.log(mdl[key]);
     switch (value) {
       case 'data not returned':
         error_item[key] = 0;
@@ -116,133 +96,160 @@ function createIssuerSignedItemsObj(
         errors[j++] = error_item;
         break;
       default:
-        console.log('INTRODUZIR', key, user, user[key]);
-        IssuerSignedItems.push(user[key]);
+        console.log('INTRODUZIR', key, mdl, mdl[key]);
+        IssuerSignedItems.push(mdl[key]);
         break;
     }
   });
+  // for (i = 0; i < mdl_parameter_values.length; i++) {
+  //   var identifier;
+  //   if (isOnlineRequest) {
+  //     identifier = matchIndexWithIdentifier(onlineIndex[i]);
+  //   } else {
+  //     if (use_case == 'prova de maioridade') {
+  //       identifier = matchIndexWithIdentifier(indexes[i]);
+  //     } else {
+  //       identifier = matchIndexWithIdentifier(i);
+  //     }
+  //   }
 
+  //   // TODO - START NEW DAY HERE
+  //   var jsonVariable = {};
+  //   if (mdl_parameter_values[i] == 'data not returned') {
+  //     jsonVariable[identifier] = 0;
+  //     errors[j++] = jsonVariable;
+  //   } else {
+  //     if (mdl_parameter_values[i] == 'data not found') {
+  //       jsonVariable[identifier] = 2;
+  //       errors[j++] = jsonVariable;
+  //     } else {
+  //       if (mdl_parameter_values[i] == 'data request denied') {
+  //         jsonVariable[identifier] = 3;
+  //         errors[j++] = jsonVariable;
+  //       } else {
+  //         // criar estrutura json
+  //         IssuerSignedItems.push(mdl[identifier]);
+  //       }
+  //     }
+  //   }
+  // }
   return [IssuerSignedItems, errors];
 }
 
 export async function createMDLResponse(
   ia_signature,
-  user,
+  data,
   status_code,
   request_accepted_flag,
   request_attributes,
   isOnlineRequest
 ) {
+  let mdl;
   if (isOnlineRequest) {
-    let user_data = JSON.parse(user);
-    const username = user_data['username'];
-    let payload = {}
-    if(request_attributes[0] == 'ticket') {
+    let obj_data = JSON.parse(data);
+    var payload;
+    if(request_attributes.length > 1){
+      console.log('elementValue', obj_data.user.username);
+      const username = obj_data.user.username;
       payload = {
         username: username,
         exp: Math.round(Date.now() / 1000) + 15 * 60,
         iat: Math.round(Date.now() / 1000),
-        type: user.type,
-        date: user.date
+        namespaces: request_attributes,
       };
-      if(user.debugdate) payload['debugdate'] = user.debugdate;
     }
     else {
-      payload = {
-        username: username,
-        exp: Math.round(Date.now() / 1000) + 15 * 60,
-        iat: Math.round(Date.now() / 1000),
-        nameSpaces: request_attributes
-      };
+      payload = obj_data;
+      payload['exp'] = Math.round(Date.now() / 1000) + 15 * 60;
+      payload['iat'] = Math.round(Date.now() / 1000);
     }
     const jwt = await generateToken(payload);
     console.log('jwt', jwt);
     ia_signature = null;
-    user = JSON.stringify({
+    mdl = JSON.stringify({
       token: jwt,
     });
   }
-  if(request_attributes[0] != 'ticket') {
-    console.log('user: ', user);
-    console.log('request flag: ', request_accepted_flag);
-    let user_obj = JSON.parse(user);
-    console.log('user object: ', JSON.parse(user));
-    let [IssuerSignedItemsBytes, errors] = createIssuerSignedItemsObj(
-      user_obj,
-      request_accepted_flag,
-      request_attributes,
-      isOnlineRequest
+
+  console.log('token: ', mdl);
+  console.log('request flag: ', request_accepted_flag);
+  let mdl_obj = JSON.parse(mdl);
+  console.log('mdl object: ', JSON.parse(mdl));
+  let [IssuerSignedItemsBytes, errors] = createIssuerSignedItemsObj(
+    mdl_obj,
+    request_accepted_flag,
+    request_attributes,
+    isOnlineRequest
+  );
+  console.log('IssuerSignedItems:', IssuerSignedItemsBytes);
+  console.log('IssuerSignedItems errors:', errors);
+
+  let Cose_Mac0 = [
+    /*
+      Headers,
+      payload: null,
+      tag: ""
+      */
+  ];
+  // TODO : verificar melhor o device authentication (neste caso a ISO recomenda o uso da autenticação via MAC)
+  let DeviceAuth = {
+    deviceMac: Cose_Mac0,
+  };
+  let DeviceNameSpaces = {};
+  let DeviceNameSpacesBytes = GeneralMethods.b2str(
+    CBOR.encode(DeviceNameSpaces)
+  );
+  let DeviceSigned = {
+    nameSpaces: DeviceNameSpacesBytes, //,
+    //"deviceAuth" : DeviceAuth //Autenticação do Holder (TODO : ver melhor)
+  };
+
+  let IssuerNameSpaces = {
+    'org.iso.18013.5.1.PT.UminhoID.card': IssuerSignedItemsBytes,
+  };
+
+  let IssuerAuth;
+
+  if (!isOnlineRequest) {
+    IssuerAuth = Buffer.from(
+      GeneralMethods.url_safe_base64_to_base64(ia_signature),
+      'base64'
     );
-    console.log('IssuerSignedItems:', IssuerSignedItemsBytes);
-    console.log('IssuerSignedItems errors:', errors);
-
-    let Cose_Mac0 = [
-      /*
-        Headers,
-        payload: null,
-        tag: ""
-        */
-    ];
-    // TODO : verificar melhor o device authentication (neste caso a ISO recomenda o uso da autenticação via MAC)
-    let DeviceAuth = {
-      deviceMac: Cose_Mac0,
-    };
-    let DeviceNameSpaces = {};
-    let DeviceNameSpacesBytes = GeneralMethods.b2str(
-      CBOR.encode(DeviceNameSpaces)
-    );
-    let DeviceSigned = {
-      nameSpaces: DeviceNameSpacesBytes, //,
-      //"deviceAuth" : DeviceAuth //Autenticação do Holder (TODO : ver melhor)
-    };
-
-    let IssuerNameSpaces = {
-      'org.iso.18013.5.1': IssuerSignedItemsBytes,
-    };
-
-    let IssuerAuth;
-
-    if (!isOnlineRequest) {
-      IssuerAuth = Buffer.from(
-        GeneralMethods.url_safe_base64_to_base64(ia_signature),
-        'base64'
-      );
-    }
-
-    let IssuerSigned = {
-      nameSpaces: IssuerNameSpaces, // opcional
-      issuerAuth: IssuerAuth, // Autenticação da Entidade Emissora (TODO : ver melhor)
-    };
-
-    console.log('IssuerNameSpaces: ', IssuerSigned);
-
-    let Errors = {
-      'org.iso.18013.5.1': errors,
-    };
-    var ResponseData;
-    if (errors.length == 0) {
-      ResponseData = {
-        issuerSigned: IssuerSigned, // Responded data elements signed by the issuer
-        deviceSigned: DeviceSigned, // Responded data elements signed by the mDL
-      };
-    } else {
-      ResponseData = {
-        issuerSigned: IssuerSigned, // Responded data elements signed by the issuer
-        deviceSigned: DeviceSigned, // Responded data elements signed by the mDL
-        errors: Errors, // errors
-      };
-    }
-    let Documents = {
-      'org.iso.18013.5.1.mDL': ResponseData,
-    };
-    let OfflineResponse = {
-      version: '1.0',
-      documents: [Documents],
-      status: status_code,
-    };
-    console.log('OfflineResponse: ', OfflineResponse);
-    return CBOR.encode(OfflineResponse);
   }
+
+  let IssuerSigned = {
+    nameSpaces: IssuerNameSpaces, // opcional
+    issuerAuth: IssuerAuth, // Autenticação da Entidade Emissora (TODO : ver melhor)
+  };
+
+  console.log('IssuerNameSpaces: ', IssuerSigned);
+
+  let Errors = {
+    'org.iso.18013.5.1.PT.UminhoID.card': errors,
+  };
+  var ResponseData;
+  if (errors.length == 0) {
+    ResponseData = {
+      issuerSigned: IssuerSigned, // Responded data elements signed by the issuer
+      deviceSigned: DeviceSigned, // Responded data elements signed by the mDL
+    };
+  } else {
+    ResponseData = {
+      issuerSigned: IssuerSigned, // Responded data elements signed by the issuer
+      deviceSigned: DeviceSigned, // Responded data elements signed by the mDL
+      errors: Errors, // errors
+    };
+  }
+  let Documents = {
+    'org.iso.18013.5.1.PT.UminhoID': ResponseData,
+  };
+  let OfflineResponse = {
+    version: '1.0',
+    documents: [Documents],
+    status: status_code,
+  };
+  console.log('OfflineResponse: ', OfflineResponse);
+  return CBOR.encode(OfflineResponse);
 }
 
 export async function getRequestOption(
@@ -271,36 +278,23 @@ export async function getRequestOption(
       reader_auth
     );
     if (verify) {
-      let cert_chain_verify_promises = await ReaderAuthMethods.verifyEntCertificateChain(
+      let cert_chain_verified = await ReaderAuthMethods.verifyEntCertificateChain(
         reader_auth
       );
-      let isGNR = await cert_chain_verify_promises[0];
-      let isPSP = await cert_chain_verify_promises[1];
-      if (isPSP == 0) {
-        entity = 'psp';
-        console.log('agente da psp está a pedir os dados');
-      } else {
-        if (isGNR == 0) {
-          entity = 'gnr';
-          console.log('agente da gnr está a pedir os dados');
-        }
-      }
+
+      if(cert_chain_verified.result) entity = 'employee'
+      else console.log('not trusted')  
     }
-  } else {
-    entity = 'default';
-    console.log('entidade comum está a pedir os dados');
   }
-  console.log(entity);
   if (entity) {
     var decoded = CBOR.decode(
       Buffer.from(reader_request.docRequests[0].itemsRequest).buffer
     );
-    var request = decoded.nameSpaces['org.iso.18013.5.1'];
+    var request = decoded.nameSpaces['org.iso.18013.5.1.PT.UminhoID.card'];
     var isOnlineRequest = decoded.requestInfo['isOnlineRequest'];
     const request_flag = decoded.requestInfo['request_flag'];
     console.log('Request keys from reader:', Object(request));
     var len = Object.keys(request).length;
-    console.log(len);
     return {
       entity: entity,
       request_attributes: request,

@@ -121,7 +121,8 @@ export class HolderBleTransferPage {
   success_quote: string;
   failure_quote: string;
   failure_code: string;
-
+  info: string;
+  sub_info: string;
   loading_message: string;
   eReaderKey: Object;
   entity: string;
@@ -201,6 +202,7 @@ export class HolderBleTransferPage {
   dataLoaded: boolean = false;
 
   has_auth = true;
+  shared_other: boolean;
 
   /**
    * Cria-se uma  instance da classe PeripheralPage.
@@ -587,7 +589,6 @@ export class HolderBleTransferPage {
         if (
           !paramMap.has('user') ||
           !paramMap.has('data_name') ||
-          !paramMap.has('mso') ||
           !paramMap.has('option')
         ) {
           return;
@@ -597,6 +598,8 @@ export class HolderBleTransferPage {
         
         this.mso = paramMap.get('mso');
         this.option = paramMap.get('option');
+        if(this.option == 0) this.icon_name = 'card';
+        else this.icon_name = 'ticket';
         this.view_name = "Apresentar " + paramMap.get('data_name');
         this.has_back_button = true;
         this.show_counter = false;
@@ -1117,6 +1120,7 @@ export class HolderBleTransferPage {
    * @param state
    */
   changeUIState(state: string): void {
+    console.log(state)
     switch (state) {
       case 'cancel-request':
         this.icon_name = 'share_data';
@@ -1133,11 +1137,17 @@ export class HolderBleTransferPage {
         this.qr = false;
         this.auth = true;
         this.background_color = this.auth_color;
+        this.view_name = "Autorizar";
+        this.has_back_button = true;
+        this.info = "O leitor solicitou isso:";
+        this.sub_info = "você autoriza?"
+        this.shared_other = false;
         break;
       case 'close-authorization':
         this.auth = false;
         this.spinner = true;
         this.background_color = this.default_color;
+        this.loading_message = 'A transferir dados'
         break;
       case 'invalid-request':
         this.index = -1;
@@ -1148,12 +1158,9 @@ export class HolderBleTransferPage {
         this.background_color = this.default_color;
         break;
       case 'auth-entity':
-        this.toastMessage(
-          `Agente da ${this.entity.toUpperCase()} está a requisitar os dados.`
-        );
         this.hidden = true;
         this.qr = false;
-        this.auth = false;
+        this.auth = true;
         this.spinner = true;
         this.background_color = this.auth_color;
         break;
@@ -1297,6 +1304,8 @@ export class HolderBleTransferPage {
   async choiceCaseBLE(result) {
     this.consent = result;
     let contentMDL;
+    if(this.request_attributes[0] == 'ticket') this.icon_name = 'ticket';
+    else this.icon_name = 'card';
     console.log('Request attributes', this.request_attributes);
     if (this.consent) {
       this.changeUIState('close-authorization');
@@ -1490,7 +1499,6 @@ export class HolderBleTransferPage {
         this.requestFlag = parseInt(decodeMessage.request_flag); 
         this.isOnlineRequest = decodeMessage.isOnlineRequest;
         this.request_attributes = decodeMessage.request_attributes;
-
         console.log('isOnlineRequest', this.isOnlineRequest);
         break;
       case 2:

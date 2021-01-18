@@ -12,9 +12,11 @@ export class IdCardComponent implements OnInit {
   photo: string;
   platform: string;
   width: number;
+  dataLoaded: boolean = false;
   constructor(
     public platf : Platform,
-  ) { }
+  ) {
+   }
 
   ngOnInit() {
     this.width = window.innerWidth;
@@ -24,6 +26,7 @@ export class IdCardComponent implements OnInit {
     else this.platform = 'android';
     console.log(this.card_info);
     this.photo = 'data:image/jpeg;base64,' + this.card_info.user.picture;
+    this.dataLoaded = true;
   }
 
   calcAge(birthDate) {
@@ -35,7 +38,7 @@ export class IdCardComponent implements OnInit {
       case 'STUDENT':
         return 'Estudante';
       case 'EMPLOYEE':
-        return 'Funcionário';
+        return 'Funcionário/a';
       default: return '';
     }
   }

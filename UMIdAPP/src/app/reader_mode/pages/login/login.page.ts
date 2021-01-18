@@ -32,7 +32,8 @@ export class LoginPage implements OnInit {
     public plt: Platform,
     public navCtrl: NavController,
     private menu: MenuController,
-    private events: Events
+    private events: Events,
+    private net: Network
   ) {
    
   }
@@ -149,11 +150,10 @@ export class LoginPage implements OnInit {
       async (key) => {
         const privKey = await ComunicationCrypto.export_key(key.privateKey)
         const ss = SecureStorage.instantiateSecureStorage();
-        SecureStorage.set('privateKey', privKey)
+        SecureStorage.set('privateKey', JSON.stringify(privKey),ss);
         return CSR.make_csr(key, user.username);
     });
   }
-
 
 }
 

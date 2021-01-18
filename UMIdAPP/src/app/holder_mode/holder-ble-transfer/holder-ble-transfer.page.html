@@ -1,5 +1,5 @@
 <ion-header>
-  <app-header-menu
+  <app-header-menu 
     [title]=view_name
     [has_back_button]=has_back_button
     [username]=first_name
@@ -11,7 +11,7 @@
 <ion-content>
 
   <app-qrcode 
-  *ngIf="dataLoaded"
+  *ngIf="dataLoaded && !auth && !spinner && !failure && !success"
   [createdCode]="createdCode"
   [data_name]="data_name"
   ></app-qrcode>
@@ -36,6 +36,10 @@
   <app-permit
     *ngIf="auth"
     [request_attributes]="translateRequestAttributes()"
+    [info]=info
+    [sub_info]=sub_info
+    [icon_name]=icon_name
+    [shared_other] = shared_other
     (refused)="refuse($event)"
     (accepted)="accept($event)"
   ></app-permit>

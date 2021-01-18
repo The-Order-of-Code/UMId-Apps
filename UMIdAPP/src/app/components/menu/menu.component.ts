@@ -2,7 +2,7 @@ import { Component, OnInit, NgZone, ChangeDetectorRef } from '@angular/core';
 
 import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
-
+import { Network } from '@ionic-native/network/ngx';
 import { AlertController } from '@ionic/angular';
 import { MenuController } from '@ionic/angular';
 import * as SecureStorage from '../../../common/general/secureStorage.js';
@@ -21,13 +21,15 @@ export class MenuComponent implements OnInit {
   
   photo: any;
   name: any;
-  userType: any;
   dataLoaded: boolean = false;
   view_name: string;
   has_back_button: boolean;
   first_name: string;
   fingerprint: boolean = false;
   biometry: boolean = false;
+  connected: boolean;
+  userType: string;
+  user_t: string;
 
   options : InAppBrowserOptions = {
     location : 'yes',//Or 'no' 
@@ -52,6 +54,7 @@ export class MenuComponent implements OnInit {
     public alertController: AlertController,
     private router: Router,
     private platform: Platform,
+    private network: Network,
     private storage: Storage,
     private menu: MenuController,
     private iab: InAppBrowser,
@@ -62,6 +65,8 @@ export class MenuComponent implements OnInit {
     this.events.subscribe('fingerprint_done', () => {
       this.view_name = 'Menu';
       this.has_back_button = true;
+      this.connected = this.isConnected();
+      this.storage.set('isOnline', this.connected);
       this.dataLoaded = true;
       console.log('listened event: fingerprint event');
       this.storage.get('fingerprint').then((result) => {
@@ -77,16 +82,40 @@ export class MenuComponent implements OnInit {
           SecureStorage.get('user', ss).then( 
             (card) => {
               const user = JSON.parse(card).user;
+              this.user_t = user.userType;
               this.name=user.fullName;
               this.userType=this.translate(user.userType);
               this.photo = 'data:image/jpeg;base64,' + user.picture;
               this.dataLoaded = true;
             }
           );
-        });
+        },
+        () =>{
+          const ss = SecureStorage.instantiateSecureStorage();
+          SecureStorage.get('user', ss).then( 
+            (card) => {
+              const user = JSON.parse(card).user;
+              this.user_t = user.userType;
+              
+              this.name=user.fullName;
+              this.userType=this.translate(user.userType);
+              this.photo = 'data:image/jpeg;base64,' + user.picture;
+              this.dataLoaded = true;
+            }
+          );
+        }    
+      );
       });
     });
+  }
 
+  /**
+   * Verifica se há conexão com a internet para efetuar associação.
+   * @return {*}  {boolean} retorna se há (true) ou não (false)
+   */
+  isConnected(): boolean {
+    const conntype = this.network.type;
+    return conntype && conntype != 'unknown' && conntype != 'none';
   }
 
   translate(type){
@@ -94,7 +123,7 @@ export class MenuComponent implements OnInit {
       case 'STUDENT':
         return 'Estudante';
       case 'EMPLOYEE':
-        return 'Funcionário';
+        return 'Funcionário/a';
       default: return '';
     }
   }
@@ -122,6 +151,21 @@ export class MenuComponent implements OnInit {
         this.fingerprint = true;
         this.storage.remove('fingerprint');
         this.storage.set('fingerprint', true);
+      }
+      this.changeRef.detectChanges();
+    });
+  }
+
+  changeTransferOption(): void {
+    this.ngZone.run(() => {
+      if (this.connected) {
+        this.fingerprint = false;
+        this.storage.remove('isOnline');
+        this.storage.set('isOnline', false);
+      } else {
+        this.fingerprint = true;
+        this.storage.remove('isOnline');
+        this.storage.set('isOnline', true);
       }
       this.changeRef.detectChanges();
     });

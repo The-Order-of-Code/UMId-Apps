@@ -31,7 +31,6 @@ export class NextReservationsPage implements OnInit {
   constructor(private router: Router) { }
 
   ngOnInit() {
-   
     // próximas reservas
     this.view_name = "Próximas reservas";
     this.has_back_button = true;
@@ -43,7 +42,7 @@ export class NextReservationsPage implements OnInit {
       console.log('Reservas', reservationsJSON[0])
       reservationsJSON.forEach(element => {
         let begin_date = new Date(element['start'])
-        let end_date = new Date(element['end']);
+        let end_date = new Date(element['end']); 
         this.items.push({name: "reserva", icon_name: 'calendario', room_name: "Sala "+element['room'], begin_date: begin_date.toISOString() , end_date: end_date.toISOString(), check_in: false})  
       });
     });

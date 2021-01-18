@@ -215,7 +215,7 @@
           </ion-card-header>
         </ion-label>
       </ion-item>
-      <ion-card-content *ngIf="nextReservations(item.begin_date, item.end_date) == 'A decorrer'">
+      <ion-card-content *ngIf="nextReservations(item.begin_date, item.end_date) === 'A decorrer'">
         <div *ngIf="item.check_in">
           <ion-button color="primary" slot="start" style="height: 45px; width: 100%;">
             <ion-text>Check-out</ion-text>

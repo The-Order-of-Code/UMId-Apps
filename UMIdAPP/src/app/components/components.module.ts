@@ -10,6 +10,8 @@ import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 import {LoadingComponent} from './loading/loading.component';
 import {CantinacardComponent} from './cantinacard/cantinacard.component';
 import {PermitComponent} from './permit/permit.component';
+import {WaitingComponent} from './waiting/waiting.component';
+
 
 
 
@@ -24,6 +26,7 @@ import { IonicModule } from '@ionic/angular';
     declarations: [
         FooterTabComponent,
         PermitComponent,
+        WaitingComponent,
         HeaderMenuComponent,
         CardsComponent,
         LoadingComponent,
@@ -40,6 +43,7 @@ import { IonicModule } from '@ionic/angular';
         HeaderMenuComponent,
         PermitComponent,
         CardsComponent,
+        WaitingComponent,
         CantinacardComponent,
         LoadingComponent,
         QrcodeComponent,

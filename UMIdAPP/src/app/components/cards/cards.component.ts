@@ -1,6 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { IconsComponent } from '../icons/icons.component';
+import { LibraryService } from '../../../services/library.service';
+import * as SecureStorage from '../../../common/general/secureStorage.js';
+
 
 @Component({
   selector: 'app-cards',
@@ -19,7 +22,7 @@ export class CardsComponent implements OnInit {
   icons: string;
   count_ticket;
 
-  constructor(public navCtrl: NavController) {
+  constructor(public navCtrl: NavController,private libraryService: LibraryService) {
 
 
   }
@@ -104,6 +107,22 @@ export class CardsComponent implements OnInit {
 
   goBack() {
     this.eventEmitter.emit('back');
+  }
+
+  async cancelReservation(id){
+    const ss = SecureStorage.instantiateSecureStorage();
+    // Busca as credenciais do utilizador no Secure Storage
+    let dataAuth = await SecureStorage.get('dataAuth', ss).then(dataUser => {
+        return JSON.parse(dataUser);
+    });
+    this.libraryService.deleteReservation(dataAuth['username'],dataAuth['password'],id).then(result =>{
+      if (result.status === 204){
+         console.log('Delete with sucess!')
+      }
+      else{
+        console.log('Delete fail :( ')
+      }
+    });
   }
 
 

@@ -1,16 +1,16 @@
-import * as SecureStorage from '../../general/secureStorage.js';
-import * as GeneralMethods from '../../general/reader-mode/general';
+import * as GeneralMethods from '../../general/holder-mode/general';
 import * as COSE from 'cose-js';
-import * as CBOR from '../../general/reader-mode/cbor.js';
+import * as CBOR from '../../general/holder-mode/cbor.js';
+import * as pkijs from 'pkijs';
 import * as EC from 'elliptic';
-import { HTTP } from '@ionic-native/http/ngx'
 import * as crypto from 'crypto';
+import * as SecureStorage from '../../general/secureStorage.js';
 
 /**
  * criação da estrutura COSE_Sign1 a ser enviada para o Holder
  * @param ReaderAuthentication  
  */
-export async function createSignature(ReaderAuthentication){
+export async function createSignature(DeviceAuthentication){
     const ss = SecureStorage.instantiateSecureStorage()
     const signature_promise = await Promise.all([SecureStorage.get('userCertificate', ss),SecureStorage.get('privateKey', ss)]).then(
         async ([reader_cert,key]) => {
@@ -31,13 +31,13 @@ export async function createSignature(ReaderAuthentication){
             const options = {
                 'excludetag': true // Untagged Cose_Sign1 structure
             }
-            const ReaderAuth = await COSE.sign.create(headers, null, signer,options);
+            const DeviceAuth = await COSE.sign.create(headers, null, signer,options);
             // adapt structure
 
-            console.log('signed message: ', ReaderAuth);
-            const readable_signature = CBOR.decode(Buffer.from(ReaderAuth).buffer)
+            console.log('signed message: ', DeviceAuth);
+            const readable_signature = CBOR.decode(Buffer.from(DeviceAuth).buffer)
             // substitute signature created by the lib with the one who contains the structure
-            readable_signature[3] = createSignatureFromStructure(ReaderAuthentication,signer.key);
+            readable_signature[3] = createSignatureFromStructure(DeviceAuthentication,signer.key);
             const readerAuth = CBOR.encode(readable_signature)
             //console.log('verified signature', verifySignatureWithStructure(ReaderAuthentication,Buffer.from(readerAuth),reader_cert));
             return Buffer.from(readerAuth);
@@ -61,38 +61,4 @@ function createSignatureFromStructure(ReaderAuthStruct,priv_key){
   const signature = key.sign(to_be_signed);
   const sig = Buffer.concat([signature.r.toArrayLike(Buffer), signature.s.toArrayLike(Buffer)]);
   return sig;
-}
-
-/**
- * Envio do CSR criado para o Backend e obtenção do certificado
- * @param csr 
- * @param user 
- */
-export async function reqEntCertificate(csr, user) {
-  const http = new HTTP();
-  http.setServerTrustMode('default');
-  http.setHeader('*', 'Access-Control-Allow-Origin', '*');
-  http.setHeader(
-    '*',
-    'Access-Control-Allow-Methods',
-    'POST, GET, OPTIONS, PUT'
-  );
-  http.setHeader('*', 'Accept', 'application/json');
-  http.setHeader('*', 'content-type', 'application/json');
-
-  http.setDataSerializer('json');
-  const csr_data = window.btoa(csr); 
-  return http.post('https://vhaslab04.inesctec.pt/V2/readerAuth',{'email': user.email,'password': user.password,'csr': csr_data},{}).then(
-    (response) => {
-      if(response.status == 200) {
-        const base64_cert = JSON.parse(response.data);
-        return base64_cert.certificate;
-     }
-    },
-    error => {
-      console.log(error);
-      if(error.status == 401) return '-1'; // flag para credenciais inválidas
-      if(error.status == 400) return '-2'; // entidade não corresponde à enviada para o backend
-    }
-  )
 }

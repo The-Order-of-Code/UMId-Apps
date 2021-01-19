@@ -109,6 +109,19 @@ export function decode_issuerSignedItemsBytes(issuerSignedItemsBytes){
   return issuerSignedItems;
 }
 
+export function decodeIssuerItems(issuer_items_encoded){
+  console.log(issuer_items_encoded)
+  let issuer_items = jsonToStrMap(JSON.stringify(issuer_items_encoded));
+  issuer_items.forEach(
+    (attr,value)=>{
+      const c = Buffer.from(value).toString();
+      console.log("value",c)
+      issuer_items.set(attr,c);
+    }
+  )
+  return issuer_items;
+}
+
 
 /**
  * Função responsável de transformar um arraybuffer em string base64

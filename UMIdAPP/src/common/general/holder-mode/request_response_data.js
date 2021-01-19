@@ -3,10 +3,15 @@ const GeneralMethods = require('./general.ts');
 const COSE = require('cose-js');
 const SecureStorage = require('../secureStorage.js');
 const ReaderAuthMethods = require('../../crypto/holder-mode/readerAuth.ts');
+const HolderAuthMethods = require('../../crypto/holder-mode/holderAuth.ts');
 import { getAllFields, getOver18Fields, generateToken } from './jwt';
 
 function jsonToStrMap(jsonStr) {
   return GeneralMethods.objToStrMap(JSON.parse(jsonStr));
+}
+
+export function strMapToJson(strMap) {
+  return JSON.stringify(GeneralMethods.strMapToObj(strMap));
 }
 
 /**
@@ -19,44 +24,48 @@ function map_to_readable_list(
   request_attributes,
   isOnlineRequest
 ) {
-  let mdl_map = jsonToStrMap(JSON.stringify(data));
-  console.log('map: ', mdl_map);
-  console.log('typeof:', typeof request_attributes, request_attributes);
-  let readable_map = {};
+  let user_info
+    user_info = data; 
+    console.log(user_info);
+    let mdl_map = jsonToStrMap(JSON.stringify(user_info));
+    console.log('map: ', mdl_map);
+    console.log('typeof:', typeof request_attributes, request_attributes);
+    let readable_map = {};
 
-  if (request_accepted_flag) {
-    if (isOnlineRequest) {
-      readable_map['token'] = Buffer.from(
-        mdl_map.get('token')
-      );
-      console.log('MAP:', readable_map);
-    } else {
-      console.log('typeof:', typeof request_attributes);
-      request_attributes.forEach((attr) => {
-        let value = mdl_map.get(attr);
-        if (value == undefined) {
-          readable_map[attr] = 'data not found';
-        } else {
-          if (attr == 'token') {
-            readable_map[attr] = Buffer.from(value, 'base64');
+    if (request_accepted_flag) {
+      if (isOnlineRequest) {
+        readable_map['token'] = mdl_map.get('token');
+        console.log('MAP:', readable_map);
+      } else {
+        console.log('typeof:', typeof request_attributes);
+        request_attributes.forEach((attr) => {
+          let value = mdl_map.get(attr);
+          console.log("value: ", value)
+          if (value == undefined) {
+            readable_map[attr] = 'data not found';
           } else {
-            readable_map[attr] = Buffer.from(
-              GeneralMethods.url_safe_base64_to_base64(value),
-              'base64'
-            );
+            if (attr == 'token') {
+              readable_map[attr] = Buffer.from(value, 'base64');
+            } else {
+              if(typeof value == 'number'){
+                readable_map[attr] = JSON.stringify(value);
+              }
+              else {
+                readable_map[attr] = value;
+              }
+            }
           }
-        }
-      });
-    }
-  } else {
-    if (isOnlineRequest) {
-      readable_map['token'] = 'data request denied';
+        });
+      }
     } else {
-      request_attributes.forEach((attr) => {
-        readable_map[attr] = 'data request denied';
-      });
+      if (isOnlineRequest) {
+        readable_map['token'] = 'data request denied';
+      } else {
+        request_attributes.forEach((attr) => {
+          readable_map[attr] = 'data request denied';
+        });
+      }
     }
-  }
 
   console.log('readable map:', readable_map);
   return readable_map;
@@ -77,11 +86,10 @@ function createIssuerSignedItemsObj(
     request_attributes,
     isOnlineRequest
   );
-
+  let dict = {};
   console.log('PARAMETERS:', mdl_parameter_map);
   Object.entries(mdl_parameter_map).forEach(([key, value]) => {
     let error_item = {};
-    console.log(mdl[key]);
     switch (value) {
       case 'data not returned':
         error_item[key] = 0;
@@ -96,43 +104,14 @@ function createIssuerSignedItemsObj(
         errors[j++] = error_item;
         break;
       default:
-        console.log('INTRODUZIR', key, mdl, mdl[key]);
-        IssuerSignedItems.push(mdl[key]);
+        if(isOnlineRequest) {
+          console.log('INTRODUZIR', key, mdl, mdl[key]);
+          if(isOnlineRequest) IssuerSignedItems.push(mdl[key]);
+        }
         break;
     }
   });
-  // for (i = 0; i < mdl_parameter_values.length; i++) {
-  //   var identifier;
-  //   if (isOnlineRequest) {
-  //     identifier = matchIndexWithIdentifier(onlineIndex[i]);
-  //   } else {
-  //     if (use_case == 'prova de maioridade') {
-  //       identifier = matchIndexWithIdentifier(indexes[i]);
-  //     } else {
-  //       identifier = matchIndexWithIdentifier(i);
-  //     }
-  //   }
-
-  //   // TODO - START NEW DAY HERE
-  //   var jsonVariable = {};
-  //   if (mdl_parameter_values[i] == 'data not returned') {
-  //     jsonVariable[identifier] = 0;
-  //     errors[j++] = jsonVariable;
-  //   } else {
-  //     if (mdl_parameter_values[i] == 'data not found') {
-  //       jsonVariable[identifier] = 2;
-  //       errors[j++] = jsonVariable;
-  //     } else {
-  //       if (mdl_parameter_values[i] == 'data request denied') {
-  //         jsonVariable[identifier] = 3;
-  //         errors[j++] = jsonVariable;
-  //       } else {
-  //         // criar estrutura json
-  //         IssuerSignedItems.push(mdl[identifier]);
-  //       }
-  //     }
-  //   }
-  // }
+  if(!isOnlineRequest) IssuerSignedItems.push(mdl_parameter_map);
   return [IssuerSignedItems, errors];
 }
 
@@ -166,21 +145,22 @@ export async function createMDLResponse(
     const jwt = await generateToken(payload);
     console.log('jwt', jwt);
     ia_signature = null;
-    mdl = JSON.stringify({
+    data = JSON.stringify({
       token: jwt,
     });
+    console.log('token: ', mdl);
   }
 
-  console.log('token: ', mdl);
   console.log('request flag: ', request_accepted_flag);
-  let mdl_obj = JSON.parse(mdl);
-  console.log('mdl object: ', JSON.parse(mdl));
+  let mdl_obj = JSON.parse(data);
+  console.log('mdl object: ', JSON.parse(data));
   let [IssuerSignedItemsBytes, errors] = createIssuerSignedItemsObj(
     mdl_obj,
     request_accepted_flag,
     request_attributes,
     isOnlineRequest
   );
+  IssuerSignedItemsBytes.push(ia_signature);
   console.log('IssuerSignedItems:', IssuerSignedItemsBytes);
   console.log('IssuerSignedItems errors:', errors);
 
@@ -211,8 +191,13 @@ export async function createMDLResponse(
   let IssuerAuth;
 
   if (!isOnlineRequest) {
+    let COSE_Sign1 = await HolderAuthMethods.createSignature(
+      ia_signature
+    );
+    const HolderIssuerAuth = COSE_Sign1;
+    console.log('HolderIssuerAuth: ', HolderIssuerAuth);
     IssuerAuth = Buffer.from(
-      GeneralMethods.url_safe_base64_to_base64(ia_signature),
+      HolderIssuerAuth,
       'base64'
     );
   }
@@ -277,11 +262,12 @@ export async function getRequestOption(
       ReaderAuthentication,
       reader_auth
     );
+    console.log(verify);
     if (verify) {
       let cert_chain_verified = await ReaderAuthMethods.verifyEntCertificateChain(
         reader_auth
       );
-
+      console.log(cert_chain_verified);
       if(cert_chain_verified.result) entity = 'employee'
       else console.log('not trusted')  
     }

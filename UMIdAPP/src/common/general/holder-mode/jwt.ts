@@ -1,7 +1,5 @@
-import { Payload } from '../../interfaces/holder-mode/payload';
 import { instantiateSecureStorage, get } from '../secureStorage.js';
-import { encodeJwt, decodeJwt, verifyJwt, RawJwt } from '@borderless/web-jwt';
-import * as GeneralMethods from './general';
+import { encodeJwt } from '@borderless/web-jwt';
 
 export async function generateToken(payload){
 
@@ -28,13 +26,13 @@ export async function generateToken(payload){
   )
 
   return jwt;
-  
 }
 
 function getKey() {
   const ss = instantiateSecureStorage();
   return get('privateKey', ss);
 }
+
 
 
   

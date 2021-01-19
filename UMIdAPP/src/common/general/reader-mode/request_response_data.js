@@ -4,6 +4,7 @@ const CBOR = require('./cbor.js');
 const GeneralMethods = require('./general.ts');
 const IssuerDataAuthMethods = require('../../crypto/reader-mode/issuerDataAuth.ts');
 const ReaderAuthMethods = require('../../crypto/reader-mode/readerAuth.ts');
+const HolderAuthMethods = require('../../crypto/reader-mode/holderAuth.ts');
 
 function contains_all_identifiers_needed(arr, arr2) {
   return arr.every((i) => arr2.includes(i));
@@ -157,84 +158,45 @@ export async function treatOnlineMDLResponse(response_str) {
  */
 export async function treatMDLResponse(response_str, request_flag) {
   console.log(response_str);
-  let response = response_str.documents[0]['org.iso.18013.5.1.PT.UminhoID.card'];
+  let response = response_str.documents[0]['org.iso.18013.5.1.PT.UminhoID'];
 
   // get DS certificate
   let ds_cert;
-  let verifiedCertificateChainAndSignature;
+  let verifiedCertificateChain;
+  let verifiedSignature, mso;
+  let issuerSigned = response.issuerSigned.nameSpaces;
   if (response.issuerSigned.issuerAuth) {
-    ds_cert = await IssuerDataAuthMethods.get_DS_certificate(
+    verifiedCertificateChain = await HolderAuthMethods.verifyEntCertificateChain(
       response.issuerSigned.issuerAuth
     );
-
-    verifiedCertificateChainAndSignature = await IssuerDataAuthMethods.checkIssuerAuthConditionsAB(
-      response.issuerSigned.issuerAuth,
-      ds_cert
-    );
+    console.log('verifiedCertificateChain.result: ', verifiedCertificateChain.result)
+    if(verifiedCertificateChain.result) {
+      verifiedSignature = await HolderAuthMethods.verifySignature(
+        issuerSigned['org.iso.18013.5.1.PT.UminhoID.card'][1],
+        response.issuerSigned.issuerAuth
+      );
+      console.log('verifiedSignature: ', verifiedSignature)
+    } 
   }
-
-  console.log('certificate: ', ds_cert);
-
   var mdl;
-  if (verifiedCertificateChainAndSignature != undefined) {
+  if (verifiedCertificateChain != undefined && verifiedSignature != undefined) {
     // if DS certificate and signature are valid
     console.log('DS certificate is authentic and signature is valid!');
     console.log(
-      'payload from signature: ',
-      verifiedCertificateChainAndSignature
+      'verifiedCertificateChain: ',
+      verifiedCertificateChain
     );
-    let mso_cbor_encoded = verifiedCertificateChainAndSignature;
     //let erros = response.errors["org.iso.18013.5.1"];
-    let issuerSigned = response.issuerSigned.nameSpaces;
-    let issuerSignedItemsBytes = issuerSigned['org.iso.18013.5.1.PT.UminhoID'];
-    let verifiedDigests = await IssuerDataAuthMethods.verifyDigests(
-      verifiedCertificateChainAndSignature,
-      issuerSignedItemsBytes
-    );
+    let issuerSignedItems = issuerSigned['org.iso.18013.5.1.PT.UminhoID.card'][0];
+    let verifiedDigests = true
+    await HolderAuthMethods.verifyDigests(
+      issuerSigned['org.iso.18013.5.1.PT.UminhoID.card'][1],
+      issuerSigned['org.iso.18013.5.1.PT.UminhoID.card'][0]);
     if (verifiedDigests) {
-      let issuerSignedItems = GeneralMethods.decode_issuerSignedItemsBytes(
-        issuerSignedItemsBytes
+      mdl = createMDLStructureFromParsedData(
+        issuerSignedItems,
+        request_flag
       );
-      let deviceSignedItems = response.deviceSigned; //.nameSpaces["nameSpace"]; // neste momento está vazio
-
-      // get issuing country
-      let issuing_country = issuerSignedItems.find(
-        (element) => element.elementIdentifier == 'issuing_country'
-      );
-
-      // get countryName from DS certificate
-      let cn_ds_cert = ds_cert.issuer.typesAndValues.find(
-        (element) => element.type == '2.5.4.6'
-      ).value.valueBlock.value;
-      let mso = CBOR.decode(Buffer.from(mso_cbor_encoded).buffer);
-
-      let d_e_f_verified = IssuerDataAuthMethods.checkIssuerAuthConditionsDEF(
-        issuing_country,
-        response_str,
-        mso,
-        cn_ds_cert,
-        ds_cert
-      );
-      if (d_e_f_verified[0])
-        mdl = createMDLStructureFromParsedData(
-          issuerSignedItems,
-          mso_cbor_encoded,
-          request_flag,
-          d_e_f_verified[1]
-        );
-      else {
-        if (d_e_f_verified[1]) {
-          console.log('validityInfo expired');
-          mdl = createMDLStructureFromParsedData(
-            issuerSignedItems,
-            mso_cbor_encoded,
-            request_flag,
-            d_e_f_verified[1]
-          );
-        } else {
-          mdl = null;
-        }
-      }
       console.log('mdl: ', mdl);
     } else {
       // if DS certificate or signature are not valid
@@ -256,17 +218,18 @@ export async function treatMDLResponse(response_str, request_flag) {
  * @param {*} request_flag
  */
 export function createMDLStructureFromParsedData(
-  issuer_items_json,
+  issuer_items_encoded,
   request_flag
 ) {
   var mdl;
   let identifiers_needed = [];
-  var issuer_items = GeneralMethods.jsonToStrMap(issuer_items_json);
+  const issuer_items = GeneralMethods.jsonToStrMap(JSON.stringify(issuer_items_encoded));
+  console.log(GeneralMethods.jsonToStrMap(JSON.stringify(issuer_items_encoded)))
   if (request_flag == '0') {
     // identificação
     // check if there's all the data requested
     let a;
-    if("user.userType" == 'STUDENT'){
+    if(issuer_items.get("user.userType") == 'STUDENT'){
       identifiers_needed = [
         'user.userType',
         'user.username',
@@ -298,7 +261,7 @@ export function createMDLStructureFromParsedData(
     }
     // get device signed items
     if (a) {
-      mdl = JSON.stringify(GeneralMethods.strMapToJson(issuer_items));
+      mdl = JSON.stringify(GeneralMethods.userResponseToUserBackend(issuer_items_encoded));
     } else {
       // check errors on attributes
       // if it has more than the attributes requested mdl = -2

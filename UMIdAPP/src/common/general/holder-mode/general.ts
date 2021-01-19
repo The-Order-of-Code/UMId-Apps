@@ -6,6 +6,7 @@ import * as CBOR from './cbor.js';
 import * as pvutils from 'pvutils';
 
 
+
 /**
  * Método responsável pela conversão de 
  * Buffer para string

@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { CantinacardComponent } from './cantinacard.component';
+import { ReserveFinishPage } from './reserve-finish.page';
 
-describe('CantinacardComponent', () => {
-  let component: CantinacardComponent;
-  let fixture: ComponentFixture<CantinacardComponent>;
+describe('ReserveFinishPage', () => {
+  let component: ReserveFinishPage;
+  let fixture: ComponentFixture<ReserveFinishPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CantinacardComponent ],
+      declarations: [ ReserveFinishPage ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CantinacardComponent);
+    fixture = TestBed.createComponent(ReserveFinishPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

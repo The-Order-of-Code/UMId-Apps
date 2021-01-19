@@ -11,6 +11,10 @@ const routes: Routes = [
   {
     path: 'reserve',
     loadChildren: () => import('./reserve/reserve.module').then( m => m.ReservePageModule)
+  },
+  {
+    path: 'reserve-finish',
+    loadChildren: () => import('./reserve-finish/reserve-finish.module').then( m => m.ReserveFinishPageModule)
   }
 ];
 

@@ -10,7 +10,7 @@ export class ReservePage implements OnInit {
   room_name:string;
   date:any;
 
-  // nome da página (Cantina, Biblioteca, etc.)
+  // nome da página (Cantina, Biblioteca, etc.) 
   view_name: string;
 
 
@@ -33,8 +33,7 @@ export class ReservePage implements OnInit {
       this.date = this.updateDate(paramMap.get('available'));
     }
    );
-    // this.room_name ='Sala 4';
-    // this.date = 'Hoje, até as 15:30h';
+   
     this.view_name = 'Reservar';
     this.has_back_button = true;
     
@@ -44,6 +43,7 @@ export class ReservePage implements OnInit {
 
   showData(){
     console.log('data', this.date_reservation,' inicio', this.start_time, 'fim', this.finish_time);
+    this.router.navigate(['/library/available-rooms/reserve-finish',{name:this.room_name,available:this.date}]);
   }
 
   goBack(_event){

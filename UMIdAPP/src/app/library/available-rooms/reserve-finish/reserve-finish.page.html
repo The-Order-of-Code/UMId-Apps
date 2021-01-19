@@ -8,6 +8,7 @@
 </ion-header>
 
 <ion-content>
+  
   <ion-card>
     <ion-item lines="none" color="light">
       <ion-icon name="calendar-outline" size="large" class="reservation_card" color="medium"></ion-icon>
@@ -18,26 +19,16 @@
         </ion-card-header>
       </ion-label>
     </ion-item>
-    <ion-item lines="none" color="light">
-      <ion-label position="floating">Data:</ion-label>
-      <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="date_reservation" [value]="null" max="2050-12-09"  placeholder="Select Date">
-      </ion-datetime>
-    </ion-item>
-    <ion-item lines="none" color="light">
-      <ion-label>Hora Início:</ion-label>
-      <ion-datetime displayFormat="HH:mm" [(ngModel)]="start_time" placeholder="10:00"></ion-datetime>
-    </ion-item>
-    <ion-item lines="none" color="light">
-      <ion-label>Hora Fim:</ion-label>
-      <ion-datetime displayFormat="HH:mm" [(ngModel)]="finish_time" placeholder="10:30"></ion-datetime>
-    </ion-item>
-    <ion-card-content>
-      <ion-button color="primary" slot="start" style="height: 45px; width: 100%;" (click)="showData()">
-        <ion-text>PROCURAR</ion-text>
-      </ion-button>
-    </ion-card-content>
   </ion-card>
 
+  <div *ngIf='dataLoaded'>
+    <app-cards
+      [card_type]=card_type
+      [items]=items
+      (nextPageEventEmitter)="nextPage($event)"
+      (eventEmitter)="goBack($event)">
+      </app-cards>
+  </div>
 </ion-content>
 
 <app-footer-tab 

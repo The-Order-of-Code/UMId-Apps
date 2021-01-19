@@ -9,6 +9,11 @@
 
 <ion-content>
 
+  <div *ngIf='!dataLoaded'>
+    <app-waiting>
+    </app-waiting>
+  </div>
+  
   <div *ngIf='dataLoaded'>
     <app-cards
       [card_type]=card_type

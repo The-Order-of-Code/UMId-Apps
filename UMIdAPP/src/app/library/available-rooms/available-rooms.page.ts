@@ -36,9 +36,7 @@ export class AvailableRoomsPage implements OnInit {
     private router: Router,
     private network: Network,
     private libraryService: LibraryService,
-    public alertController: AlertController) {
-
-  }
+    public alertController: AlertController) {}
 
   ngOnInit() {
 
@@ -64,6 +62,7 @@ export class AvailableRoomsPage implements OnInit {
 
           for await (const element of roomsJSON) {
             let available = await this.availableRoom(user.username, user.password, element['id']);
+            console.log('Available', available,' id',element['id'] );
             this.items.push({ name: "reserva", icon_name: 'calendario', room_name: "Sala " + element['number'], date: available.toISOString(), capacity: "Capacidade: " + element['capacity'], url: '/library/available-rooms/reserve', args: { id: element['id'], number_room:element['number'], available: available.toISOString()} });
           } 
             this.dataLoaded = true;
@@ -92,8 +91,10 @@ export class AvailableRoomsPage implements OnInit {
 
   async availableRoom(username, password, id) {
     const freeTime = await this.libraryService.getFreeTime(username, password, id).then(result => { return result.data });
+    // console.log("Sala ",id, 'é', freeTime)
     let freeTimeAvailable = JSON.parse(freeTime)[0][0]
-    var available = new Date(freeTimeAvailable);
+    // console.log("Sala horario ",freeTimeAvailable);
+    var available = new Date(freeTimeAvailable); 
     return available
 
   }

@@ -45,9 +45,15 @@ export class CardsComponent implements OnInit {
   updateDate(d) {
     const date = new Date(d);
     const today = new Date();
-    if (date.getDate() == today.getDate() && date.getMonth() == today.getMonth() && date.getFullYear() == today.getFullYear()) {
-      if (date.getHours() > today.getHours()) return "Disponível hoje, a partir das " + this.timeNow(date) + "h";
-      else return "Sala disponível";
+    console.log('Hoje ', date.getHours() )
+    console.log('Disponivel ', today.getHours())
+    if ((date.getDate() == today.getDate()) && (date.getMonth() == today.getMonth()) && (date.getFullYear() == today.getFullYear()))  {
+      if (date.getHours() > today.getHours() || date.getMinutes() > today.getMinutes()) {
+        return "Disponível hoje, a partir das " + this.timeNow(date) + "h";
+      }
+      else {
+        return "Sala disponível";
+      }
     }
     else {
       let tomorrow = new Date(today.toISOString());
@@ -73,6 +79,7 @@ export class CardsComponent implements OnInit {
     }
     else return false
   }
+
   nextReservations(d, d2) {
     const date = new Date(d);
     const date1 = new Date(d2);
@@ -95,6 +102,7 @@ export class CardsComponent implements OnInit {
       }
     }
   }
+
 
 
   nextPage(ev, item) {

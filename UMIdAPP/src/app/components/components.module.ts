@@ -8,7 +8,6 @@ import {SuccessComponent} from './success/success.component';
 import {FailureComponent} from './failure/failure.component';
 import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 import {LoadingComponent} from './loading/loading.component';
-import {CantinacardComponent} from './cantinacard/cantinacard.component';
 import {PermitComponent} from './permit/permit.component';
 import {WaitingComponent} from './waiting/waiting.component';
 
@@ -30,7 +29,6 @@ import { IonicModule } from '@ionic/angular';
         HeaderMenuComponent,
         CardsComponent,
         LoadingComponent,
-        CantinacardComponent,
         QrcodeComponent,
         SuccessComponent,
         FailureComponent,
@@ -44,7 +42,6 @@ import { IonicModule } from '@ionic/angular';
         PermitComponent,
         CardsComponent,
         WaitingComponent,
-        CantinacardComponent,
         LoadingComponent,
         QrcodeComponent,
         SuccessComponent,

@@ -45,8 +45,6 @@ export class CardsComponent implements OnInit {
   updateDate(d) {
     const date = new Date(d);
     const today = new Date();
-    console.log('Hoje ', date.getHours() )
-    console.log('Disponivel ', today.getHours())
     if ((date.getDate() == today.getDate()) && (date.getMonth() == today.getMonth()) && (date.getFullYear() == today.getFullYear()))  {
       if (date.getHours() > today.getHours() || date.getMinutes() > today.getMinutes()) {
         return "Disponível hoje, a partir das " + this.timeNow(date) + "h";

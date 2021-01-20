@@ -47,6 +47,7 @@
     "cose-js": "^0.4.2",
     "dompurify": "^2.2.3",
     "es6-promise-plugin": "^4.2.2",
+    "moment": "^2.29.1",
     "phonegap-plugin-mobile-accessibility": "^1.0.5",
     "pkijs": "^2.1.93",
     "pvutils": "^1.0.17",

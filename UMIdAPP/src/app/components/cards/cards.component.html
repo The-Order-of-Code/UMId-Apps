@@ -46,7 +46,7 @@
     </ion-item>
 
     <ion-item *ngIf="card_type === 'slots_reservas'">
-      <ion-label class="card ion-text-wrap" color="medium">{{ item }}</ion-label>
+      <ion-label class="card ion-text-wrap" color="medium">{{ item.start }} - {{ item.end }}</ion-label>
       <ion-button color="success" class="add_button" slot="end">
         <ion-text class="text_add_button">Adicionar</ion-text>
       </ion-button>

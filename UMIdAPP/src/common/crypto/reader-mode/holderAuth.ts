@@ -4,7 +4,7 @@ import * as pkijs from 'pkijs';
 import * as EC from 'elliptic';
 import * as crypto from 'crypto'; 
 import * as consts from '../../general/constants';
-
+import {toBase64, arrayBufferToString } from 'pvutils';
 /**
  * Metodo de obtenção do certificado que está inserido na Cose Signature
  * @param signature assinatura onde se encontra o certificado com a chave publica para se fazer a verificação
@@ -101,6 +101,30 @@ export function verifySignature(DeviceAuthStruct,DeviceAuthSignature){
   return key.verify(msgHash, sig);
 } 
 
+export function formatPEM(pemString)
+{
+	const PEM_STRING_LENGTH = pemString.length, LINE_LENGTH = 64;
+	const wrapNeeded = PEM_STRING_LENGTH > LINE_LENGTH;
+
+	if(wrapNeeded)
+	{
+		let formattedString = "", wrapIndex = 0;
+
+		for(let i = LINE_LENGTH; i < PEM_STRING_LENGTH; i += LINE_LENGTH)
+		{
+			formattedString += pemString.substring(wrapIndex, i) + "\r\n";
+			wrapIndex = i;
+		}
+
+		formattedString += pemString.substring(wrapIndex, PEM_STRING_LENGTH);
+		return formattedString;
+	}
+	else
+	{
+		return pemString;
+	}
+}
+
 export async function verifyDigests(mso_str, user_info){
   let mso = JSON.parse(mso_str);
   console.log(mso)
@@ -108,7 +132,14 @@ export async function verifyDigests(mso_str, user_info){
   const root_cert = GeneralMethods.decodeCert(consts.root_cert_pem);
   console.log(root_cert.subjectPublicKeyInfo)
   console.log(root_cert.subjectPublicKeyInfo.parsedKey.toSchema().toBER())
-  const publKey = root_cert.subjectPublicKeyInfo.parsedKey.toSchema().toBER()
+  const publKey = formatPEM(toBase64(arrayBufferToString(root_cert.subjectPublicKeyInfo.toSchema().toBER(false))));
+  const pub2 = '-----BEGIN PUBLIC KEY-----\n' + publKey + '\n-----END PUBLIC KEY-----';
+  console.log(pub2);
+  //const pub2 = "-----BEGIN PUBLIC KEY-----\n" + "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEAz8EbDwdSq2BCnBkQcIy1i1R+Ngg\n" + "llxkkny6OuK1FFaQIalNvqEAqIyvEaK0EL/YvfEUZ6gztrwhdJ76S/YGAg==\n" + "-----END PUBLIC KEY-----"
+  var verifier = crypto.createVerify('sha256');
+  verifier.update(user_info["user.username"]);
+  var ver = verifier.verify(pub2, mso.valueDigests.user.username,'hex');
+  console.log(ver);//<--- always false!
   // {
   //   'key': 
   //     {
@@ -117,30 +148,30 @@ export async function verifyDigests(mso_str, user_info){
   //     }
   //   }
   
-  const pubkey = await window.crypto.subtle.importKey(
-      'raw',
-      publKey,
-      {
-        name: 'ECDSA',
-        namedCurve: 'P-256',
-      },
-      false,
-      ['verify']
-    );
-    console.log(pubkey);
-  // const ec = new EC.ec('p256');
-  // const key = ec.keyFromPublic(publKey.key);
-  // console.log(key.getPublic())
-  const signature = Buffer.from(mso.valueDigests.user.picture);
-  const data = Buffer.from(user_info["user.picture"]);
-      const verified = await window.crypto.subtle.verify(
-        {
-          name: "ECDSA",
-          hash: {name: "SHA-256"},
-        },
-        pubkey,
-        signature,
-        data
-      );
-      console.log(verified)
+  // const pubkey = await window.crypto.subtle.importKey(
+  //     'jwk',
+  //     publKey,
+  //     {
+  //       name: 'ECDSA',
+  //       namedCurve: 'P-256',
+  //     },
+  //     true,
+  //     ['verify']
+  //   );
+  //   console.log(pubkey);
+  // // const ec = new EC.ec('p256');
+  // // const key = ec.keyFromPublic(publKey.key);
+  // // console.log(key.getPublic())
+  // const signature = hexStringToArrayBuffer(mso.valueDigests.user.username);
+  // const data = new TextEncoder().encode(user_info["user.username"]);
+  //     const verified = await window.crypto.subtle.verify(
+  //       {
+  //         name: "ECDSA",
+  //         hash: {name: "SHA-256"},
+  //       },
+  //       pubkey,
+  //       signature,
+  //       data
+  //     );
+  //     console.log(verified)   
 }

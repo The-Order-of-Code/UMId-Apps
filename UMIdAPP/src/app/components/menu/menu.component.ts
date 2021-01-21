@@ -62,51 +62,55 @@ export class MenuComponent implements OnInit {
   ) { }
 
   ngOnInit(){
-    this.events.subscribe('fingerprint_done', () => {
-      this.view_name = 'Menu';
-      this.has_back_button = true;
-      this.connected = this.isConnected();
-      this.storage.set('isOnline', this.connected);
-      this.dataLoaded = true;
-      console.log('listened event: fingerprint event');
-      this.storage.get('fingerprint').then((result) => {
-        FingerprintAIO.isAvailable().then((has_biometry) => {
-          console.log(result);
-          this.fingerprint = result;
-          this.biometry = true;
-          if (!this.fingerprint){
-            console.log(result);
-            this.fingerprint = false;
-          }
-          const ss = SecureStorage.instantiateSecureStorage();
-          SecureStorage.get('user', ss).then( 
-            (card) => {
-              const user = JSON.parse(card).user;
-              this.user_t = user.userType;
-              this.name=user.fullName;
-              this.userType=this.translate(user.userType);
-              this.photo = 'data:image/jpeg;base64,' + user.picture;
-              this.dataLoaded = true;
-            }
+    this.platform.ready().then(
+      ()=>{
+        this.events.subscribe('fingerprint_done', () => {
+          this.view_name = 'Menu';
+          this.has_back_button = true;
+          this.connected = this.isConnected();
+          this.storage.set('isOnline', this.connected);
+          this.dataLoaded = true;
+          console.log('listened event: fingerprint event');
+          this.storage.get('fingerprint').then((result) => {
+            FingerprintAIO.isAvailable().then((has_biometry) => {
+              console.log(result);
+              this.fingerprint = result;
+              this.biometry = true;
+              if (!this.fingerprint){
+                console.log(result);
+                this.fingerprint = false;
+              }
+              const ss = SecureStorage.instantiateSecureStorage();
+              SecureStorage.get('user', ss).then( 
+                (card) => {
+                  const user = JSON.parse(card).user;
+                  this.user_t = user.userType;
+                  this.name=user.fullName;
+                  this.userType=this.translate(user.userType);
+                  this.photo = 'data:image/jpeg;base64,' + user.picture;
+                  this.dataLoaded = true;
+                }
+              );
+            },
+            () =>{
+              const ss = SecureStorage.instantiateSecureStorage();
+              SecureStorage.get('user', ss).then( 
+                (card) => {
+                  const user = JSON.parse(card).user;
+                  this.user_t = user.userType;
+                  
+                  this.name=user.fullName;
+                  this.userType=this.translate(user.userType);
+                  this.photo = 'data:image/jpeg;base64,' + user.picture;
+                  this.dataLoaded = true;
+                }
+              );
+            }    
           );
-        },
-        () =>{
-          const ss = SecureStorage.instantiateSecureStorage();
-          SecureStorage.get('user', ss).then( 
-            (card) => {
-              const user = JSON.parse(card).user;
-              this.user_t = user.userType;
-              
-              this.name=user.fullName;
-              this.userType=this.translate(user.userType);
-              this.photo = 'data:image/jpeg;base64,' + user.picture;
-              this.dataLoaded = true;
-            }
-          );
-        }    
-      );
-      });
-    });
+          });
+        });
+      }
+    )
   }
 
   /**

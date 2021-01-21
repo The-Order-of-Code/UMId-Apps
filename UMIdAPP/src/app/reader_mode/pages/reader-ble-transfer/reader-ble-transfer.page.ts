@@ -507,6 +507,7 @@ export class ReaderBleTransferPage implements OnInit {
         const deviceEngagementStruct = JSON.parse(
           paramMap.get('device_engagement_structure')
         );
+        this.loading_message = 'A obter ' + paramMap.get('data_name');
         this.spinner = true;
         this.state_machine.send('PARSED');
 
@@ -1039,7 +1040,7 @@ export class ReaderBleTransferPage implements OnInit {
         this.state_machine.send('SUCCESS');
         
         if (this.request_flag == '0') {
-          this.ionViewWillLeave();
+          this.ionViewWillLeave()
           this.navCtrl.navigateRoot([
             '/card-page',
             { user: mdl },
@@ -1245,14 +1246,7 @@ export class ReaderBleTransferPage implements OnInit {
    * @memberof PeripheralPage
    */
   goBack(_event) {
-    console.log(_event);
-    this.navCtrl
-      .navigateRoot(['/home', { user_info: 1 }])
-      .then((status) => {
-        this.spinner = false;
-        this.failure = false;
-        this.success = false;
-        this.age_request = false;
-      });
+    console.log("event triggered:", _event);
+    this.navCtrl.navigateRoot(['/home', { user_info: 1 }]);
   }
 }

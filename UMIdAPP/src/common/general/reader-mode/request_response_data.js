@@ -2,7 +2,6 @@
 
 const CBOR = require('./cbor.js');
 const GeneralMethods = require('./general.ts');
-const IssuerDataAuthMethods = require('../../crypto/reader-mode/issuerDataAuth.ts');
 const ReaderAuthMethods = require('../../crypto/reader-mode/readerAuth.ts');
 const HolderAuthMethods = require('../../crypto/reader-mode/holderAuth.ts');
 
@@ -27,10 +26,7 @@ export async function createReaderRequest(
   entity,
   isOnlineRequest
 ) {
-  /*
-   * tratar da parte da autenticação (faltam os certificados)
-   */
-
+  
   let DeviceEngagementBytes = Buffer.from(CBOR.encode(DeviceEngagement));
   let EreaderKeyBytes = Buffer.from(CBOR.encode(EreaderKey));
   let SessionTranscript = [
@@ -41,49 +37,6 @@ export async function createReaderRequest(
   let DocType = 'org.iso.18013.5.1.PT.UminhoID';
 
   const DataElements = request_attributes;
-  // if (use_case == 'prova de maioridade') {
-  //   DataElements = {
-  //     portrait: false,
-  //     age_over_18: false, // para já está tudo a false pq nao queremos guardar nada no reader
-  //   };
-  // }
-  // if (use_case == 'carta de condução') {
-  //   DataElements = {
-  //     family_name: false,
-  //     given_name: false,
-  //     birth_date: false,
-  //     issue_date: false,
-  //     expiry_date: false,
-  //     issuing_country: false,
-  //     issuing_authority: false,
-  //     document_number: false,
-  //     administrative_number: false,
-  //     driving_privileges: false,
-  //     un_distinguishing_sign: false,
-  //     gender: false,
-  //     height: false,
-  //     weight: false,
-  //     eye_color: false,
-  //     hair_color: false,
-  //     birth_place: false,
-  //     resident_address: false,
-  //     portrait: false,
-  //     portrait_capture_date: false,
-  //     age_in_years: false,
-  //     age_birth_year: false,
-  //     age_over_18: false, // para já está tudo a false pq nao queremos guardar nada no reader
-  //     issuing_jurisdiction: false,
-  //     nationality: false,
-  //     resident_city: false,
-  //     resident_state: false,
-  //     resident_postal_code: false,
-  //     biometric_template_xx: false, // este xx temos de substituir por alguma coisa!!! secção 7.4.6 da ISO
-  //     name_national_character: false,
-  //     signature_usual_mark: false,
-  //     online_token_xxxx: false, // este xxxx temos de substituir por alguma coisa!!! secção 7.4.8 da ISO
-  //     online_url_xxxx: false, // este xxxx temos de substituir por alguma coisa!!! secção 7.4.8 da ISO
-  //   };
-  // }
 
   let NameSpaces = {
     'org.iso.18013.5.1.PT.UminhoID.card': DataElements, // para já temos só o que estão na ISO (podemos acrescentar mais namespaces)
@@ -175,7 +128,6 @@ export async function treatMDLResponse(response_str, request_flag) {
         issuerSigned['org.iso.18013.5.1.PT.UminhoID.card'][1],
         response.issuerSigned.issuerAuth
       );
-      console.log('verifiedSignature: ', verifiedSignature)
     } 
   }
   var mdl;
@@ -189,7 +141,7 @@ export async function treatMDLResponse(response_str, request_flag) {
     //let erros = response.errors["org.iso.18013.5.1"];
     let issuerSignedItems = issuerSigned['org.iso.18013.5.1.PT.UminhoID.card'][0];
     let verifiedDigests = true
-    await HolderAuthMethods.verifyDigests(
+    verifiedDigests = await HolderAuthMethods.verifyDigests(
       issuerSigned['org.iso.18013.5.1.PT.UminhoID.card'][1],
       issuerSigned['org.iso.18013.5.1.PT.UminhoID.card'][0]);
     if (verifiedDigests) {

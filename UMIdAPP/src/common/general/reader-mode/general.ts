@@ -177,3 +177,55 @@ export function userResponseToUserBackend(user){
   }
   return strMapToObj(obj);
 }
+
+export function userResponseToMSOStructType(user){
+  const mdl_map = objToStrMap(user);
+  let courseDict = {};
+
+  const obj = new Map();
+  for (const [key, value] of mdl_map.entries()){
+    const splitted = key.split('.');
+    console.log(splitted.length)
+    if(splitted.length > 1) {
+        obj.set(splitted[1],value);
+    } else {
+        obj.set(splitted[0],value);
+    }
+  }
+  return strMapToObj(obj);
+}
+
+export function formatPEM(pemString){
+	const PEM_STRING_LENGTH = pemString.length, LINE_LENGTH = 64;
+	const wrapNeeded = PEM_STRING_LENGTH > LINE_LENGTH;
+
+	if(wrapNeeded){
+		let formattedString = "", wrapIndex = 0;
+
+		for(let i = LINE_LENGTH; i < PEM_STRING_LENGTH; i += LINE_LENGTH){
+			formattedString += pemString.substring(wrapIndex, i) + "\r\n";
+			wrapIndex = i;
+		}
+
+		formattedString += pemString.substring(wrapIndex, PEM_STRING_LENGTH);
+		return formattedString;
+	}
+	else {
+		return pemString;
+	}
+}
+
+
+export function cleanPTSpecialChars(str){
+    return str
+        .replace(/[ÀÁÂÃÄÅ]/g,"A")
+        .replace(/[àáâãäå]/g,"a")
+        .replace(/[ÈÉÊË]/g,"E")
+        .replace(/[èéêë]/g,"e")
+        .replace(/[ÒÓÔÖ]/g,"O")
+        .replace(/[òóôö]/g,"o")
+        .replace(/[ç]/g,"c")
+        .replace(/[Ç]/g,"C")
+        .replace(/[ñ]/g,"n")
+        .replace(/[Ñ]/g,"N");
+}

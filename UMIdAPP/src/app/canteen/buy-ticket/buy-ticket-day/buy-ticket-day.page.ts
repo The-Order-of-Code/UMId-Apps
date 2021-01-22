@@ -38,6 +38,7 @@ export class BuyTicketDayPage implements OnInit {
     this.has_back_button = true;
     this.show_counter = true;
     this.card_type = "senhas"
+    this.quantity = 2;
 
 
 
@@ -45,7 +46,7 @@ export class BuyTicketDayPage implements OnInit {
     let dataAuth = await SecureStorage.get('dataAuth', ss).then(dataUser => {
       return JSON.parse(dataUser);
     });
-
+   
     let my_resevations = await this.ticketsService.getMyTicketsPromoctions(dataAuth['username'], dataAuth['password']).then(result => {
       return JSON.parse(result.data);
     });
@@ -59,7 +60,7 @@ export class BuyTicketDayPage implements OnInit {
 
     let day = new Date();
 
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 10; i++) {
       let result = this.checkResarvations(day,my_resevations,types_tickets);
       if (result == 0) {
         this.items.push(day.toLocaleDateString());
@@ -69,9 +70,7 @@ export class BuyTicketDayPage implements OnInit {
         this.items.push(day.toLocaleDateString());
       }
 
-      day = moment(day).add(1, 'd').toDate()
-
-
+      day = moment(day).add(1, 'd').toDate();
     }
     this.operation_name = "adicionadas";
     this.dataLoaded = true;
@@ -93,16 +92,10 @@ export class BuyTicketDayPage implements OnInit {
       });
       
     });
-
     return nTicketsDay;
-
   }
 
-
-
-
-
-  goBack(_event) {
+  goBack(_event) { 
     this.router.navigate(['/canteen/buy-ticket/information', { user_info: 1 }]);
   }
 
@@ -110,9 +103,5 @@ export class BuyTicketDayPage implements OnInit {
     console.log(_event)
     this.quantity = _event;
   }
-
-
-
-
 
 }

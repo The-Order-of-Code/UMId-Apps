@@ -89,7 +89,7 @@ export class CanteenPage implements OnInit {
                 this.has_back_button = true;
                 this.show_counter = false;
                 this.card_type = "main menu";
-                this.items.push({name: "Apresentar senha", icon_name: 'senha', url: '/canteen/choice-ticket'});
+                this.items.push({name: "Apresentar senha", icon_name: 'senha', url: '/canteen/choice-ticket',  args:{type:userType}});
                 this.items.push({name: "Consultar senhas", icon_name: 'pesquisar senhas', url:'/canteen/search-ticket'});
                 this.items.push({name: "Comprar senhas", icon_name: 'comprar senhas', url:'/canteen/buy-ticket'});
                 this.dataLoaded = true;
@@ -101,7 +101,7 @@ export class CanteenPage implements OnInit {
               this.card_type = "main menu";
               this.items.push({name: "Verificar senha", icon_name: 'verificar senha', url: 'scanCode(1)'});
               this.items.push({name: "Verificar identificação", icon_name: 'verificar identidade', url: 'scanCode(0)'});
-              this.items.push({name: "Apresentar senha", icon_name: 'senha', url: '/canteen/choice-ticket'});
+              this.items.push({name: "Apresentar senha", icon_name: 'senha', url: '/canteen/choice-ticket', args:{type:userType}});
               this.items.push({name: "Consultar senhas", icon_name: 'pesquisar senhas', url:'/canteen/search-ticket'});
               this.items.push({name: "Comprar senhas", icon_name: 'comprar senhas', url:'/canteen/buy-ticket'});
               this.dataLoaded = true;

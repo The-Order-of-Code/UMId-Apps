@@ -41,9 +41,10 @@ export class SearchTicketPage implements OnInit {
     const interval = 2;
     SecureStorage.get('tickets', ss).then(result => {
       const [count, ticketDay] = this.getData(JSON.parse(result), type, interval);
+      let day = new Date(ticketDay)
       this.items.push({ count: count[0], type_ticket: "Senha completa.", descripton: "Dá-te direito ao prato principal, sopa, uma bebida e sobremesa." });
       this.items.push({ count: count[1], type_ticket: "Senha simples.", descripton: "Dá-te direito ao prato principal e uma bebida." });
-      this.items.push({ count: count[2], type_ticket: "Senha do dia.", descripton: "Esta senha é a senha promocional das duas categorias acima ", date: ticketDay });
+      this.items.push({ count: count[2], type_ticket: "Senha do dia.", descripton: "Esta senha é a senha promocional das duas categorias acima ", date: day.toLocaleDateString() });
       this.dataLoaded = true;
     })
     this.has_back_button = true;
@@ -98,17 +99,19 @@ export class SearchTicketPage implements OnInit {
     if (vet.length > 0) {
       let present = days[0];
       for (let index = 0; index < vet.length; index++) {
-        if ((Date.parse(vet[index]) >= Date.parse(days[0])) && (Date.parse(vet[index]) <= Date.parse(days[1])) && (Date.parse(vet[index]) >= today ) ) {
+        if ((Date.parse(vet[index]) >= Date.parse(days[0])) && (Date.parse(vet[index]) <= Date.parse(days[1])) || (Date.parse(vet[index]) >= today ) ) {
           present = vet[index]
         }
         if (Date.parse(present) > Date.parse(vet[index]) && (Date.parse(vet[index]) >= today ) ) {
           present = vet[index]
         }
-        else return "Passou o prazo destas senhas.";
+        if ( Date.parse(vet[index])  == today  ){
+          present = vet[index]
+        }
       }
       return present;
     }
-    else return " "
+    else return "Passou prazo das suas senhas ou não possui."
   }
 
   /**

@@ -99,9 +99,9 @@ export class BuyTicketDayPage implements OnInit {
     this.router.navigate(['/canteen/buy-ticket/information', { user_info: 1 }]);
   }
 
-  sendType(_event) {
-    console.log(_event)
-    this.quantity = _event;
+  sendType(event) {
+    console.log(event)
+    this.quantity = event;
   }
 
 }

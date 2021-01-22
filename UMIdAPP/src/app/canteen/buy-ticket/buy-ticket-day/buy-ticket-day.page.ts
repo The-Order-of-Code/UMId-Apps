@@ -27,6 +27,7 @@ export class BuyTicketDayPage implements OnInit {
   // adicionar botao voltar para trás true -> sim, false -> nao (depende da vista)
   has_back_button: boolean;
   operation_name: string;
+  quantity: any;
 
   constructor(
     private router: Router,
@@ -105,8 +106,9 @@ export class BuyTicketDayPage implements OnInit {
     this.router.navigate(['/canteen/buy-ticket/information', { user_info: 1 }]);
   }
 
-  reciveType(_event) {
+  sendType(_event) {
     console.log(_event)
+    this.quantity = _event;
   }
 
 

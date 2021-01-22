@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import * as SecureStorage from '../../../common/general/secureStorage.js';
 import { TicketsService } from '../../../services/tickets.service';
@@ -34,6 +34,7 @@ export class BuyTicketPage implements OnInit {
   constructor(
     private activateRoute: ActivatedRoute,
     public navCtrl: NavController,
+    public alertController: AlertController,
     private router: Router,
     private storage: Storage,
     private ticketsService: TicketsService) { }
@@ -143,6 +144,17 @@ export class BuyTicketPage implements OnInit {
     if (this.numberSimplesTicket === undefined || this.numberSimplesTicket === null) {
       this.numberSimplesTicket = { type: "Senha prato simples.", count: "0" }
     }
+  }
+
+  async presentAlert(message) {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Aviso',
+      message: message,
+      buttons: ['OK']
+    });
+
+    await alert.present();
   }
 
 }

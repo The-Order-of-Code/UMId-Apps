@@ -17,7 +17,7 @@ export class CardsComponent implements OnInit {
   @Output() nextPageEventEmitter = new EventEmitter();
   @Output() requestTicketsEmitter = new EventEmitter();
   
-  @Output() sendTypeEmmitter = new EventEmitter();
+  @Output() sendTypeEmitter = new EventEmitter();
 
   width: number;
   icons: string;
@@ -28,8 +28,9 @@ export class CardsComponent implements OnInit {
 
   value: number =0;
 
-  typeTicket ='';
-
+  list_tickets =[];
+  typeTicket: any;
+  
   constructor(public navCtrl: NavController,private libraryService: LibraryService) {
   }
 
@@ -58,10 +59,12 @@ export class CardsComponent implements OnInit {
 
 input1(event){
   this.typeTicket = event.target.value;
+  console.log('here', this.typeTicket);
 }
 
-sendType(event){
-  this.sendTypeEmmitter.emit(this.typeTicket)
+sendType(event,item){
+  this.list_tickets.push({date:item, type:this.typeTicket})
+  this.sendTypeEmitter.emit(this.list_tickets)
 }
 
   timeNow(d) {

@@ -94,15 +94,17 @@ export class SearchTicketPage implements OnInit {
    */
   getTicketPromotion(vetS, vetC, days) {
     const vet = vetS.concat(vetC);
+    const today = Date.now();
     if (vet.length > 0) {
       let present = days[0];
       for (let index = 0; index < vet.length; index++) {
-        if ((Date.parse(vet[index]) >= Date.parse(days[0])) && (Date.parse(vet[index]) <= Date.parse(days[1]))) {
+        if ((Date.parse(vet[index]) >= Date.parse(days[0])) && (Date.parse(vet[index]) <= Date.parse(days[1])) && (Date.parse(vet[index]) >= today ) ) {
           present = vet[index]
         }
-        if (Date.parse(present) > Date.parse(vet[index])) {
+        if (Date.parse(present) > Date.parse(vet[index]) && (Date.parse(vet[index]) >= today ) ) {
           present = vet[index]
         }
+        else return "Passou o prazo destas senhas.";
       }
       return present;
     }

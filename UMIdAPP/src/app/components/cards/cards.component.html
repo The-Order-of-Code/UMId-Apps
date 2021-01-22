@@ -9,14 +9,14 @@
           <ion-col size-sm="5" size="5" class="ion-text-end" text-center>
             <ion-row>
               <ion-button color="dark">
-                <ion-select interface="popover" placeholder="Tipo">
+                <ion-select interface="popover" (input)="input1($event)" placeholder="Tipo">
                   <ion-select-option value="normal">Normal</ion-select-option>
                   <ion-select-option value="simples">Simples</ion-select-option>
                 </ion-select>
               </ion-button>
             </ion-row>
             <ion-row>
-              <ion-button color="success" class="add_button">
+              <ion-button color="success" class="add_button" (click)="sendType($event)">
                 <ion-text class="text_add_button">Adicionar</ion-text>
               </ion-button>
             </ion-row>
@@ -29,14 +29,14 @@
           <ion-col size-sm="4" size="4" class="ion-text-end" text-center>
             <ion-row *ngIf="card_type === 'senhas'">
               <ion-button color="dark">
-                <ion-select interface="popover" placeholder="Tipo">
+                <ion-select interface="popover" (input)="input1($event)" placeholder="Tipo">
                   <ion-select-option value="normal">Normal</ion-select-option>
                   <ion-select-option value="simples">Simples</ion-select-option>
                 </ion-select>
               </ion-button>
             </ion-row>
             <ion-row>
-              <ion-button color="success" class="add_button">
+              <ion-button color="success" class="add_button" (click)="sendType($event)">
                 <ion-text class="text_add_button">Adicionar</ion-text>
               </ion-button>
             </ion-row>
@@ -277,11 +277,17 @@
         </ion-card-header>
       </ion-item>
 
-      <ion-item lines="none" color="transparent">
+      <ion-item lines="none" color="transparent"> 
         <ion-label *ngIf="item.type_ticket != 'Senha do dia.' " class="text_title_sub"> Quantidade:</ion-label>
 
-        <ion-input *ngIf="item.type_ticket != 'Senha do dia.' " type="number" value="0" [min]=0></ion-input>
+        <ion-input *ngIf="item.type_ticket != 'Senha do dia.' && item.type_ticket === 'Senha completa.' "       aria-placeholder="Número de senhas"   (input)="updateInput($event)"  (focusout)="inputKeyDownEnter($event,item.type_ticket)" type="number"  [min]=0></ion-input>
+        <ion-input *ngIf="item.type_ticket != 'Senha do dia.' && item.type_ticket === 'Senha prato simples.' "  aria-placeholder="Número de senhas"   (input)="updateInput2($event)"  (focusout)="inputKeyDownEnter2($event,item.type_ticket)" type="number"  [min]=0></ion-input>
         <ion-label *ngIf="item.type_ticket != 'Senha do dia.' " class="text_title_sub"> senhas</ion-label>
+
+        <!-- <ion-button *ngIf="item.type_ticket !== 'Senha do dia.' "  (Keyup)="inputKeyDownEnter($event,item.type_ticket)" style="--background:#23BD61" class="bottom"
+        (click)="nextPage($event,item)">
+          ADICIONAR
+        </ion-button>  -->
 
         <ion-label *ngIf="item.type_ticket === 'Senha do dia.' " class="text_title_sub ion-text-wrap"> {{item.selected}}
         </ion-label>

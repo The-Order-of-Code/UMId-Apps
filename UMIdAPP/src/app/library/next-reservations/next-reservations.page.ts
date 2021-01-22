@@ -32,7 +32,11 @@ export class NextReservationsPage implements OnInit {
 
   dataLoaded: boolean = false;
   
-  constructor(private router: Router, private libraryService: LibraryService,private network: Network,public alertController: AlertController) { }
+  constructor(
+    private router: Router, 
+    private libraryService: LibraryService,
+    private network: Network,
+    public alertController: AlertController) { }
 
   async ngOnInit() {
 

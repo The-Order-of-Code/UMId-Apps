@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-information',
@@ -22,13 +23,21 @@ export class InformationPage implements OnInit {
     // adicionar botao voltar para trás true -> sim, false -> nao (depende da vista)
     has_back_button: boolean;
 
-  constructor(private router: Router,) { }
+  constructor(private router: Router,private storage: Storage) { }
 
   ngOnInit() {
     this.view_name = "Senha do dia";
     this.has_back_button = true;
     this.show_counter = false;
     this.dataLoaded = true;
+    this.storage.get('tickets_simples').then(result=>{
+      console.log('senha simples',result);
+    })
+    this.storage.get('tickets_complete').then(result=>{
+      console.log('senha completa',result);
+    })
+
+
   }
 
   goForward(_event) {

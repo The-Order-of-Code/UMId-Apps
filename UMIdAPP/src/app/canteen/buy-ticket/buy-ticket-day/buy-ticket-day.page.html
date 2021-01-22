@@ -5,16 +5,33 @@
     [username]=first_name
     (goback)="goBack($event)">
     </app-header-menu>
+    
+      <div class="center">
+        <ion-row>
+        <ion-col>
+          <ion-datetime displayFormat="DD/MM/YYYY" mode ='md' [(ngModel)]="date_reservation" [value]="null" max="2050-12-09"  placeholder="Select Date"></ion-datetime>
+        </ion-col>
+        <ion-col>
+          <ion-button class="bottomSearch" (click)="searchDate()">
+            <ion-icon name="search-sharp"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+      </div>
 </ion-header>
 
 <ion-content>
-  
+
+
   <div *ngIf='dataLoaded'>
     <app-cards
       [card_type]=card_type
       [items]=items
       (nextPageEventEmitter)="nextPage($event)"
-      (eventEmitter)="goBack($event)">
+      (eventEmitter)="goBack($event)"
+      (eventEmitter)="requestTickets($event)"
+      (sendTypeEmmitter)="reciveType($event)"
+      >
       </app-cards>
   </div> 
 

@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
-import { AuthService } from '../../../services/auth.service';
+import { Storage } from '@ionic/storage';
+import * as SecureStorage from '../../../common/general/secureStorage.js';
+import { TicketsService } from '../../../services/tickets.service';
 
 @Component({
   selector: 'app-buy-ticket',
@@ -25,11 +27,16 @@ export class BuyTicketPage implements OnInit {
   // adicionar botao voltar para trás true -> sim, false -> nao (depende da vista)
   has_back_button: boolean;
 
+  ticketsCount = [];
+  numberSimplesTicket;
+  numberCompleteTicket;
+
   constructor(
     private activateRoute: ActivatedRoute,
     public navCtrl: NavController,
     private router: Router,
-    private authService: AuthService,) { }
+    private storage: Storage,
+    private ticketsService: TicketsService) { }
 
   ngOnInit() {
     this.view_name = "Comprar Senhas";
@@ -37,8 +44,8 @@ export class BuyTicketPage implements OnInit {
     this.has_back_button = true;
     this.show_counter = false;
     this.items.push({ type_ticket: "Senha completa.", descripton: "Dá-te direito ao prato principal, sopa, uma bebida e sobremesa." });
-    this.items.push({ type_ticket: "Senha prato principal.", descripton: "Dá-te direito ao prato principal e uma bebida." });
-    this.items.push({ type_ticket: "Senha do dia.", descripton: "Dá-te direito ao prato principal, sopa, uma bebida e sobremesa.", date: "24-01-2020",selected:"1 senhas adicionadas", url:'/canteen/buy-ticket/information'} );
+    this.items.push({ type_ticket: "Senha prato simples.", descripton: "Dá-te direito ao prato principal e uma bebida." });
+    this.items.push({ type_ticket: "Senha do dia.", descripton: "Dá-te direito ao prato principal, sopa, uma bebida e sobremesa.", date: "24-01-2020", selected: "1 senhas adicionadas", url: '/canteen/buy-ticket/information' });
     this.dataLoaded = true;
   }
 
@@ -48,25 +55,33 @@ export class BuyTicketPage implements OnInit {
 
 
 
-  nextPage(_event){
+  nextPage(_event) {
     console.log(_event);
-    const ev = JSON.parse(_event); 
+    this.verifierIsNull();
+    this.storage.set('tickets_simples', this.numberSimplesTicket);
+    this.storage.set('tickets_complete', this.numberCompleteTicket);
+    const ev = JSON.parse(_event);
     console.log(ev)
-    if(ev.args){
+    if (ev.args) {
       this.navCtrl.navigateRoot([ev.url, ev.args]);
     }
     else this.navCtrl.navigateRoot([ev.url]);
   }
 
-  reciveTickets($event){
-    console.log('value from child component',$event);
+  reciveTickets($event) {
+    console.log('value from child component', $event);
   }
 
-  buytTickets(){
-    const username = "pg39261";
-    const password = "123456";
-    const data = {
-      "username": username,
+
+  async buytTickets() {
+
+    const ss = SecureStorage.instantiateSecureStorage();
+    let dataAuth = await SecureStorage.get('dataAuth', ss).then(dataUser => {
+      return JSON.parse(dataUser);
+    });
+
+    let data = {
+      "username": dataAuth['username'],
       "tickets": [
         {
           "ticketType": "Senha completa (estudante)",
@@ -80,15 +95,54 @@ export class BuyTicketPage implements OnInit {
         {
           "ticketType": "Senha prato simples promocional (estudante)",
           "dates": [
-            "2021-01-18T01:28:31.164501Z",
+            "2021-01-30T01:28:31.164501Z"
 
           ]
         }
       ]
     }
-
-    this.authService.buyTickets(username,password,data).then(result=>{
-      console.log(result.status)
+    let result =  await this.ticketsService.buyTickets(dataAuth['username'], dataAuth['password'],data).then(result=>{
+      return result.status
     })
+    console.log(result)
+
   }
+
+
+
+  inputKeyDownEnter(event) {
+    this.ticketsCount.push(event);
+    this.updateCountTicket();
+  }
+
+  /**
+   * Atualiza os valores inseridos pelo utilizador 
+   *
+   * @memberof BuyTicketPage
+   */
+  updateCountTicket() {
+    let i = this.ticketsCount.length
+    if (this.ticketsCount[i - 1].type === "Senha completa.") {
+      this.numberCompleteTicket = this.ticketsCount[i - 1]
+    }
+    else
+      this.numberSimplesTicket = this.ticketsCount[i - 1]
+
+    this.verifierIsNull();
+
+    console.log('complete', this.numberCompleteTicket)
+    console.log('simples', this.numberSimplesTicket)
+  }
+
+
+
+  verifierIsNull() {
+    if (this.numberCompleteTicket === undefined || this.numberCompleteTicket === null) {
+      this.numberCompleteTicket = { type: "Senha completa.", count: "0" }
+    }
+    if (this.numberSimplesTicket === undefined || this.numberSimplesTicket === null) {
+      this.numberSimplesTicket = { type: "Senha prato simples.", count: "0" }
+    }
+  }
+
 }

@@ -11,7 +11,7 @@ export class LibraryService {
 
   setCredentials(username, password){
     this.http.setServerTrustMode('default');
-    this.http.useBasicAuth(username, password);
+    this.http.useBasicAuth(username, password); 
     this.http.setDataSerializer('json');
   }
 

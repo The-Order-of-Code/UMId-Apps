@@ -15,26 +15,54 @@ export class CardsComponent implements OnInit {
   @Input() items: any;
   @Output() eventEmitter = new EventEmitter();
   @Output() nextPageEventEmitter = new EventEmitter();
-  @Output() requestTickets = new EventEmitter();
+  @Output() requestTicketsEmitter = new EventEmitter();
   
+  @Output() sendTypeEmmitter = new EventEmitter();
 
   width: number;
   icons: string;
   count_ticket;
 
+  countTicket1  = 0;
+  countTicket2  = 0;
+
+  value: number =0;
+
+  typeTicket ='';
+
   constructor(public navCtrl: NavController,private libraryService: LibraryService) {
-
-
   }
+
   ngOnInit() {
     this.width = window.innerWidth;
     
   }
 
-  do_something($event){
-    this.requestTickets.emit($event.target.value);
-
+  // Caputrar quantidade de senhas 
+  updateInput(event){
+    this.countTicket1 = event.target.value;
   }
+
+  updateInput2(event){
+    this.countTicket2 = event.target.value;
+  }
+
+  inputKeyDownEnter(event,type_ticket){
+    this.requestTicketsEmitter.emit({type:type_ticket, count:this.countTicket1});
+  }
+
+  inputKeyDownEnter2(event,type_ticket){
+    this.requestTicketsEmitter.emit({type:type_ticket, count:this.countTicket2});
+  }
+// Caputrar quantidade de senhas  essas 4 funções
+
+input1(event){
+  this.typeTicket = event.target.value;
+}
+
+sendType(event){
+  this.sendTypeEmmitter.emit(this.typeTicket)
+}
 
   timeNow(d) {
     const h = (d.getHours() < 10 ? '0' : '') + d.getHours()
@@ -84,7 +112,7 @@ export class CardsComponent implements OnInit {
     const today = new Date();
     if (date.getDate() == today.getDate() && date.getMonth() == today.getMonth() && date.getFullYear() == today.getFullYear()) {
       if (date.getHours() >= today.getHours()) {
-        if (date.getHours() == today.getHours() && date.getMinutes() > today.getMinutes()) return "Hoje, das " + this.timeNow(date) + "h às " + this.timeNow(date1) + "h";
+        if (date.getHours() >= today.getHours() && date.getMinutes() > today.getMinutes()) return "Hoje, das " + this.timeNow(date) + "h às " + this.timeNow(date1) + "h";
         else return "A decorrer";
       }
       else return "A decorrer";

@@ -19,7 +19,7 @@
   </div> 
   
 </ion-content>
-      
+
 <app-footer-tab
   [show_counter]=show_counter
   [quantity]=quantity
@@ -27,4 +27,5 @@
   [prod_name]=prod_name
   [operation_name]=operation_name
   (eventEmitter)="goBack($event)"
+  (eventEmitter)="requestTickets($event)"
 ></app-footer-tab>

@@ -508,6 +508,7 @@ export class ReaderBleTransferPage implements OnInit {
           paramMap.get('device_engagement_structure')
         );
         this.loading_message = 'A obter ' + paramMap.get('data_name');
+        this.title = 'Obter ' +  paramMap.get('data_name');
         this.spinner = true;
         this.state_machine.send('PARSED');
 

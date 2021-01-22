@@ -78,7 +78,7 @@ export class ChoiceTicketPage implements OnInit {
 
 
 
-    if(count[0][2]==0){
+    if((count[0][2]===0) && (count[0][3]===0) ){
       if (count[0][0] != 0) {
         this.items.push({
           count: count[0][0], type_ticket: "Senha completa.", descripton: "Dá-te direito ao prato principal, sopa, uma bebida e sobremesa.", url: '/holder-ble-transfer', args: {

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import { simples } from 'src/common/general/constants.js';
 import * as SecureStorage from '../../../common/general/secureStorage.js';
 import { TicketsService } from '../../../services/tickets.service';
 
@@ -30,6 +31,7 @@ export class BuyTicketPage implements OnInit {
   ticketsCount = [];
   numberSimplesTicket;
   numberCompleteTicket;
+  quantity;
 
   constructor(
     private activateRoute: ActivatedRoute,
@@ -81,31 +83,44 @@ export class BuyTicketPage implements OnInit {
       return JSON.parse(dataUser);
     });
 
-    let data = {
-      "username": dataAuth['username'],
-      "tickets": [
+    let nSimples = await this.storage.get('tickets_simples').then(result=>{
+      return result;
+    });
+
+    let nCompleta = await this.storage.get('tickets_complete').then(result=>{
+      return result;
+    });
+      console.log("utilizador",dataAuth['username'])
+      console.log("numero simples",typeof(parseInt(nSimples["count"])))
+      console.log("numero complicada",nCompleta["count"])
+
+      console.log(dataAuth['username'])
+      let data = { 
+        "username": dataAuth['username'], 
+        "tickets": [
         {
-          "ticketType": "Senha completa (estudante)",
-          "amount": 1
+              "ticketType": "Senha completa (estudante)",
+              "amount": parseInt(nCompleta["count"])
         },
         {
-          "ticketType": "Senha prato simples (estudante)",
-          "amount": 1
-
+              "ticketType": "Senha prato simples (estudante)",
+              "amount": parseInt(nSimples["count"])
         },
         {
           "ticketType": "Senha prato simples promocional (estudante)",
           "dates": [
-            "2021-01-30T01:28:31.164501Z"
+                "2021-01-17T01:28:31.164501Z"
+          ]}
+        ]
+  }
 
-          ]
-        }
-      ]
-    }
-    let result =  await this.ticketsService.buyTickets(dataAuth['username'], dataAuth['password'],data).then(result=>{
-      return result.status
-    })
-    console.log(result)
+      let result =  await this.ticketsService.buyTickets(dataAuth['username'], dataAuth['password'],data).then(result=>{
+        return result.status
+      });
+
+      if (result == 200){
+        this.presentAlert("Compra de senhas realizado com sucesso.")
+      }
 
   }
 
@@ -125,9 +140,13 @@ export class BuyTicketPage implements OnInit {
     let i = this.ticketsCount.length
     if (this.ticketsCount[i - 1].type === "Senha completa.") {
       this.numberCompleteTicket = this.ticketsCount[i - 1]
+      this.storage.set('tickets_complete', this.numberCompleteTicket);
     }
-    else
+    else{
       this.numberSimplesTicket = this.ticketsCount[i - 1]
+      this.storage.set('tickets_simples', this.numberSimplesTicket);
+    }
+      
 
     this.verifierIsNull();
 
@@ -140,9 +159,11 @@ export class BuyTicketPage implements OnInit {
   verifierIsNull() {
     if (this.numberCompleteTicket === undefined || this.numberCompleteTicket === null) {
       this.numberCompleteTicket = { type: "Senha completa.", count: "0" }
+      this.storage.set('tickets_complete', this.numberCompleteTicket);
     }
     if (this.numberSimplesTicket === undefined || this.numberSimplesTicket === null) {
       this.numberSimplesTicket = { type: "Senha prato simples.", count: "0" }
+      this.storage.set('tickets_simples', this.numberSimplesTicket);
     }
   }
 

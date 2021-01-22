@@ -46,7 +46,7 @@ export class BuyTicketDayPage implements OnInit {
     let dataAuth = await SecureStorage.get('dataAuth', ss).then(dataUser => {
       return JSON.parse(dataUser);
     });
-   
+    
     let my_resevations = await this.ticketsService.getMyTicketsPromoctions(dataAuth['username'], dataAuth['password']).then(result => {
       return JSON.parse(result.data);
     });

@@ -1,4 +1,9 @@
-
+/**
+ * Geração de chaves efemeras
+ *
+ * @export
+ * @return {*} 
+ */
 export function generate_key() {
   return window.crypto.subtle.generateKey(
     {
@@ -10,6 +15,12 @@ export function generate_key() {
   );
 }
 
+/**
+ * Geração de chaves de assinatura (neste caso é usada para autenticação do dispositivo) 
+ * 
+ * @export
+ * @return {*} 
+ */
 export function generate_signing_key() {
   return crypto.subtle.generateKey(
     {
@@ -22,7 +33,10 @@ export function generate_signing_key() {
 }
 
 
-
+/**
+ * Exportação da chave para o formato jwk
+ * @param {*} key - chave a ser exportada
+ */
 export function export_key(key) {
   return window.crypto.subtle.exportKey(
     'jwk', //can be "jwk" (public or private), "raw" (public only), "spki" (public only), or "pkcs8" (private only)
@@ -30,6 +44,10 @@ export function export_key(key) {
   );
 }
 
+/**
+ * Importação da chave do formato jwk para uma CryptoKey (formato conhecido da Web Crypto API)
+ * @param {*} key - chave a ser importada
+ */
 export function import_key(key) {
   return window.crypto.subtle.importKey(
     'jwk', //can be "jwk" (public or private), "raw" (public only), "spki" (public only), or "pkcs8" (private only)
@@ -44,6 +62,11 @@ export function import_key(key) {
   );
 }
 
+/**
+ * Derivação da chave intermédia (HKDF) para AES-GCM (página 39 do documento, 45 do pdf)
+ * @param {*} hkdf_key - chave intermédia
+ * @param {*} salt - salto
+ */
 export function derive_key_aes(hkdf_key, salt) {
   return window.crypto.subtle.deriveKey(
     {
@@ -65,6 +88,12 @@ export function derive_key_aes(hkdf_key, salt) {
   );
 }
 
+/**
+ * Processo intermédio de geração das chaves efémeras para a conexão BLE
+ * @param {*} privateKey - chave privada local
+ * @param {*} publicKeyRemote - chave publica da entidade externa (do outro dispositivo)
+ * @param {*} salt - salto
+ */
 export function derive_key(privateKey, publicKeyRemote, salt) {
   return Promise.all([
     window.crypto.subtle.deriveKey(
@@ -106,6 +135,13 @@ export function derive_key(privateKey, publicKeyRemote, salt) {
   ]);
 }
 
+/**
+ * Encriptação da mensagem a ser enviada para outra entidade
+ * @param {*} shared_key - chave resultante da derivação  
+ * @param {*} data - mensagem a ser encriptada e enviada
+ * @param {*} iv - vetor inicial (conhecido por IV)
+ * @param {*} additional_data - AAD
+ */
 export function encrypt_msg(shared_key, data, iv, additional_data) {
   return window.crypto.subtle.encrypt(
     {
@@ -126,6 +162,13 @@ export function encrypt_msg(shared_key, data, iv, additional_data) {
   );
 }
 
+/**
+ * Desencriptação da mensagem a ser enviada para outra entidade
+ * @param {*} shared_key - chave resultante da derivação  
+ * @param {*} data - mensagem recebida a ser desencriptada
+ * @param {*} iv - vetor inicial (conhecido por IV)
+ * @param {*} additional_data - AAD
+ */
 export function decrypt_msg(shared_key, data, iv, additional_data) {
   return window.crypto.subtle.decrypt(
     {
@@ -139,7 +182,15 @@ export function decrypt_msg(shared_key, data, iv, additional_data) {
   );
 }
 
+/**
+ * Autenticação da mensagem, para geração da AAD
+ * @param {*} shared_key - chave resultante da derivação
+ */
 export function hmac(shared_key) {
+  /**
+   * A ISO na página 39 (45 do .pdf) refere que AAD é uma string vazia
+   */
+  const msg_to_encode = '';
   const data = new TextEncoder().encode(msg_to_encode);
   //console.log(data);
   return window.crypto.subtle.sign(
@@ -151,10 +202,18 @@ export function hmac(shared_key) {
   );
 }
 
+/**
+ * Conversão de base decimal para hexadecimal
+ * @param {*} n - valor a ser convertido 
+ */
 export function dec2hex(n) {
   return n ? [n % 256].concat(dec2hex(~~(n / 256))) : [];
 }
 
+/**
+ * Conversão do valor decimal para um valor representado por 4 bytes (formato big endian)
+ * @param {*} n - valor a ser convertido 
+ */
 export function toBigEndian(n) {
   var hexar = dec2hex(n);
   return hexar
@@ -162,7 +221,14 @@ export function toBigEndian(n) {
     .concat(Array(4 - hexar.length).fill('0x00'));
 }
 
+/**
+ * Função de teste da encriptação e desencriptação da mensagem (via BLE)
+ *
+ * @export
+ * @return {*} 
+ */
 export function test() {
+  const msg_to_encode = 'Ola Holder!';
   /*
         definir o nonce identifier da ISO (isto aqui temos de definir conforme a
         entity seja um Holder ou um Reader):

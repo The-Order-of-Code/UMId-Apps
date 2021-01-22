@@ -1,9 +1,38 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>reader-ble-transfer</ion-title>
-  </ion-toolbar>
+  <app-header-menu 
+    [title]=title
+    [has_back_button]=has_back_button
+    [username]=first_name
+    (goback)="goBack($event)">
+    </app-header-menu>
 </ion-header>
 
-<ion-content>
+<ion-content *ngIf="dataLoaded">
+
+  <app-loading *ngIf="spinner" [icon_name]="icon_name" [message]="loading_message"></app-loading>
+  
+  <app-success
+    *ngIf="success"
+    [icon_name]="icon_name"
+    [success_quote]="success_quote"
+    (goback)="goBack($event)"
+  ></app-success>
+
+  <app-failure
+    *ngIf="failure"
+    [icon_name]="icon_name"
+    [failure_quote]="failure_quote"
+    [failure_code]="failure_code"
+    (goback)="goBack($event)"
+  ></app-failure>
 
 </ion-content>
+
+<app-footer-tab
+  [show_counter]=show_counter
+  [quantity]=quantity
+  [segment]=segment
+  [prod_name]=prod_name
+  [operation_name]=operation_name
+  (eventEmitter)="goBack($event)"
+></app-footer-tab>

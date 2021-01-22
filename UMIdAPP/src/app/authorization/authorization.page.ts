@@ -21,30 +21,17 @@ export class AuthorizationPage implements OnInit {
   info: string;
   sub_info: string;
   request_attributes :string[] = [];;
- 
-  shared_other: boolean;
+  spinner: boolean;
+  loading_message: string;
   icon_name: string;
-  card_type: string;
-  items: Object[] = [];
 
   constructor(private router: Router) { }
 
   ngOnInit() {
-
-    this.view_name = "Autorizar";
-    this.has_back_button = true;
-    this.icon_name = "restaurant";
-    this.info = "O leitor solicitou isso:";
-    this.sub_info = "você autoriza?"
-    this.request_attributes.push("Nome");
-    this.request_attributes.push("Idade");
-    console.log('lista de atributos',this.request_attributes)
-    this.shared_other = false;
+    this.loading_message = "a transferir dados";
     this.dataLoaded = true;
-    this.show_counter = false;
-  
-
-
+    this.spinner = true;
+    this.icon_name = "card"
   }
 
 

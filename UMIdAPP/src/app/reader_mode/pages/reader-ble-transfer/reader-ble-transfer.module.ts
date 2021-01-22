@@ -7,12 +7,14 @@ import { IonicModule } from '@ionic/angular';
 import { ReaderBleTransferPageRoutingModule } from './reader-ble-transfer-routing.module';
 
 import { ReaderBleTransferPage } from './reader-ble-transfer.page';
+import { ComponentsModule } from '../../../components/components.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    ComponentsModule,
     ReaderBleTransferPageRoutingModule
   ],
   declarations: [ReaderBleTransferPage]

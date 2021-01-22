@@ -9,8 +9,8 @@ import * as DeviceEngagement from '../../engagement/holder-mode/deviceEngagement
  * @export generateSessionKeys
  */
 export function initializeSecureSessionVariables() {
-  let counterIntReader = 0;
-  let identifierReader = new Uint8Array([
+  const counterIntReader = 0;
+  const identifierReader = new Uint8Array([
     0x00,
     0x00,
     0x00,
@@ -20,11 +20,11 @@ export function initializeSecureSessionVariables() {
     0x00,
     0x00,
   ]);
-  let counterReader = new Uint8Array(
+  const counterReader = new Uint8Array(
     ComunicationCrypto.toBigEndian(counterIntReader)
   );
-  let counterIntHolder = 0;
-  let identifierHolder = new Uint8Array([
+  const counterIntHolder = 0;
+  const identifierHolder = new Uint8Array([
     0x00,
     0x00,
     0x00,
@@ -34,16 +34,16 @@ export function initializeSecureSessionVariables() {
     0x00,
     0x01,
   ]);
-  let counterHolder = new Uint8Array(
+  const counterHolder = new Uint8Array(
     ComunicationCrypto.toBigEndian(counterIntHolder)
   );
   return {
-    "counterIntReader": counterIntReader, 
-    "identifierReader": identifierReader, 
-    "counterReader": counterReader, 
-    "counterIntHolder": counterIntHolder,
-    "identifierHolder": identifierHolder, 
-    "counterHolder": counterHolder
+    'counterIntReader': counterIntReader, 
+    'identifierReader': identifierReader, 
+    'counterReader': counterReader, 
+    'counterIntHolder': counterIntHolder,
+    'identifierHolder': identifierHolder, 
+    'counterHolder': counterHolder
   };
 }
 
@@ -112,7 +112,7 @@ export async function decrypt_msg(
   session_key
 ) {
   counter_int++;
-  console.log("counter reader", counter_int);
+  console.log('counter reader', counter_int);
   const counter = new Uint8Array(ComunicationCrypto.toBigEndian(counter_int));
   //data = General.str2ab(data);
   const iv = new Uint8Array(identifier.length + counter.length);
@@ -150,7 +150,7 @@ export async function encrypt_msg(
   session_key
 ) {
   counter_int++;
-  console.log("counter holder", counter_int);
+  console.log('counter holder', counter_int);
   const counter = new Uint8Array(ComunicationCrypto.toBigEndian(counter_int));
 
   const iv = new Uint8Array(identifier.length + counter.length);

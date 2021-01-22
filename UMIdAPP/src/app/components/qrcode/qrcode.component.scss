@@ -16,6 +16,9 @@
   
   color: var(ion-color-dark);
 }
+
+.qr{
+}
   
 .border {
 
@@ -25,11 +28,13 @@
   @media (min-width: 361px) {
     width: 222px;
     height: 222px;
+    padding: 16px;
   }
-  
+
   @media (max-width: 360px) {
     width: 174px;
     height: 174px;
+    padding: 12px;
   }
 }
 

@@ -11,7 +11,7 @@ export class SuccessComponent {
   @Output() goback = new EventEmitter();
 
   goBack(): void {
-    this.goback.emit('voltar');
+    this.goback.emit('back');
   }
 }
  

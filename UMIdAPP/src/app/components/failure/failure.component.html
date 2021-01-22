@@ -1,7 +1,7 @@
 <div class="circle"></div>
 
 <div class="icon-wraper">
-  <ion-icon name="{{ icon_name }}" class="icon"></ion-icon>
+  <ion-icon name="{{ icon_name }}" class="icon" color="medium"></ion-icon>
 </div>
 
 <div class="info">
@@ -15,7 +15,7 @@
 </div>
 
 <div class="bottom">
-  <ion-button style="--background:#FFFFFF; --color:#D1281B;"  (click)="goBack()">
-    Voltar
+  <ion-button style="--color:#FFFFFF; --background:#D1281B;"  (click)="goBack($event)">
+    <ion-text> Voltar </ion-text> 
   </ion-button>
 </div>

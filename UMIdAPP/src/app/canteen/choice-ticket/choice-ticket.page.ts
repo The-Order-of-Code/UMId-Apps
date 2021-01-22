@@ -93,7 +93,6 @@ export class ChoiceTicketPage implements OnInit {
     }
   }
     return listPRo;
-  
   }
   
   getCurrentDate() {

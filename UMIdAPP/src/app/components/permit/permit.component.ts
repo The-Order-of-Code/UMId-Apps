@@ -11,8 +11,9 @@ export class PermitComponent implements OnInit {
   @Input() shared_other:boolean;
   @Input() request_attributes:  Array<string>;
   @Input() icon_name:any;
-  @Output() eventEmitter = new EventEmitter();
-  @Output() nextPageEventEmitter = new EventEmitter();
+  @Output() refused = new EventEmitter();
+  @Output() accepted = new EventEmitter();
+
 
   constructor() { }
 
@@ -27,17 +28,13 @@ export class PermitComponent implements OnInit {
 
   }
 
-  nextPage(ev, item) {
-    console.log("item", item);
-    if (item.args) {
-      this.nextPageEventEmitter.emit(JSON.stringify({ url: item.url, args: item.args }));
-    }
-    else this.nextPageEventEmitter.emit(JSON.stringify({ url: item.url }));
+
+  refuse(): void {
+    this.refused.emit('refused');
   }
 
-  goBack() {
-    this.eventEmitter.emit('back');
+  accept(): void {
+    this.accepted.emit('accepted');
   }
-
 
 }

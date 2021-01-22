@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-failure',
@@ -12,7 +13,12 @@ export class FailureComponent {
   @Input() failure_code: string;
   failure_code_show = false;
 
+  constructor(public navCtrl: NavController){}
+  ngOnInit(){
+    console.log(this.icon_name);
+  }
+
   goBack(): void {
-    this.goback.emit('voltar');
+    this.navCtrl.navigateRoot(['/home',{user_info: 1}])
   }
 }

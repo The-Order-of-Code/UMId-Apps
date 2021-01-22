@@ -1,7 +1,28 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { MenuController, NavController} from '@ionic/angular';
+import { Component, OnInit, NgZone } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import {
+  BarcodeScannerOptions,
+  BarcodeScanner,
+} from '@ionic-native/barcode-scanner/ngx';
+import {
+  Platform,
+  ToastController,
+  NavController,
+  MenuController,
+} from '@ionic/angular';
+import { HTTP } from '@ionic-native/http/ngx';
+import { BLE } from '@ionic-native/ble/ngx';
+import { BluetoothLE } from '@ionic-native/bluetooth-le/ngx';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { Storage } from '@ionic/storage';
+import { Network } from '@ionic-native/network/ngx';
+
 import * as SecureStorage from '../../common/general/secureStorage.js';
+import * as IgnoreBatterySavingMethod from '../../common/network/reader-mode/ble/doze_mode.js';
+import * as ComunicationCrypto from '../../common/crypto/reader-mode/communicationCrypto.js';
+import * as GeneralMethods from '../../common/general/reader-mode/general';
+import Profile  from '../../common/classes/profile';
+import Attribute  from '../../common/classes/attributes';
 
 @Component({
   selector: 'app-home',
@@ -40,39 +61,42 @@ export class HomePage {
   text_select:any;
   show_pay:any;
   description:any;
-
+  wifi_option = 1;
+  ble_option = 2;
+  nfc_option = 3;
+  any_option = 4;
   card_info: Object;
-
+  scannedData: unknown;
+  barcodeScannerOptions: BarcodeScannerOptions;
   dataLoaded: boolean = false;
+  deviceID: any;
+  timer: any;
+  publicKey: string;
+  privateKey: string;
+
+
 
   segment: string;
 
   constructor(
     private activateRoute: ActivatedRoute,
+    private barcodeScanner: BarcodeScanner,
+    private ble: BLE,
+    public platform: Platform,
+    private diagnostic: Diagnostic,
+    private toastCtrl: ToastController,
     public navCtrl: NavController,
+    public bluetoothle: BluetoothLE,
     private menu: MenuController,
+    private ngZone: NgZone,
+    private storage: Storage,
+    private net: Network
+
   ) {
   }
   
   ngOnInit() {
     this.menu.enable(true);
-  
-  
-    // Reservas
-    // this.view_name = "Reservar";
-    // this.has_back_button = true;
-    // this.show_counter = true;
-    // this.quantity = 2;
-    // this.card_type = "slots_reservas";
-    // this.prod_name = "slots";
-    // this.operation_name = "adicionados";
-    // this.items.push("14:30h - 15:00h")
-    // this.items.push("15:00h - 15:30h")
-    // this.items.push("15:30h - 16:00h")
-    // this.items.push("16:00h - 16:30h")
-    // this.items.push("16:30h - 17:00h")
-    // this.items.push("17:00h - 17:30h")
-    // this.items.push("17:30h - 18:00h")
     this.activateRoute.paramMap.subscribe(
       (paramMap) => {
         if (!paramMap.has('user_info')) {
@@ -82,152 +106,281 @@ export class HomePage {
           this.items = [];
           const user_info = paramMap.get('user_info');
           console.log(user_info);
-          const ss = SecureStorage.instantiateSecureStorage();
-          SecureStorage.get('user',ss).then((result)=>{
-            this.segment='home';
-            const user = JSON.parse(result);
-            console.log(user);
-            switch (user.user.userType) {
-              case 'STUDENT':
-                // Menu inicial estudante
-                  this.first_name = user.user.first_name;
-                  this.has_back_button = false;
-                  this.show_counter = false;
-                  this.card_type = "main menu";
-                  this.items.push({name: "Cantina", icon_name: 'cantina', url: '/canteen', args: {userType: user.user.userType}});
-                  this.items.push({name: "Reserva de salas de estudo", icon_name: 'biblioteca',url: '/library', args: {userType: user.user.userType}});
-                  this.items.push({name: "Apresentar identificação", icon_name: 'cartao', url: '/holder-ble-transfer', args: {user: result, data_name: "identificação", content:"ola"}});
-                  this.items.push({name: "Pagamentos", icon_name: 'carteira', url: '/payments'});
-                  this.items.push({name: "Ver cartão", icon_name: 'perfil', url: '/card-page', args: {user: result}});
-                  this.dataLoaded = true;
-                break;
-              case 'EMPLOYEE':
-                // Menu inicial funcionário cantina
-                this.first_name = user.user.first_name;
-                this.has_back_button = false;
-                this.show_counter = false;
-                this.card_type = "main menu";
-                this.items.push({name: "Verificar senha", icon_name: 'verificar senha'});
-                this.items.push({name: "Verificar identificação", icon_name: 'verificar identidade'});
-                this.items.push({name: "Cantina", icon_name: 'cantina', url: '/canteen', args: {userType: user.user.userType}});
-                this.items.push({name: "Apresentar identificação", icon_name: 'cartao'});
-                this.items.push({name: "Ver cartão", icon_name: 'perfil'});
-                this.dataLoaded = true;
-                break;
-              default: break;
-            }
-          })
-          console.log(this.items);
+          this.platform.ready().then(
+            () => {
+              const ss = SecureStorage.instantiateSecureStorage();
+              console.log(ss)
+              Promise.all([SecureStorage.get('user',ss), SecureStorage.get('mso',ss)]).then(([result,mso])=>{
+                this.segment='home';
+                const user = JSON.parse(result);
+                console.log(user);
+                switch (user.user.userType) {
+                  case 'STUDENT':
+                    // Menu inicial estudante
+                      this.first_name = user.user.first_name;
+                      this.has_back_button = false;
+                      this.show_counter = false;
+                      this.card_type = "main menu";
+                      this.items.push({name: "Cantina", icon_name: 'cantina', url: '/canteen', args: {userType: user.user.userType}});
+                      this.items.push({name: "Reserva de salas de estudo", icon_name: 'biblioteca',url: '/library', args: {userType: user.user.userType}});
+                      this.items.push({name: "Apresentar identificação", icon_name: 'cartao', url: '/holder-ble-transfer', args: {user: result, data_name: "identificação", mso:mso, option: 0}});
+                      this.items.push({name: "Pagamentos", icon_name: 'carteira', url: '/payments'});
+                      this.items.push({name: "Ver cartão", icon_name: 'perfil', url: '/card-page', args: {user: result}});
+                      this.dataLoaded = true;
+                    break;
+                  case 'EMPLOYEE':
+                    // Menu inicial funcionário cantina
+                    this.first_name = user.user.first_name;
+                    this.has_back_button = false;
+                    this.show_counter = false;
+                    this.card_type = "main menu";
+                    this.items.push({name: "Verificar senha", icon_name: 'verificar senha', url: 'scanCode(1)'});
+                    this.items.push({name: "Verificar identificação", icon_name: 'verificar identidade', url: 'scanCode(0)'});
+                    this.items.push({name: "Cantina", icon_name: 'cantina', url: '/canteen', args: {userType: user.user.userType}});
+                    this.items.push({name: "Apresentar identificação", icon_name: 'cartao', url: '/holder-ble-transfer', args: {user: result, data_name: "identificação", mso:mso, option: 0}});
+                    this.items.push({name: "Ver cartão", icon_name: 'perfil', url: '/card-page', args: {user: result}});
+                    this.dataLoaded = true;
+                    break;
+                  default: break;
+                }
+              },
+              () => {
+                this.ngOnInit()
+              })
+              console.log(this.items);
+            })
+          
         }
       }
     );
   
-  
-  
-    // Menu inicial funcionário biblioteca
-    // this.first_name = "Joana";
-    // this.has_back_button = false;
-    // this.show_counter = false;
-    // this.card_type = "main menu";
-    // this.items.push({name: "Verificar reserva", icon_name: 'verificar reserva'});
-    // this.items.push({name: "Verificar identificação", icon_name: 'verificar identidade'});
-    // this.items.push({name: "Cantina", icon_name: 'cantina'});
-    // this.items.push({name: "Reserva de salas de estudo", icon_name: 'biblioteca'});
-    // this.items.push({name: "Apresentar identificação", icon_name: 'cartao'});
-    // this.items.push({name: "Ver cartão", icon_name: 'perfil'});
-  
-  
-    // Menu inicial professor
-    // this.first_name = "Joana";
-    // this.has_back_button = false;
-    // this.show_counter = false;
-    // this.card_type = "main menu";
-    // this.items.push({name: "Verificar identificação", icon_name: 'verificar identidade'});
-    // this.items.push({name: "Cantina", icon_name: 'cantina'});
-    // this.items.push({name: "Reserva de salas de estudo", icon_name: 'biblioteca'});
-    // this.items.push({name: "Apresentar identificação", icon_name: 'cartao'});
-    // this.items.push({name: "Ver Cartão", icon_name: 'perfil'});
-
-
-    // A view do Loading
-    // this.icon_name = "restaurant"
-    // this.message = "A debitar senha."
-
-    //A view de pagamentos
-    // this.text_pay = "Valor em pagamento:"
-    // this.total_value= 92.65+"€"
-    // this.title_description= "Descrição:"
-    // this.title_count=" Quantidade:"
-    // this.title_value="Valor:"
-
-    // this.items.push({description:"Senha normal",count:1,value:2.50+"€"})
-    // this.items.push({description:"Senha do dia",count:2,value:2.00+"€"})
-    // this.items.push({description:"3° prestação de propinas ",count:1,value:87.15+"€"})
-    //  // rodape da pagina
-    // this.show_pay = true;
-    // this.text_select = "Selecione o meio de pagamento:"
-
-    // A view do qrcode
-    // this.title = "Utilize o código QR Code para  debitar uma senha para sua refeição."
-    // this.createdCode = "Equipa The order of code."
-    
-    // A view de sucesso
-    // this.icon_name = "ticket"
-    // this.success_quote = "Senha debitada com sucesso."
-
-    // A view de insucesso
-    //  this.icon_name = "ticket"
-    //  this.failure_quote = "Não foi possível debitar a senha ."
-
-    // A view de permissão
-    // this.info = "Deseja compartilhar uma senha com Leonardo ?"
-    // this.icon_name="ticket"
-    // this.sub_info = "Senha completa."
-
-    // A view do menu Cantina
-    // this.card_type= "cantina menu"
-    // this.items.push({title:"Apresentar senha",icon_name:"ticket"})
-    // this.items.push({title:"Consultar senha",icon_name:"ticket",sub_icon_name:"search"})
-    // this.items.push({title:"Comprar senha",icon_name:"ticket",sub_icon_name:"wallet"})
-
-    // A view da notificação
-    // this.view_name = "Notificações";
-    // this.items.push({icon_name:"restaurant",descripton:"Amanhã deve-se utilizar sua senha do dia, para não perdê-la.", type:"Urgente"})
-    // this.items.push({icon_name:"wallet",descripton:"Pagamento da sua propina referente ao mês de janeiro vence daqui a 10 dias.", type:"Atenção"})
-    // this.items.push({icon_name:"library",descripton:"Sua reserva da sala 2 campus Gualtar as 14 horas iniciará dentre 10 mins.", type:"Urgente"})
-    // this.items.push({icon_name:"restaurant",descripton:"Foi atualizado seu número de senhas da cantina.", type:"Informativo"})
-    // this.card_type='notify'
-
-
-
-
-    // A view para informações
-    //this.text = "Para reduzir o desperdício alimentar, a Universidade do Minho oferece um novo tipo de senhas, as senhas do dia.\n As senhas do dia podem ser senhas simples ou completas. Fica à tua escolha.  Nota que tens de consumir a senha no dia que escolheste para a refeição. Caso não tenhas consumido no dia, a senha deixa de estar disponível para ser consumida.  "
-    
-
-    // A view para proprinas 
-    // this.card_type = "paid";
-    // this.items.push({value:87.15,n_propinas:"3° PRESTAÇÃO DE PROPINAS",ano:"(2020/2021) - (PÓS-GRADUAÇÃO)",valid:"Até 10/12/2020"});
-    // this.items.push({value:87.15,n_propinas:"4° PRESTAÇÃO DE PROPINAS",ano:"(2020/2021) - (PÓS-GRADUAÇÃO)",valid:"Até 10/01/2021"});
-
-    // A view para  consultar senhas 
-    //this.card_type="consultar senhas";
-    // this.card_type="comprar senhas"; // A view para comprar senhas 
-    // this.items.push({count:8,type_ticket:"Senha completa.",descripton:"Dá-te direito ao prato principal, sopa, uma bebida e sobremesa."});
-    // this.items.push({count:2,type_ticket:"Senha prato principal.",descripton:"Dá-te direito ao prato principal e uma bebida."});
-    // this.items.push({count:2,type_ticket:"Senha do dia.",descripton:"Dá-te direito ao prato principal, sopa, uma bebida e sobremesa.",date:"24-01-2020",selected:"1 senhas adicionadas"});
-
-    
-
-    
-
-    
-
-  
-  
- 
   }
-  
+
+
+  /**
+   * Handler para inicializar o pedido de leitura do QRCode
+   * @param {*} option // 0 - consultar identificacão; 1 - senhas;
+   * @memberof HomePage
+   */
+  scanCode(option: number): void {
+    let mdl_attributes;
+
+    if (option == 0) {
+      mdl_attributes = Profile.prepareRequest(Attribute.identity());
+    } else {
+      mdl_attributes = Profile.prepareRequest(Attribute.ticket());
+    }
+
+    console.log('Atributos:', mdl_attributes);
+
+    if (this.platform.is('android')) {
+      this.diagnostic.isLocationEnabled().then(
+        (result) => {
+          if (result == true) {
+            IgnoreBatterySavingMethod.requestPermission().then(() =>
+              this.scanCodeOption(option, mdl_attributes)
+            );
+          } else {
+            this.toastMessage(
+              'Por favor ative a localização no seu dispositivo.'
+            );
+          }
+        },
+        () => {
+          this.toastMessage(
+            'Por favor ative a localização no seu dispositivo.'
+          );
+        }
+      );
+    } else {
+      this.scanCodeOption(option, mdl_attributes);
+    }
+  }
+
+  /**
+   * Abre a camara para a leitura do QR Code
+   * @param option
+   */
+  scanCodeOption(option: number, mdl_attributes): void {
+    this.barcodeScanner
+      .scan({
+        prompt:
+          'Aponte a câmara para o código QR e a Carta de Condução será lida automaticamente.', // Android
+        resultDisplayDuration: 2000, // Android, display scanned text for X ms. 0 suppresses it entirely, default 1500
+        formats: 'QR_CODE', // default: all but PDF_417 and RSS_EXPANDED
+        disableAnimations: true, // iOS
+        disableSuccessBeep: false, // iOS and Android,
+      })
+      .then(
+        (barcodeData) => {
+          if (!barcodeData.cancelled) {
+            try {
+              this.scannedData = JSON.parse(barcodeData.text);
+              const security = this.scannedData['_Security'];
+              this.publicKey = security._DeviceKeyBytes;
+
+              // verifica as opções disponíveis
+              const transferOption: number = this.scannedData[
+                '_TransferMethods'
+              ]._type;
+
+              switch (transferOption) {
+                case this.ble_option:
+                  // caso o outro dispositivo suporte BLE
+                  this.bleTreatment(option, mdl_attributes);
+                  break;
+                default:
+                  // caso o outro dispositivo não suporte BLE
+                  this.toastMessage(
+                    'A aplicação não suporta este modo de comunicação.'
+                  );
+                  break;
+              }
+            } catch {
+              this.toastMessage('Ocorreu um problema na leitura do QRCode.');
+            }
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  }
+
+  /**
+   * Tratamento necessário para o estabelecimento da
+   * conexão bluetooth
+   * @memberof HomePage
+   */
+  bleTreatment(option: number, mdl_attributes): void {
+    // caso o outro dispositivo suporte modo periférico
+    if (this.scannedData['_TransferMethods']._TransferOption._perifMode) {
+      // reader atua a modo central
+      const puuid = this.scannedData['_TransferMethods']._TransferOption
+        ._pmuuid;
+      const cuuid = this.scannedData['_TransferMethods']._TransferOption
+        ._cmuuid;
+      this.centralMode(puuid, cuuid, option, mdl_attributes);
+    } else {
+      // reader atua a modo periférico
+      // ...
+    }
+  }
+
+  /**
+   * Ativação do modo central e procede-se para a comunicação BLE
+   * @param {*} cuuid // id do outro dispositivo (que está em modo periférico)
+   * @memberof HomePage
+   */
+  centralMode(puuid, cuuid, option: number, mdl_attributes): void {
+    if (this.platform.is('android')) {
+      this.ble.enable().then(
+        (success) => {
+          this.bleTransfer(success, puuid, cuuid, option, mdl_attributes);
+        },
+        () => {
+          // enable automatico
+          console.log('Bluetooth não está ligado\n');
+        }
+      );
+    } else if (this.platform.is('ios')) {
+      this.ble.isEnabled().then(
+        (enabled) => {
+          this.bleTransfer(
+            'scanning on ios',
+            puuid,
+            cuuid,
+            option,
+            mdl_attributes
+          );
+        },
+        (disabled) => {
+          this.toastMessage('Bluetooth desligado.');
+        }
+      );
+    }
+  }
+
+  /**
+   * Verfica se há conexão à internet
+   * @memberof HomePage
+   */
+  isConnected(): boolean {
+    const conntype = this.net.type;
+    return conntype && conntype !== 'unknown' && conntype !== 'none';
+  }
+
+  /**
+   * Criação da toast message a ser apresentada no dispositivo
+   * @param {*} message
+   * @memberof HomePage
+   */
+  toastMessage(message: string): void {
+    this.toastCtrl
+      .create({
+        message: message,
+        duration: 8000,
+        position: 'top',
+      })
+      .then((toastr) => {
+        toastr.present();
+      });
+  }
+
+
+  /**
+   * Subscrição no dispositivo selecionado
+   * e navegação para a página de loading (ble-transfer)
+   * @memberof HomePage
+   */
+  bleTransfer(status, puuid, cuuid, option: number, mdl_attributes): void {
+    navigator.geolocation.getCurrentPosition(
+      () => ({}),
+      () => ({})
+    );
+    this.ble.scan([puuid], 5).subscribe(
+      (device) => {
+        this.deviceID = device.id;
+        clearTimeout(this.timer);
+        const data_name = option == 1? 'senha' : 'identificação';
+        this.ngZone.run(() => {
+          this.navCtrl.navigateRoot([
+            '/reader-ble-transfer',
+            {
+              id: device.id,
+              puuid: puuid,
+              public_key: JSON.stringify(this.publicKey),
+              option: JSON.stringify(option),
+              attributes: JSON.stringify(mdl_attributes),
+              device_engagement_structure: JSON.stringify(this.scannedData),
+              data_name: data_name
+            },
+          ]);
+        });
+      },
+      () => {
+        this.toastMessage(
+          'Erro na conexão com o outro dispositivo\nPor favor tente novamente.'
+        );
+      },
+      () => console.log('Scan complete')
+    );
+
+    this.timer = setTimeout(() => {
+      if (this.deviceID == '') {
+        this.ble.stopScan();
+        if (this.platform.is('android')) {
+          this.bluetoothle.disable();
+        }
+
+        this.toastMessage(
+          'Erro na conexão com o outro dispositivo\nPor favor tente novamente.'
+        );
+        this.navCtrl.navigateRoot(['/home']);
+      }
+    }, 5000);
+  }
+
 
   nextPage(_event){
     console.log(_event);
@@ -236,7 +389,14 @@ export class HomePage {
     if(ev.args){
       this.navCtrl.navigateRoot([ev.url, ev.args]);
     }
-    else this.navCtrl.navigateRoot([ev.url]);
+    else {
+      if (ev.url == 'scanCode(0)') {
+        this.scanCode(0)
+      } else if (ev.url == 'scanCode(1)') {
+        this.scanCode(1)
+      }
+      else this.navCtrl.navigateRoot([ev.url]);
+    }
   }
 
   goBack(_event) {

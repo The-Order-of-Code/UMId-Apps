@@ -17,6 +17,7 @@ export class FooterTabComponent implements OnInit {
   @Input() show_pay:any;
 
   @Output() eventEmitter = new EventEmitter();
+  @Output() confirmEventEmitter = new EventEmitter();
   constructor(public navCtrl: NavController) {}
 
   ngOnInit() {
@@ -55,6 +56,10 @@ export class FooterTabComponent implements OnInit {
     else{
       // acao para mbway
     }
+  }
+
+  confirmReservation(){
+    this.confirmEventEmitter.emit('confirm');
   }
 
 }

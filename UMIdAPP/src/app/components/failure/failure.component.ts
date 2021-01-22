@@ -15,10 +15,9 @@ export class FailureComponent {
 
   constructor(public navCtrl: NavController){}
   ngOnInit(){
-    console.log(this.icon_name);
   }
 
   goBack(): void {
-    this.navCtrl.navigateRoot(['/home',{user_info: 1}])
+    this.goback.emit('back');  
   }
 }

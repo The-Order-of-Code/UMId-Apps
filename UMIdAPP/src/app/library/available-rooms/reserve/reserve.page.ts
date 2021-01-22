@@ -22,7 +22,7 @@ export class ReservePage implements OnInit {
   finish_time;
   date_reservation;
   avaible_room;
-
+  room_id: string;
   minTime = '08:00';
   maxTime = '22:00';
   hourValues = ['08','09','10','11','12','13','14','15','16','17','18','19','20','21','22'];
@@ -38,6 +38,7 @@ export class ReservePage implements OnInit {
       (paramMap) => {
         this.room_name = "Sala " + paramMap.get('number_room');
         this.avaible_room = paramMap.get('available')
+        this.room_id =  paramMap.get('room_id');
         this.date = this.updateDate(paramMap.get('available'));
       }
     );
@@ -54,7 +55,7 @@ export class ReservePage implements OnInit {
     let check = this.checkChoice(this.date_reservation, this.avaible_room, this.start_time, this.finish_time);
     if (check) {
       console.log('ok');
-      this.router.navigate(['/library/available-rooms/reserve-finish', { name: this.room_name, available: this.avaible_room, start: this.start_time, end: this.finish_time}]);
+      this.router.navigate(['/library/available-rooms/reserve-finish', { name: this.room_name, room_id: this.room_id, available: this.avaible_room, start: this.start_time, end: this.finish_time}]);
     }
     else console.log('fail');
   }

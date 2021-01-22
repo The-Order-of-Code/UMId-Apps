@@ -3,7 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 //essa biblioteca ajuda a trabalhar com datas e time 
 import * as moment from 'moment';
-
+import { LibraryService } from '../../../../services/library.service'
+import * as SecureStorage from '../../../../common/general/secureStorage.js';
 @Component({
   selector: 'app-reserve-finish',
   templateUrl: './reserve-finish.page.html',
@@ -12,10 +13,9 @@ import * as moment from 'moment';
 export class ReserveFinishPage implements OnInit {
   room_name: string;
   date: any;
-
   // nome da página (Cantina, Biblioteca, etc.)
   view_name: string;
-
+  room_id: number;
 
   // adicionar botao voltar para trás true -> sim, false -> nao (depende da vista)
   has_back_button: boolean;
@@ -25,39 +25,47 @@ export class ReserveFinishPage implements OnInit {
   operation_name: string;
   prod_name: string;
   card_type: string;
-  quantity: number;
+  quantity: number = 0;
   show_counter: boolean;
-  dataLoaded: boolean;
+  dataLoaded: boolean = false;
+  reservationDone: boolean = false;
   start: string;
   end: string;
+  currentDate: Date;
+  success_quote: string;
+  icon_name: string;
+  success: boolean;
+  failure_quote: string;
+  failure: boolean;
 
   constructor(
     private activateRoute: ActivatedRoute,
     private router: Router,
-    public alertController: AlertController) { }
+    private libService: LibraryService,
+    public alertController: AlertController
+    ) { }
 
   ngOnInit() {
 
     this.activateRoute.paramMap.subscribe(
       (paramMap) => {
-        this.room_name = "Sala " + paramMap.get('name');
+        this.room_name = paramMap.get('name');
+        this.room_id = JSON.parse(paramMap.get('room_id'));
+        console.log(this.room_id);
         this.date = this.updateDate(paramMap.get('available'));
         this.start = paramMap.get('start');
         this.end = paramMap.get('end');
       }
     );
 
-    
-
     this.view_name = 'Reservar';
     this.has_back_button = true;
     this.show_counter = true;
-    this.quantity = 2; 
     this.card_type = "slots_reservas"; 
     this.prod_name = "slots";
     this.operation_name = "adicionados";
-
     const startTime = new Date(this.start);
+    this.currentDate = startTime;
     const endTime = new Date(this.end);
     const totalSlots = this.getNumberSlot(startTime,endTime,30);
 
@@ -66,16 +74,98 @@ export class ReserveFinishPage implements OnInit {
 
     for (let index = 0; index < totalSlots-1; index++) {
       if (index == 0){
-        this.items.push({start:`${begin.getHours()}:${begin.getMinutes()}h`, end:`${end.getHours()}:${end.getMinutes()}h`})
+        this.items.push({start:`${String(begin.getHours()).padStart(2, "0")}:${String(begin.getMinutes()).padStart(2, "0")}h`, end:`${String(end.getHours()).padStart(2, "0")}:${String(end.getMinutes()).padStart(2, "0")}h`, added: false})
       }
       begin = end;
       end = moment(begin).add(30, 'm').toDate();
-      this.items.push({start:`${begin.getHours()}:${begin.getMinutes()}h`, end:`${end.getHours()}:${end.getMinutes()}h`})
-      
+      this.items.push({start:`${String(begin.getHours()).padStart(2, "0")}:${String(begin.getMinutes()).padStart(2, "0")}h`, end:`${String(end.getHours()).padStart(2, "0")}:${String(end.getMinutes()).padStart(2, "0")}h`, added: false})    
     }
 
     this.dataLoaded = true;
 
+  }
+
+  addSlots(event){
+    this.quantity +=1;
+  }
+
+  removeSlots(event){
+    this.quantity -=1;
+  }
+
+  confirmReservation(event){
+    const ss = SecureStorage.instantiateSecureStorage();
+    SecureStorage.get('dataAuth', ss).then(
+      dataUser=> {
+        const data = JSON.parse(dataUser);
+        const consecutiveDates = this.checkConsecutiveDates(this.items.filter(x => { return x['added'] == true }));
+        console.log(consecutiveDates)
+        if(consecutiveDates){
+          const beginTimeList = consecutiveDates.begin_time.split(':');
+          const beginDate = this.currentDate;
+          beginDate.setHours(beginTimeList[0]);
+          beginDate.setMinutes(beginTimeList[1])
+          const beginTime = beginDate.toISOString();
+          const endTimeList = consecutiveDates.end_time.split(':');
+          const endDate = this.currentDate;
+          beginDate.setHours(endTimeList[0]);
+          beginDate.setMinutes(endTimeList[1]);
+          const endTime = endDate.toISOString();
+          const payload = {
+            start: beginTime, 
+            end: endTime, 
+            user: data.username,
+            room: this.room_id
+          }
+          console.log(payload);
+          this.libService.makeReservation(
+            data.username,
+            data.password,
+            payload
+          ).then(
+            (response) => {
+              this.reservationDone = true;
+              this.show_counter = false;
+              if(response.status == 200) {
+                console.log("A sua reserva foi bem sucedida!");
+                this.success_quote = 'A sua reserva foi efetuada com sucesso';
+                this.success = true;
+                this.icon_name='library';
+              }
+            },
+            (error) => {
+              console.log(error)
+              this.show_counter = false;
+              this.reservationDone = true;
+              if(error.status == 500) {
+                this.failure_quote = 'Erro na conexão ao servidor';
+                this.failure = true;
+                this.icon_name='library';
+                console.log("Erro na conexão ao servidor");
+              }
+              else {
+                this.failure_quote = 'Erro no processo de reserva';
+                this.failure = true;
+                this.icon_name='library';
+              }
+            }
+          )
+        }
+
+      }
+    );
+  }
+
+  checkConsecutiveDates(items){
+    let consecutive = true
+    let beginTime = items[0].start;
+    for(let i = 1; i<items.length && consecutive; i++){
+      if(items[i-1].end != items[i].begin){
+        consecutive = false
+      }
+    }
+    let endTime = items[items.length-1].end;
+    return { consecutive: consecutive, begin_time: beginTime.slice(0, -1), end_time: endTime.slice(0, -1) };
   }
 
   /**
@@ -95,7 +185,7 @@ export class ReserveFinishPage implements OnInit {
   }
 
   goBack(_event) {
-    this.router.navigate(['/library/available-rooms/reserve', { userType: 'STUDENT' }]);
+    this.router.navigate(['/library/available-rooms', { userType: 'STUDENT' }]);
   }
 
 

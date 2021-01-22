@@ -99,6 +99,7 @@ export class LoginPage implements OnInit {
                       SecureStorage.set('mso', JSON.stringify(card_info_data.mso),ss),
                       SecureStorage.set('tickets', JSON.stringify(card_info_data.tickets),ss),
                       SecureStorage.set('reservations', JSON.stringify(card_info_data.reservations),ss),
+                      SecureStorage.set('dataAuth', JSON.stringify({username: form.value['username'], password: form.value['password']}),ss),
                       SecureStorage.set('userCertificate', card_info_data.userCertificate,ss)]).then(
                       () => {
                         this.is_submitting = false;

@@ -40,5 +40,10 @@ export class LibraryService {
     return this.http.delete(consts.reservations+id,{},{})
   }
 
+  makeReservation(username,password,reservation){
+    this.setCredentials(username, password);
+    return this.http.post(consts.reservations,reservation,{});
+  }
+
 
 }

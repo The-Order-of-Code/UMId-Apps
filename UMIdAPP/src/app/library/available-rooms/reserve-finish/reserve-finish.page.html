@@ -9,7 +9,7 @@
 
 <ion-content>
   
-  <ion-card>
+  <ion-card *ngIf='!reservationDone'>
     <ion-item lines="none" color="light">
       <ion-icon name="calendar-outline" size="large" class="reservation_card" color="medium"></ion-icon>
       <ion-label style="margin-bottom: 0px;">
@@ -22,12 +22,28 @@
   </ion-card>
 
   <div *ngIf='dataLoaded'>
-    <app-cards
+    <app-cards *ngIf='!reservationDone'
       [card_type]=card_type
       [items]=items
+      (addSlotsEventEmitter)="addSlots($event)"
+      (removeSlotsEventEmitter)="removeSlots($event)"
       (nextPageEventEmitter)="nextPage($event)"
       (eventEmitter)="goBack($event)">
       </app-cards>
+
+    <app-success
+      *ngIf="success"
+      [icon_name]="icon_name"
+      [success_quote]="success_quote"
+      (goback)="goBack($event)"
+    ></app-success>
+
+    <app-failure
+      *ngIf="failure"
+      [icon_name]="icon_name"
+      [failure_quote]="failure_quote"
+      (goback)="goBack($event)"
+    ></app-failure>
   </div>
 </ion-content>
 
@@ -36,6 +52,7 @@
 [quantity]=quantity 
 [segment]=segment 
 [prod_name]=prod_name
-[operation_name]=operation_name 
+[operation_name]=operation_name
+(confirmEventEmitter)="confirmReservation($event)" 
 (eventEmitter)="goBack($event)">
 </app-footer-tab>

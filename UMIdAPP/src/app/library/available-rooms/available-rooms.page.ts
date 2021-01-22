@@ -63,7 +63,7 @@ export class AvailableRoomsPage implements OnInit {
           for await (const element of roomsJSON) {
             let available = await this.availableRoom(user.username, user.password, element['id']);
             console.log( 'id',element['id'] );
-            this.items.push({ name: "reserva", icon_name: 'calendario', room_name: "Sala " + element['number'], date: available.toISOString(), capacity: "Capacidade: " + element['capacity'], url: '/library/available-rooms/reserve', args: { id: element['id'], number_room:element['number'], available: available.toISOString()} });
+            this.items.push({ name: "reserva", icon_name: 'calendario', room_name: "Sala " + element['number'], date: available.toISOString(), capacity: "Capacidade: " + element['capacity'], url: '/library/available-rooms/reserve', args: { id: element['id'], number_room:element['number'], room_id: JSON.stringify(element['id']), available: available.toISOString()} });
           } 
             this.dataLoaded = true;
         }

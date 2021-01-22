@@ -16,7 +16,8 @@ export class CardsComponent implements OnInit {
   @Output() eventEmitter = new EventEmitter();
   @Output() nextPageEventEmitter = new EventEmitter();
   @Output() requestTicketsEmitter = new EventEmitter();
-  
+  @Output() addSlotsEventEmitter = new EventEmitter();
+  @Output() removeSlotsEventEmitter = new EventEmitter();
   @Output() sendTypeEmitter = new EventEmitter();
 
   width: number;
@@ -140,6 +141,16 @@ sendType(event,item){
       this.nextPageEventEmitter.emit(JSON.stringify({ url: item.url, args: item.args }));
     }
     else this.nextPageEventEmitter.emit(JSON.stringify({ url: item.url }));
+  }
+
+  addSlots(ev, item){
+    item.added = true;
+    this.addSlotsEventEmitter.emit('update');
+  }
+
+  removeSlots(ev, item){
+    item.added = false;
+    this.removeSlotsEventEmitter.emit('update');
   }
 
   goBack() {

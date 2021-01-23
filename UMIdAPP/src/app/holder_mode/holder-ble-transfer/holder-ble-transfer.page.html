@@ -8,7 +8,7 @@
 </ion-header>
 
 
-<ion-content>
+<ion-content *ngIf="!success">
 
   <app-qrcode 
   *ngIf="dataLoaded && !auth && !spinner && !failure && !success"
@@ -18,12 +18,7 @@
 
   <app-loading *ngIf="spinner" [icon_name]="icon_name" [message]="loading_message"></app-loading>
   
-  <app-success
-    *ngIf="success"
-    [icon_name]="icon_name"
-    [success_quote]="success_quote"
-    (goback)="goBack($event)"
-  ></app-success>
+
 
   <app-failure
     *ngIf="failure"
@@ -46,6 +41,14 @@
 
 </ion-content>
 
+<ion-content *ngIf="success" class="back">
+  <app-success
+    [icon_name]="icon_name"
+    [success_quote]="success_quote"
+    (goback)="goBack($event)"
+  ></app-success>
+</ion-content>
+
 <app-footer-tab
   [show_counter]=show_counter
   [quantity]=quantity
@@ -54,3 +57,4 @@
   [operation_name]=operation_name
   (eventEmitter)="goBack($event)"
 ></app-footer-tab>
+

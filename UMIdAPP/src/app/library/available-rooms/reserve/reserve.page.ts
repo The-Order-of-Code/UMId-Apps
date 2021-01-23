@@ -37,9 +37,12 @@ export class ReservePage implements OnInit {
     this.activateRoute.paramMap.subscribe(
       (paramMap) => {
         this.room_name = "Sala " + paramMap.get('number_room');
-        this.avaible_room = paramMap.get('available')
+        console.log(paramMap.get('available'))
+        this.avaible_room = JSON.parse(paramMap.get('available'))
+        this.filterAvailability()
+        console.log('available', this.avaible_room[0][0])
         this.room_id =  paramMap.get('room_id');
-        this.date = this.updateDate(paramMap.get('available'));
+        this.date = this.updateDate(this.avaible_room[0][0]);
       }
     );
 
@@ -55,7 +58,7 @@ export class ReservePage implements OnInit {
     let check = this.checkChoice(this.date_reservation, this.avaible_room, this.start_time, this.finish_time);
     if (check) {
       console.log('ok');
-      this.router.navigate(['/library/available-rooms/reserve-finish', { name: this.room_name, room_id: this.room_id, available: this.avaible_room, start: this.start_time, end: this.finish_time}]);
+      this.router.navigate(['/library/available-rooms/reserve-finish', { name: this.room_name, room_id: this.room_id, available: this.avaible_room[0][0], start: this.start_time, end: this.finish_time}]);
     }
     else console.log('fail');
   }
@@ -72,30 +75,49 @@ export class ReservePage implements OnInit {
    */
   checkChoice(date_reservation, avaible_room, start_time, finish_time) {
     const date = new Date(date_reservation);
-    const available = new Date(avaible_room);
+    const available = avaible_room;
+    console.log("avail_room",available)
     const start = new Date(start_time);
+    available.filter(x => new Date(x[0]).getTime() >= start.getTime());
     const end = new Date(finish_time);
+
 
     if (date_reservation === undefined || start_time === undefined || finish_time === undefined){
       this.presentAlert('Todos os campos devem ser preenchidos.');
       return false;
     }
     else {
-      if (date.getDate() < available.getDate() || date.getMonth() < available.getMonth() || date.getFullYear() < available.getFullYear()) {
-        this.presentAlert("A data escolhida é posterior a disponibilidade da sala.");
-        return false;
-      }
-      if ((start.getHours() < available.getHours()  || start.getMinutes() < available.getMinutes()) && date.getDate() === available.getDate() && available.getHours()>=8) {
-        this.presentAlert(`A sala só está disponível depois das ${available.getHours()}:${available.getMinutes()}`);
-        return false;
-      }
       if (start.getHours() > end.getHours()) {
         this.presentAlert('Sua horário final é inferior ao horário de inicio escolhido');
         return false;
       }
-      else return true;
+      else {
+        if (start.getTime() <= new Date(available[0][0]).getTime()) {
+          this.presentAlert("A data escolhida é anterior à disponibilidade da sala.");
+          return false;
+        }
+        else {
+          if(
+            start.getTime() >= new Date(available[0][0]).getTime() 
+            && start.getTime() <= new Date(available[0][1]).getTime() 
+            && end.getTime() <= new Date(available[0][1]).getTime()
+            ){
+            console.log(available)
+            return true;
+          }
+          else {
+            if(available.length > 1) this.presentAlert(`A sala só estará disponível dia ${new Date(available[1][0]).getDate()}/${String(new Date(available[1][0]).getMonth() + 1).padStart(2, "0")} a partir das ${new Date(available[1][0]).getHours()}:${String(new Date(available[1][0]).getMinutes()).padStart(2, "0")}h`);
+            else this.presentAlert("Não existem mais slots disponíveis hoje para esta sala");
+            return false;
+          }
+        }
+      }
     }
 
+  }
+
+  filterAvailability(){
+    this.avaible_room.filter(x => new Date(x[0]).getTime() >= new Date().getTime());
   }
 
   goBack(_event) {

@@ -56,7 +56,7 @@ export class CheckInPage implements OnInit {
       return JSON.parse(dataUser);
     });
 
-  
+    this.libraryService.getCheckInReservations(this.reservationsJSON);
     // Fará a geração dos cartões utilizando as reservas armazenadas do utilizador
     for await (const element of this.reservationsJSON) { 
       let begin_date = new Date(element['start'])
@@ -70,7 +70,7 @@ export class CheckInPage implements OnInit {
       console.log('Room data', room);
       console.log('Reservation data', element);
       console.log('Reservation id', element['id'])
-      this.items.push({name: "reserva", icon_name: 'calendario', id:element['id'],room_name: "Sala "+room['number'], begin_date: begin_date.toISOString() , end_date: end_date.toISOString(), check_in: false})  
+      this.items.push({name: "reserva", icon_name: 'calendario', id:element['id'],room_name: "Sala "+room['number'], begin_date: begin_date.toISOString() , end_date: end_date.toISOString(), check_in: element['check-in']})  
     };
 
       this.dataLoaded = true;

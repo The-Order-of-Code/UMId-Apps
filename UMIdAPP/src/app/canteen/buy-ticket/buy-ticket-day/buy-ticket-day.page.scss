@@ -1,5 +1,5 @@
 .bottomSearch {
-    width: 97px;
+    width: 77px;
     height: 46px;
     margin-bottom: 10px;
     margin-right: 10%;
@@ -10,6 +10,11 @@
   }
 
   .center{
-      margin-left: auto;
-      margin-right: auto;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+  }
+
+  .resize {
+    font-size: 20px;
   }

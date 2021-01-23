@@ -183,8 +183,10 @@ export class MenuComponent implements OnInit {
     const ss = SecureStorage.instantiateSecureStorage();
     SecureStorage.remove('user', ss);
     SecureStorage.remove('userCertificate', ss);
-    //SecureStorage.remove('root_cert_gnr', ss);
-    SecureStorage.remove('root_cert_psp', ss);
+    SecureStorage.remove('mso', ss),
+    SecureStorage.remove('tickets', ss),
+    SecureStorage.remove('reservations', ss),
+    SecureStorage.remove('dataAuth',ss),
     this.storage.remove('pin');
     this.storage.remove('fingerprint');
     this.router.navigate(['/instructions']);

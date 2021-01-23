@@ -7,7 +7,7 @@
   </app-header-menu>
 </ion-header>
 
-<ion-content>
+<ion-content *ngIf='!success'>
   
   <ion-card *ngIf='!reservationDone'>
     <ion-item lines="none" color="light">
@@ -31,20 +31,22 @@
       (eventEmitter)="goBack($event)">
       </app-cards>
 
-    <app-success
-      *ngIf="success"
+      <app-failure
+        *ngIf="failure && reservationDone"
+        [icon_name]="icon_name"
+        [failure_quote]="failure_quote"
+        (goback)="goBack($event)"
+      ></app-failure>
+  </div>
+</ion-content>
+
+<ion-content class="back" *ngIf='success'>
+  <app-success
+      *ngIf="reservationDone && dataLoaded"
       [icon_name]="icon_name"
       [success_quote]="success_quote"
       (goback)="goBack($event)"
     ></app-success>
-
-    <app-failure
-      *ngIf="failure"
-      [icon_name]="icon_name"
-      [failure_quote]="failure_quote"
-      (goback)="goBack($event)"
-    ></app-failure>
-  </div>
 </ion-content>
 
 <app-footer-tab 

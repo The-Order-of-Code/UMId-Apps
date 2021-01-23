@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, Platform } from '@ionic/angular';
 //essa biblioteca ajuda a trabalhar com datas e time 
 import * as moment from 'moment';
 import { LibraryService } from '../../../../services/library.service'
 import * as SecureStorage from '../../../../common/general/secureStorage.js';
+import { reservations } from 'src/common/general/constants';
 @Component({
   selector: 'app-reserve-finish',
   templateUrl: './reserve-finish.page.html',
@@ -34,14 +35,15 @@ export class ReserveFinishPage implements OnInit {
   currentDate: Date;
   success_quote: string;
   icon_name: string;
-  success: boolean;
+  success: boolean = false;
   failure_quote: string;
-  failure: boolean;
+  failure: boolean = false;
 
   constructor(
     private activateRoute: ActivatedRoute,
     private router: Router,
     private libService: LibraryService,
+    public platform: Platform,
     public alertController: AlertController
     ) { }
 
@@ -100,7 +102,7 @@ export class ReserveFinishPage implements OnInit {
         const data = JSON.parse(dataUser);
         const consecutiveDates = this.checkConsecutiveDates(this.items.filter(x => { return x['added'] == true }));
         console.log(consecutiveDates)
-        if(consecutiveDates){
+        if(consecutiveDates.consecutive){
           const beginTimeList = consecutiveDates.begin_time.split(':');
           const beginDate = this.currentDate;
           beginDate.setHours(beginTimeList[0]);
@@ -114,7 +116,6 @@ export class ReserveFinishPage implements OnInit {
           const payload = {
             start: beginTime, 
             end: endTime, 
-            user: data.username,
             room: this.room_id
           }
           console.log(payload);
@@ -123,35 +124,52 @@ export class ReserveFinishPage implements OnInit {
             data.password,
             payload
           ).then(
-            (response) => {
-              this.reservationDone = true;
-              this.show_counter = false;
-              if(response.status == 200) {
+            async (response) => {
+              if(response.status == 201){
+                this.show_counter = false;
                 console.log("A sua reserva foi bem sucedida!");
                 this.success_quote = 'A sua reserva foi efetuada com sucesso';
-                this.success = true;
                 this.icon_name='library';
+                this.success = true;
+                console.log(this.success,this.success_quote,this.icon_name);
+                await this.platform.ready();
+                const ss = await SecureStorage.instantiateSecureStorage();
+                SecureStorage.get('reservations',ss).then(
+                  (data) => {
+                    const reservations = JSON.parse(data);
+                    let newReservation = JSON.parse(response.data);
+                    newReservation['check-in'] = false;
+                    reservations.push(newReservation);
+                    SecureStorage.set('reservations',JSON.stringify(reservations),ss);
+                  }
+                );
+                this.reservationDone = true;
               }
             },
             (error) => {
               console.log(error)
               this.show_counter = false;
+              this.icon_name='library';
+              switch(error.status){
+                case 400: 
+                  if(error.error = '"Reservation time not available"') this.failure_quote = 'O horário escolhido para a reserva não se encontra disponível';
+                  else this.failure_quote = 'Erro no processo de reserva';
+                  break;
+                case 500: 
+                  this.failure_quote = 'Erro na conexão ao servidor';
+                  break;
+                default:
+                  this.failure_quote = 'Erro no processo de reserva';
+                  break;
+              }
+              this.failure = true;
               this.reservationDone = true;
-              if(error.status == 500) {
-                this.failure_quote = 'Erro na conexão ao servidor';
-                this.failure = true;
-                this.icon_name='library';
-                console.log("Erro na conexão ao servidor");
-              }
-              else {
-                this.failure_quote = 'Erro no processo de reserva';
-                this.failure = true;
-                this.icon_name='library';
-              }
             }
-          )
+          );
         }
-
+        else {
+          this.presentAlert('Por favor selecione slots contíguos');
+        }
       }
     );
   }
@@ -160,7 +178,9 @@ export class ReserveFinishPage implements OnInit {
     let consecutive = true
     let beginTime = items[0].start;
     for(let i = 1; i<items.length && consecutive; i++){
-      if(items[i-1].end != items[i].begin){
+      console.log(items[i-1].end)
+      console.log(items[i].start)
+      if(items[i-1].end != items[i].start){
         consecutive = false
       }
     }

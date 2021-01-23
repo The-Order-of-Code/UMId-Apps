@@ -35,6 +35,7 @@ export class PinAuthPage implements AfterViewInit, OnInit{
   infoAutentication: boolean;
   error: boolean;
   alteration: boolean;
+  dataLoaded: boolean = false;
 
   constructor(
     private storage: Storage,
@@ -48,6 +49,7 @@ export class PinAuthPage implements AfterViewInit, OnInit{
   
   ngOnInit(): void {
     this.activateRoute.paramMap.subscribe((paramMap) => {
+      console.log(paramMap);
       if (!paramMap.has('card_info')) {
         this.authenticated = false;
         this.verified = false;
@@ -268,9 +270,7 @@ export class PinAuthPage implements AfterViewInit, OnInit{
     if (this.myInput) this.myInput.setFocus();
   }
 
-  /**
-   * Handler caso o reader deseje autenticar-se (PSP/GNR)
-   */
+  
   authenticate() {
     this.router.navigate(['/login']);
   }

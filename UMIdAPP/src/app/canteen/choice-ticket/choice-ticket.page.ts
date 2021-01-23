@@ -78,47 +78,48 @@ export class ChoiceTicketPage implements OnInit {
 
 
 
-    if((count[0][2]===0) && (count[0][3]===0) ){
+    if((count[0][2] == 0) && (count[0][3] == 0) ){
       if (count[0][0] != 0) {
+        const ticket = {
+          "username": dataAuth['username'],
+          "type": consts.completa[this.type],
+          "date": false
+        }
         this.items.push({
-          count: count[0][0], type_ticket: "Senha completa.", descripton: "Dá-te direito ao prato principal, sopa, uma bebida e sobremesa.", url: '/holder-ble-transfer', args: {user: this.typeUser, data_name: "senha", option: 1, ticket: this.ticket = {
-              "username": dataAuth['username'],
-              "type": consts.completa[this.type],
-              "date": false
-            }
-          }
-        });
+          count: count[0][0], type_ticket: "Senha completa.", descripton: "Dá-te direito ao prato principal, sopa, uma bebida e sobremesa.", url: '/holder-ble-transfer', args: {user: JSON.stringify(ticket), data_name: "senha", mso: "", option: 1}});
       }
   
       if (count[0][1] != 0) {
+        const ticket = {
+          "username": dataAuth['username'],
+          "type": consts.simples[this.type],
+          "date": false
+        }
         this.items.push({
-          count: count[0][1], type_ticket: "Senha prato simples.", descripton: "Dá-te direito ao prato principal e uma bebida.", url: '/holder-ble-transfer',args: {user: this.typeUser, data_name: "senha", option: 1, ticket:this.ticket = {
-              "username": dataAuth['username'],
-              "type": consts.simples[this.type],
-              "date": false
-            }
-          }
-        });
+          count: count[0][1], type_ticket: "Senha prato simples.", descripton: "Dá-te direito ao prato principal e uma bebida.", url: '/holder-ble-transfer',args: {user: JSON.stringify(ticket), data_name: "senha", mso: "",option: 1 }});
       }
     }
    else {
-    let date = new Date()
-    //console.log(date.toISOString())
-    if(count[0][2]!=0){
-      this.items.push({ count: count[0][2], type_ticket: "Senha do dia prato simples.", descripton: "Dá-te direito ao prato principal, sopa, uma bebida e sobremesa.", date: 'Hoje', url: '/holder-ble-transfer', args: {user: this.typeUser, data_name: "senha", option: 1, ticket: this.ticket = {
-        "username": dataAuth['username'],
-        "type": consts.simplesP[this.type],
-        "date": true,
-        "debugdate":date.toISOString()}}});
-    }
-    if(count[0][3]!=0){
-        this.items.push({ count: count[0][3], type_ticket: "Senha do dia completa.", descripton: "Dá-te direito ao prato principal, sopa, uma bebida e sobremesa.", date: 'Hoje' , url: '/holder-ble-transfer', args: {user: this.typeUser, data_name: "senha", option: 1, ticket: this.ticket = {
+      let date = new Date()
+      if(count[0][2]!=0){
+        const ticket = {
+          "username": dataAuth['username'],
+            "type": consts.simplesP[this.type],
+            "date": true,
+            "debugdate":date.toISOString()
+        }
+        this.items.push({ count: count[0][2], type_ticket: "Senha do dia prato simples.", descripton: "Dá-te direito ao prato principal, sopa, uma bebida e sobremesa.", date: 'Hoje', url: '/holder-ble-transfer', args: {user: JSON.stringify(ticket), data_name: "senha", mso: "", option: 1}});
+      }
+      if(count[0][3]!=0){
+        const ticket = {
             "username": dataAuth['username'],
             "type": consts.completaP[this.type],
             "date": true,
-            "debugdate":date.toISOString()}}});  
+            "debugdate":date.toISOString()
+        }
+          this.items.push({ count: count[0][3], type_ticket: "Senha do dia completa.", descripton: "Dá-te direito ao prato principal, sopa, uma bebida e sobremesa.", date: 'Hoje' , url: '/holder-ble-transfer', args: {user: JSON.stringify(ticket), data_name: "senha", mso: "", option: 1}});  
+      }
     }
-}
     
     this.dataLoaded = true;
 

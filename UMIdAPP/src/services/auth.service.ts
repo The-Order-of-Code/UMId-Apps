@@ -20,15 +20,6 @@ export class AuthService {
   login(number_student: string, password: string, csr: string) {
     this.http.setServerTrustMode('default');
     this.http.useBasicAuth(number_student, password);
-    // this.http.setHeader('*', 'Access-Control-Allow-Origin', '*');
-    // this.http.setHeader(
-    //   '*',
-    //   'Access-Control-Allow-Methods',
-    //   'POST, GET, OPTIONS, PUT'
-    // );
-    // this.http.setHeader('*', 'Accept', 'application/json');
-    // this.http.setHeader('*', 'content-type', 'application/json');
-
     this.http.setDataSerializer('json');
 
     return this.http.post(

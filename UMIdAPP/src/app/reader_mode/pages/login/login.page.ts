@@ -9,6 +9,7 @@ import { Events } from '../../../../common/general/events';
 import * as ComunicationCrypto from '../../../../common/crypto/holder-mode/communicationCrypto.js';
 import * as CSR from '../../../../common/crypto/csr.js';
 import * as ReaderAuth from '../../../../common/crypto/holder-mode/readerAuth';
+import { LibraryService } from '../../../../services/library.service';
 
 @Component({
   selector: 'app-login',
@@ -33,6 +34,7 @@ export class LoginPage implements OnInit {
     public navCtrl: NavController,
     private menu: MenuController,
     private events: Events,
+    private libService: LibraryService,
     private net: Network
   ) {
    
@@ -94,6 +96,8 @@ export class LoginPage implements OnInit {
                   console.log(verified)
                   if(verified) {
                     const ss = SecureStorage.instantiateSecureStorage();
+                    this.libService.treatReservations(card_info_data.reservations);
+                    console.log(card_info_data.reservations);
                     Promise.all([
                       SecureStorage.set('user', JSON.stringify(card_info_data.user),ss),
                       SecureStorage.set('mso', JSON.stringify(card_info_data.mso),ss),

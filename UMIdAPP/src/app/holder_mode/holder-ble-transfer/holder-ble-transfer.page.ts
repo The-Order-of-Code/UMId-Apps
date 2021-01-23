@@ -81,6 +81,7 @@ import { Subscription } from 'rxjs';
 
 // XState - máquina de estados
 import { createMachine, interpret, assign } from 'xstate';
+import { TicketsService } from 'src/services/tickets.service.js';
 
 interface HolderContext {
   prepare_tries: number;
@@ -223,6 +224,7 @@ export class HolderBleTransferPage {
     private toastCtrl: ToastController,
     public loadingCtrl: LoadingController,
     private router: Router,
+    private ticketService: TicketsService,
     public navCtrl: NavController,
     private changeRef: ChangeDetectorRef,
     private activateRoute: ActivatedRoute
@@ -852,6 +854,7 @@ export class HolderBleTransferPage {
       this.spinner = false;
       this.success = true;
       this.background_color = this.success_color;
+      if(this.option == 1) this.ticketService.removeTickets(this.user_info.type)
       this.changeRef.detectChanges();
     }
   }

@@ -6,7 +6,6 @@ import { IonicModule } from '@ionic/angular';
 
 import { ReserveFinishPageRoutingModule } from './reserve-finish-routing.module';
 import { ComponentsModule } from '../../../components/components.module';
-
 import { ReserveFinishPage } from './reserve-finish.page';
 
 @NgModule({

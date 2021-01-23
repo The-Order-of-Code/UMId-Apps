@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 import { IconsComponent } from '../icons/icons.component';
 import { LibraryService } from '../../../services/library.service';
 import * as SecureStorage from '../../../common/general/secureStorage.js';
@@ -18,7 +18,8 @@ export class CardsComponent implements OnInit {
   @Output() requestTicketsEmitter = new EventEmitter();
   @Output() addSlotsEventEmitter = new EventEmitter();
   @Output() removeSlotsEventEmitter = new EventEmitter();
-  @Output() sendTypeEmitter = new EventEmitter();
+  @Output() addPromoTicketsEventEmitter = new EventEmitter();
+  @Output() removePromoTicketsEventEmitter = new EventEmitter();
 
   width: number;
   icons: string;
@@ -29,10 +30,11 @@ export class CardsComponent implements OnInit {
 
   value: number =0;
 
-  list_tickets =[];
+  normal_tickets = [];
+  simple_tickets = [];
   typeTicket: any;
   
-  constructor(public navCtrl: NavController,private libraryService: LibraryService) {
+  constructor(public navCtrl: NavController,private libraryService: LibraryService, public alertController: AlertController) {
   }
 
   ngOnInit() {
@@ -61,11 +63,6 @@ export class CardsComponent implements OnInit {
 input1(event){
   this.typeTicket = event.target.value;
   console.log('here', this.typeTicket);
-}
-
-sendType(event,item){
-  this.list_tickets.push({date:item, type:this.typeTicket})
-  this.sendTypeEmitter.emit(this.list_tickets)
 }
 
   timeNow(d) {
@@ -158,20 +155,114 @@ sendType(event,item){
   }
 
   async cancelReservation(id){
+    this.presentAlert(
+      'Cancelamento de reserva',
+      'Deseja mesmo cancelar a reserva?', 
+      [{
+        text: 'Não',
+        role: 'cancel',
+        handler: () => {
+          console.log('Cancel clicked');
+        }
+      },
+      {
+        text: 'Sim',
+        handler: () => {
+          this.navCtrl.navigateRoot(['/library',{userType: 'STUDENT'}]);
+        }
+      }]);
     const ss = SecureStorage.instantiateSecureStorage();
     // Busca as credenciais do utilizador no Secure Storage
     let dataAuth = await SecureStorage.get('dataAuth', ss).then(dataUser => {
         return JSON.parse(dataUser);
     });
     this.libraryService.deleteReservation(dataAuth['username'],dataAuth['password'],id).then(result =>{
-      if (result.status === 204){
-         console.log('Delete with sucess!')
-      }
-      else{
-        console.log('Delete fail :( ')
+      console.log("response",result);
+      console.log('Delete with sucess!')
+      SecureStorage.get('reservations', ss).then(async data => {
+         let reservations = JSON.parse(data)
+         reservations = reservations.filter(function(item) {
+           return item.id !== JSON.parse(result.data).id
+         });
+         console.log("reservations: ",reservations);
+         await SecureStorage.set('reservations', JSON.stringify(reservations),ss)
+      });
+    },
+    error => {
+      console.log(error);
+      if(error.status == 404 && error.error == '{"detail":"Not found."}'){
+        SecureStorage.get('reservations', ss).then(async data => {
+          let reservations = JSON.parse(data)
+          reservations = reservations.filter(function(item) {
+            return item.id !== id
+          });
+          console.log("reservations: ",reservations);
+          await SecureStorage.set('reservations', JSON.stringify(reservations),ss)
+          console.log('Delete fail')
+       });
       }
     });
   }
+
+  async presentAlert(subHeader, message, buttons) {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Aviso',
+      subHeader: subHeader,
+      message: message,
+      buttons: buttons
+    });
+
+    await alert.present();
+  }
+
+  updateTicketType(event,item){
+    this.typeTicket = event.target.value;
+    item.type = this.typeTicket;
+  }
+
+  addPromoTicket(event,item){
+    if(item.type!=undefined){
+      item.added = true;
+      if(item.type == 'normal') this.normal_tickets.push(item.date);
+      if(item.type == 'simples') this.simple_tickets.push(item.date);
+      this.addPromoTicketsEventEmitter.emit(
+        {
+          normal: this.normal_tickets,
+          simples: this.simple_tickets
+        }
+      );
+    }
+    else {
+      this.presentAlert("", "Por favor selecione o tipo de senha pretendido", ["OK"]);
+    }
+
+  }
+
+  removePromoTicket(event,item){
+    if(item.type != undefined) {
+      item.added = false;
+      if(item.type == 'normal') {
+        const ind = this.normal_tickets.indexOf(item.date);
+        if (ind > -1) {
+          this.normal_tickets.splice(ind, 1);
+        }
+      }
+      if(item.type == 'simples'){
+        const ind = this.simple_tickets.indexOf(item.date);
+        if (ind > -1) {
+          this.simple_tickets.splice(ind, 1);
+        }
+      } 
+      this.removePromoTicketsEventEmitter.emit(
+        {
+          normal: this.normal_tickets,
+          simples: this.simple_tickets
+        }
+      );
+    }
+  }
+
 
 
 }

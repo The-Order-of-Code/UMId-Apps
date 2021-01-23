@@ -11,7 +11,6 @@ export const room = 'http://'+ip_backend+ '/library/rooms/';
 export const free_rooms = 'http://'+ip_backend+ '/library/freeRooms/';
 export const reservations = 'http://'+ip_backend+ '/library/reservations/';
 export const free_times =  'http://'+ip_backend+ '/library/freeTimes/';
-export const makeReservation = 'http://'+ip_backend+ '/library/reservations/makeReservation/'
 export const auth_url = 'http://'+ ip_backend +'/general/all/';
 
 

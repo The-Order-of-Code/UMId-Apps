@@ -50,6 +50,8 @@ export class CheckOutPage implements OnInit {
       return JSON.parse(reservations); 
     });
 
+    this.libraryService.getCheckOutReservations(this.reservationsJSON);
+
       // Busca as credenciais do utilizador no Secure Storage
       let dataAuth = await SecureStorage.get('dataAuth', ss).then(dataUser => {
         return JSON.parse(dataUser);

@@ -16,6 +16,7 @@ import { BluetoothLE } from '@ionic-native/bluetooth-le/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Storage } from '@ionic/storage';
 import { Network } from '@ionic-native/network/ngx';
+import { Events } from '../../common/general/events';
 
 import * as SecureStorage from '../../common/general/secureStorage.js';
 import * as IgnoreBatterySavingMethod from '../../common/network/reader-mode/ble/doze_mode.js';
@@ -82,6 +83,7 @@ export class HomePage {
     private activateRoute: ActivatedRoute,
     private barcodeScanner: BarcodeScanner,
     private ble: BLE,
+    private events: Events,
     public platform: Platform,
     private diagnostic: Diagnostic,
     private toastCtrl: ToastController,
@@ -96,9 +98,10 @@ export class HomePage {
   }
   
   ngOnInit() {
+    this.events.publish('fingerprint_done', {});
     this.menu.enable(true);
     this.activateRoute.paramMap.subscribe(
-      (paramMap) => {
+      async(paramMap) => {
         if (!paramMap.has('user_info')) {
           return;
         }
@@ -106,54 +109,51 @@ export class HomePage {
           this.items = [];
           const user_info = paramMap.get('user_info');
           console.log(user_info);
-          this.platform.ready().then(
-            () => {
-              const ss = SecureStorage.instantiateSecureStorage();
-              console.log(ss)
-              Promise.all([SecureStorage.get('user',ss), SecureStorage.get('mso',ss)]).then(([result,mso])=>{
-                this.segment='home';
-                const user = JSON.parse(result);
-                console.log(user);
-                switch (user.user.userType) {
-                  case 'STUDENT':
-                    // Menu inicial estudante
-                      this.first_name = user.user.first_name;
-                      this.has_back_button = false;
-                      this.show_counter = false;
-                      this.card_type = "main menu";
-                      this.items.push({name: "Cantina", icon_name: 'cantina', url: '/canteen', args: {userType: user.user.userType}});
-                      this.items.push({name: "Reserva de salas de estudo", icon_name: 'biblioteca',url: '/library', args: {userType: user.user.userType}});
-                      this.items.push({name: "Apresentar identificação", icon_name: 'cartao', url: '/holder-ble-transfer', args: {user: result, data_name: "identificação", mso:mso, option: 0}});
-                      this.items.push({name: "Pagamentos", icon_name: 'carteira', url: '/payments'});
-                      this.items.push({name: "Ver cartão", icon_name: 'perfil', url: '/card-page', args: {user: result}});
-                      this.dataLoaded = true;
-                    break;
-                  case 'EMPLOYEE':
-                    // Menu inicial funcionário cantina
-                    this.first_name = user.user.first_name;
-                    this.has_back_button = false;
-                    this.show_counter = false;
-                    this.card_type = "main menu";
-                    this.items.push({name: "Verificar senha", icon_name: 'verificar senha', url: 'scanCode(1)'});
-                    this.items.push({name: "Verificar identificação", icon_name: 'verificar identidade', url: 'scanCode(0)'});
-                    this.items.push({name: "Cantina", icon_name: 'cantina', url: '/canteen', args: {userType: user.user.userType}});
-                    this.items.push({name: "Apresentar identificação", icon_name: 'cartao', url: '/holder-ble-transfer', args: {user: result, data_name: "identificação", mso:mso, option: 0}});
-                    this.items.push({name: "Ver cartão", icon_name: 'perfil', url: '/card-page', args: {user: result}});
-                    this.dataLoaded = true;
-                    break;
-                  default: break;
-                }
-              },
-              () => {
-                this.ngOnInit()
-              })
-              console.log(this.items);
-            })
+          await this.platform.ready();
+          const ss = await SecureStorage.instantiateSecureStorage();
+          console.log(ss)
+          Promise.all([SecureStorage.get('user',ss), SecureStorage.get('mso',ss)]).then(([result,mso])=>{
+            this.segment='home';
+            const user = JSON.parse(result);
+            console.log(user);
+            switch (user.user.userType) {
+              case 'STUDENT':
+                // Menu inicial estudante
+                  this.first_name = user.user.first_name;
+                  this.has_back_button = false;
+                  this.show_counter = false;
+                  this.card_type = "main menu";
+                  this.items.push({name: "Cantina", icon_name: 'cantina', url: '/canteen', args: {userType: user.user.userType}});
+                  this.items.push({name: "Reserva de salas de estudo", icon_name: 'biblioteca',url: '/library', args: {userType: user.user.userType}});
+                  this.items.push({name: "Apresentar identificação", icon_name: 'cartao', url: '/holder-ble-transfer', args: {user: result, data_name: "identificação", mso:mso, option: 0}});
+                  this.items.push({name: "Pagamentos", icon_name: 'carteira', url: '/payments'});
+                  this.items.push({name: "Ver cartão", icon_name: 'perfil', url: '/card-page', args: {user: result}});
+                  this.dataLoaded = true;
+                break;
+              case 'EMPLOYEE':
+                // Menu inicial funcionário cantina
+                this.first_name = user.user.first_name;
+                this.has_back_button = false;
+                this.show_counter = false;
+                this.card_type = "main menu";
+                this.items.push({name: "Verificar senha", icon_name: 'verificar senha', url: 'scanCode(1)'});
+                this.items.push({name: "Verificar identificação", icon_name: 'verificar identidade', url: 'scanCode(0)'});
+                this.items.push({name: "Cantina", icon_name: 'cantina', url: '/canteen', args: {userType: user.user.userType}});
+                this.items.push({name: "Apresentar identificação", icon_name: 'cartao', url: '/holder-ble-transfer', args: {user: result, data_name: "identificação", mso:mso, option: 0}});
+                this.items.push({name: "Ver cartão", icon_name: 'perfil', url: '/card-page', args: {user: result}});
+                this.dataLoaded = true;
+                break;
+              default: break;
+            }
+            console.log(this.items);
+          },
+          () => {
+            this.ngOnInit()
+          })
           
         }
       }
     );
-  
   }
 
 

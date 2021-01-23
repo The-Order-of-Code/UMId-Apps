@@ -62,8 +62,8 @@ export class AvailableRoomsPage implements OnInit {
 
           for await (const element of roomsJSON) {
             let available = await this.availableRoom(user.username, user.password, element['id']);
-            console.log( 'id',element['id'] );
-            this.items.push({ name: "reserva", icon_name: 'calendario', room_name: "Sala " + element['number'], date: available.toISOString(), capacity: "Capacidade: " + element['capacity'], url: '/library/available-rooms/reserve', args: { id: element['id'], number_room:element['number'], room_id: JSON.stringify(element['id']), available: available.toISOString()} });
+            console.log( 'id',available );
+            this.items.push({ name: "reserva", icon_name: 'calendario', room_name: "Sala " + element['number'], date: new Date(available[0][0]).toISOString(), capacity: "Capacidade: " + element['capacity'], url: '/library/available-rooms/reserve', args: { id: element['id'], number_room:element['number'], room_id: JSON.stringify(element['id']), available: JSON.stringify(available)} });
           } 
             this.dataLoaded = true;
         }
@@ -93,11 +93,8 @@ export class AvailableRoomsPage implements OnInit {
     const freeTime = await this.libraryService.getFreeTime(username, password, id).then(result => { return result.data });
     // console.log("Sala ",id, 'é', freeTime)
     let freeTimeAvailable = JSON.parse(freeTime)
-    const index = freeTimeAvailable.length -1
-
-  
     // console.log("Sala horario ",freeTimeAvailable);
-    var available = new Date(freeTimeAvailable[0][index]); 
+    var available = freeTimeAvailable; 
     return available
 
   }

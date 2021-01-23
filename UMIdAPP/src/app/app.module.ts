@@ -24,11 +24,12 @@ import { BluetoothLE } from '@ionic-native/bluetooth-le/ngx';
 import { BLE } from '@ionic-native/ble/ngx';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { FormsModule }    from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent, MenuComponent],
   entryComponents: [],
-  imports: [BrowserModule, NgxQRCodeModule, FormsModule, IonicStorageModule.forRoot(), IonicModule.forRoot(), AppRoutingModule],
+  imports: [BrowserModule, NgxQRCodeModule, HttpClientModule, FormsModule, IonicStorageModule.forRoot(), IonicModule.forRoot(), AppRoutingModule],
   providers: [
     StatusBar,
     HTTP,

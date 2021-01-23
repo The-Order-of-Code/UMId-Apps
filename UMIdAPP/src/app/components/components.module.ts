@@ -16,7 +16,6 @@ import {WaitingComponent} from './waiting/waiting.component';
 
 import { IconsComponent } from './icons/icons.component';
 import { IdCardComponent } from './id-card/id-card.component';
-import { QRCodeModule } from 'angularx-qrcode';
 import { IonicModule } from '@ionic/angular';
 
 

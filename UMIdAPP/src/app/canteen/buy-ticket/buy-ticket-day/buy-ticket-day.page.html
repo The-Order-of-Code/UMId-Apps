@@ -6,13 +6,13 @@
     (goback)="goBack($event)">
     </app-header-menu>
     
-      <div class="center">
+    <div class="center">
         <ion-row>
-        <ion-col>
-          <ion-datetime displayFormat="DD/MM/YYYY" mode ='md' [(ngModel)]="date_reservation" [value]="null" max="2050-12-09"  placeholder="Select Date"></ion-datetime>
+        <ion-col size="9">
+          <ion-datetime class="resize" displayFormat="DD/MM/YYYY" mode ='md' [(ngModel)]="picked_date" [value]="null" max="2050-12-09"  placeholder="Selecione uma data"></ion-datetime>
         </ion-col>
-        <ion-col>
-          <ion-button class="bottomSearch" (click)="searchDate()">
+        <ion-col size="3">
+          <ion-button class="bottomSearch" (click)="selectTicketsForDate()">
             <ion-icon name="search-sharp"></ion-icon>
           </ion-button>
         </ion-col>
@@ -30,7 +30,8 @@
       (nextPageEventEmitter)="nextPage($event)"
       (eventEmitter)="goBack($event)"
       (eventEmitter)="requestTickets($event)"
-      (sendTypeEmmitter)="sendType($event)"
+      (addPromoTicketsEventEmitter)="addPromoTicket($event)"
+      (removePromoTicketsEventEmitter)="removePromoTicket($event)"
       >
       </app-cards>
   </div> 
@@ -44,4 +45,5 @@
   [prod_name]=prod_name
   [operation_name]=operation_name
   (eventEmitter)="goBack($event)"
+  (confirmEventEmitter)="confirmReservation($event)"
 ></app-footer-tab>

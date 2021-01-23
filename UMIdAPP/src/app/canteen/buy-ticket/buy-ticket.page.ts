@@ -32,6 +32,7 @@ export class BuyTicketPage implements OnInit {
   numberSimplesTicket;
   numberCompleteTicket;
   quantity;
+  promo_tickets: any;
 
   constructor(
     private activateRoute: ActivatedRoute,
@@ -42,14 +43,23 @@ export class BuyTicketPage implements OnInit {
     private ticketsService: TicketsService) { }
 
   ngOnInit() {
-    this.view_name = "Comprar Senhas";
-    this.card_type = "buy_tickets";
-    this.has_back_button = true;
-    this.show_counter = false;
-    this.items.push({ type_ticket: "Senha completa.", descripton: "Dá-te direito ao prato principal, sopa, uma bebida e sobremesa." });
-    this.items.push({ type_ticket: "Senha prato simples.", descripton: "Dá-te direito ao prato principal e uma bebida." });
-    this.items.push({ type_ticket: "Senha do dia.", descripton: "Dá-te direito ao prato principal, sopa, uma bebida e sobremesa.", date: "24-01-2020", selected: "1 senhas adicionadas", url: '/canteen/buy-ticket/information' });
-    this.dataLoaded = true;
+    this.activateRoute.paramMap.subscribe(
+      paramMap => {
+        this.view_name = "Comprar Senhas";
+        this.card_type = "buy_tickets";
+        this.has_back_button = true;
+        this.show_counter = false;
+        this.items.push({ type_ticket: "Senha completa.", descripton: "Dá-te direito ao prato principal, sopa, uma bebida e sobremesa." });
+        this.items.push({ type_ticket: "Senha prato simples.", descripton: "Dá-te direito ao prato principal e uma bebida." });
+        if(paramMap.has('promo_tickets') && paramMap.has('quantity')) {
+          this.items.push({ type_ticket: "Senha do dia.", descripton: "Dá-te direito ao prato principal, sopa, uma bebida e sobremesa.", date: "24-01-2020", selected: paramMap.get('quantity') + " senhas adicionadas", url: '/canteen/buy-ticket/information' });
+          this.promo_tickets = JSON.parse(paramMap.get('promo_tickets'));
+          console.log(this.promo_tickets);
+        }
+        else this.items.push({ type_ticket: "Senha do dia.", descripton: "Dá-te direito ao prato principal, sopa, uma bebida e sobremesa.", date: "24-01-2020", selected: "0 senhas adicionadas", url: '/canteen/buy-ticket/information' });
+        this.dataLoaded = true;
+      }
+    )
   }
 
   goBack(_event) {
@@ -90,11 +100,7 @@ export class BuyTicketPage implements OnInit {
     let nCompleta = await this.storage.get('tickets_complete').then(result=>{
       return result;
     });
-      console.log("utilizador",dataAuth['username'])
-      console.log("numero simples",typeof(parseInt(nSimples["count"])))
-      console.log("numero complicada",nCompleta["count"])
 
-      console.log(dataAuth['username'])
       let data = { 
         "username": dataAuth['username'], 
         "tickets": [
@@ -106,16 +112,14 @@ export class BuyTicketPage implements OnInit {
               "ticketType": "Senha prato simples (estudante)",
               "amount": parseInt(nSimples["count"])
         },
-        {
-          "ticketType": "Senha prato simples promocional (estudante)",
-          "dates": [
-                "2021-01-17T01:28:31.164501Z"
-          ]}
-        ]
+        this.promo_tickets[0],
+        this.promo_tickets[1]
+      ]
   }
 
       let result =  await this.ticketsService.buyTickets(dataAuth['username'], dataAuth['password'],data).then(result=>{
-        return result.status
+        this.ticketsService.addTickets(data);
+        return result.status;
       });
 
       if (result == 200){
@@ -172,7 +176,12 @@ export class BuyTicketPage implements OnInit {
       cssClass: 'my-custom-class',
       header: 'Aviso',
       message: message,
-      buttons: ['OK']
+      buttons: [{
+        text: 'OK',
+        handler: () => {
+          this.navCtrl.navigateRoot(['/canteen',{userType: 'STUDENT'}]);
+        }
+      }]
     });
 
     await alert.present();

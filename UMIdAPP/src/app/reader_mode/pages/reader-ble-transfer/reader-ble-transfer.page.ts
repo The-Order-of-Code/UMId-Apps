@@ -920,7 +920,7 @@ export class ReaderBleTransferPage implements OnInit {
                 this.reqRespService.validateTicket(jwt).then(
                   async (data) => {
                     if (data.status == 200) {
-                      console.log('success')
+                      console.log('success');
                       this.background_color = this.success_color;
                       this.spinner = false;
                       this.success = true;

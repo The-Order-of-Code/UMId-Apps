@@ -508,7 +508,15 @@ export class ReaderBleTransferPage implements OnInit {
           paramMap.get('device_engagement_structure')
         );
         this.loading_message = 'A obter ' + paramMap.get('data_name');
-        this.title = 'Obter ' +  paramMap.get('data_name');
+        console.log('typeOf request flag: ', typeof(this.request_flag));
+        if (JSON.parse(this.request_flag) == 0) {
+          this.title = 'Verificar Identificação';
+        }
+        else {
+          this.title = 'Verificar Senha';
+        }
+        this.has_back_button = true;
+        console.log(this.title)
         this.spinner = true;
         this.state_machine.send('PARSED');
 
@@ -601,10 +609,8 @@ export class ReaderBleTransferPage implements OnInit {
         this.request = request;
         // TODO : refactor this:
         console.log('FLAG:', request_flag);
-        this.has_back_button = false;
         this.show_counter = false;
         if (request_flag == '0') {
-          this.title = 'Verificar Identificação';
           this.icon_name = 'card';
         } else if (request_flag == '1') {
           this.title = 'Verificar Senha';

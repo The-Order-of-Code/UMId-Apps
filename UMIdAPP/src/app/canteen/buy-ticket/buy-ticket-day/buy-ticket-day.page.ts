@@ -167,7 +167,6 @@ export class BuyTicketDayPage implements OnInit {
 
   confirmReservation(event){
     let normalTickets, simpleTickets;
-    console.log(this.userType);
     switch(this.userType){
       case 'STUDENT':
         simpleTickets = 'Senha prato simples promocional (estudante)';
@@ -180,13 +179,10 @@ export class BuyTicketDayPage implements OnInit {
       default: break;
     }
     let normal_promo_tickets = {}, simple_promo_tickets = {};
-    console.log(this.ticketObj);
     normal_promo_tickets["ticketType"] = normalTickets;
     normal_promo_tickets["dates"] = this.ticketObj.normal.map(x => this.transformDates(x));
-    console.log(normal_promo_tickets)
     simple_promo_tickets["ticketType"] = simpleTickets;
     simple_promo_tickets["dates"] = this.ticketObj.simples.map(x => this.transformDates(x));
-    console.log(simple_promo_tickets["dates"])
     this.router.navigate(['/canteen/buy-ticket', {promo_tickets: JSON.stringify([simple_promo_tickets,normal_promo_tickets]), quantity: JSON.stringify(this.quantity)}]);
   }
 

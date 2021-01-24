@@ -46,12 +46,21 @@ export class TicketsService {
     );
   }
 
-  async removeTickets(ticketType){
+  async removeTickets(ticketType, debugDate){
     const ss = await SecureStorage.instantiateSecureStorage();
     SecureStorage.get('tickets',ss).then(
       async tickets_str => {
         let tickets = JSON.parse(tickets_str);
-        tickets[ticketType] -=1;
+        if(ticketType == "Senha completa (estudante)"
+           || ticketType == "Senha completa"
+           || ticketType == "Senha prato simples (estudante)"
+           || ticketType == "Senha prato simples" ) tickets[ticketType] -=1;
+        else {
+          let index = tickets.promotional[ticketType].indexOf(debugDate);
+          if (index > -1) {
+            tickets.promotional[ticketType].splice(index, 1);
+          }
+        }
         await SecureStorage.set('tickets',JSON.stringify(tickets),ss);
       },
       error => {

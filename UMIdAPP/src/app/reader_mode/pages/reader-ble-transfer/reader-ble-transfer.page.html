@@ -7,16 +7,9 @@
     </app-header-menu>
 </ion-header>
 
-<ion-content *ngIf="dataLoaded">
+<ion-content *ngIf="!success && dataLoaded">
 
   <app-loading *ngIf="spinner" [icon_name]="icon_name" [message]="loading_message"></app-loading>
-  
-  <app-success
-    *ngIf="success"
-    [icon_name]="icon_name"
-    [success_quote]="success_quote"
-    (goback)="goBack($event)"
-  ></app-success>
 
   <app-failure
     *ngIf="failure"
@@ -26,6 +19,14 @@
     (goback)="goBack($event)"
   ></app-failure>
 
+</ion-content>
+
+<ion-content *ngIf="success" class="back">
+  <app-success
+    [icon_name]="icon_name"
+    [success_quote]="success_quote"
+    (goback)="goBack($event)"
+  ></app-success>
 </ion-content>
 
 <app-footer-tab

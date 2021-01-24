@@ -602,7 +602,12 @@ export class HolderBleTransferPage {
         this.option = paramMap.get('option');
         if(this.option == 0) this.icon_name = 'card';
         else this.icon_name = 'ticket';
-        this.view_name = "Apresentar " + paramMap.get('data_name');
+        if(this.option == '0'){
+          this.title = "Apresentar Identificação";
+        }
+        if(this.option == '1'){
+          this.title = "Apresentar Senha";
+        }
         this.has_back_button = true;
         this.show_counter = false;
         
@@ -854,7 +859,10 @@ export class HolderBleTransferPage {
       this.spinner = false;
       this.success = true;
       this.background_color = this.success_color;
-      if(this.option == 1) this.ticketService.removeTickets(this.user_info.type)
+      if(this.option == 1) {
+        if(this.user_info.date) this.ticketService.removeTickets(this.user_info.type, this.user_info.debugdate);
+        else this.ticketService.removeTickets(this.user_info.type, undefined);
+      }
       this.changeRef.detectChanges();
     }
   }
@@ -1105,6 +1113,7 @@ export class HolderBleTransferPage {
         this.title = 'Apresentar Identificação';
         this.success_quote =
           'Os dados da sua identificação foram partilhados com sucesso.';
+          this.loading_message = 'A transferir identificação'
         this.failure_quote =
           'Não foi possivel partilhar os dados da sua identificação.';
         this.mdl = this.user_info;
@@ -1113,6 +1122,7 @@ export class HolderBleTransferPage {
         this.icon_name = 'ticket';
         this.title = 'Apresentar Senha';
         this.success_quote = 'Senha partilhada com sucesso.';
+        this.loading_message = 'A transferir senha'
         this.failure_quote = 'Não foi possivel partilhar a sua senha.';
         break;
     }
@@ -1127,7 +1137,6 @@ export class HolderBleTransferPage {
     switch (state) {
       case 'cancel-request':
         this.icon_name = 'share_data';
-        this.title = 'Partilhar dados da carta';
         this.failure_quote =
           'Não selecionou a opção necessária para o respetivo pedido.';
         this.failure = true;
@@ -1140,7 +1149,7 @@ export class HolderBleTransferPage {
         this.qr = false;
         this.auth = true;
         this.background_color = this.auth_color;
-        this.view_name = "Autorizar";
+        this.title = "Autorizar";
         this.has_back_button = true;
         this.info = "O leitor solicitou isso:";
         this.sub_info = "você autoriza?"
@@ -1150,7 +1159,6 @@ export class HolderBleTransferPage {
         this.auth = false;
         this.spinner = true;
         this.background_color = this.default_color;
-        this.loading_message = 'A transferir dados'
         break;
       case 'invalid-request':
         this.index = -1;

@@ -51,9 +51,7 @@ export class LoginPage implements OnInit {
           this.navCtrl.navigateRoot(['/home', { user_info: 1 }]);
         }
       },
-      () => {
-        SecureStorage.clear(ss);
-      }
+      () => {}
     );
   }
 
@@ -125,7 +123,7 @@ export class LoginPage implements OnInit {
             }
           },
           (err) => {
-            console.error('There was an error!', err);
+            console.log('There was an error!', err);
             if (!this.isConnected()) {
               this.is_submitting = false;
               this.fail_flag = true;
@@ -133,6 +131,14 @@ export class LoginPage implements OnInit {
               this.changeRef.detectChanges();
             }
             if (err.status == 400) {
+              this.ngZone.run(() => {
+                this.is_submitting = false;
+                this.fail_flag = true;
+                this.message = 'Dados Inválidos.';
+                this.changeRef.detectChanges();
+              });
+            }
+            if (err.status == 403) {
               this.ngZone.run(() => {
                 this.is_submitting = false;
                 this.fail_flag = true;

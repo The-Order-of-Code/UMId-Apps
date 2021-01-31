@@ -65,9 +65,11 @@ export class SplashPage implements OnInit {
             }
           }, erro => {
             this.navCtrl.navigateRoot(['/instructions']);
-          });
-
-
+          }).catch(
+            erro => {
+              this.navCtrl.navigateRoot(['/instructions']);
+            }
+          )
       }, 3000);
       
     });

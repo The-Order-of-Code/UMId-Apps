@@ -252,7 +252,7 @@ export class PinAuthPage implements AfterViewInit, OnInit{
 
   ngAfterViewInit(): void {
     setTimeout(() => {
-      this.myInput.setFocus();
+      this.setFocus();
     }, 250);
   }
 

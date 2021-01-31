@@ -8,7 +8,6 @@ export function instantiateSecureStorage() {
       },
       function (error) {
         console.log('Error ' + error);
-        instantiateSecureStorage();
       },
       'cardStudent'
     );

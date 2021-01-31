@@ -28,15 +28,10 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      const ss = SecureStorage.instantiateSecureStorage();
-      SecureStorage.get('user', ss).then( 
-        () => {
-          this.displayMode.toggleDisplayMode();
-          this.statusBar.styleDefault();
-          this.splashScreen.hide();
-        }
-        );
-      });
+      this.displayMode.toggleDisplayMode();
+      this.statusBar.styleDefault();
+      this.splashScreen.hide();
+    });
   }
 
   translate(type){

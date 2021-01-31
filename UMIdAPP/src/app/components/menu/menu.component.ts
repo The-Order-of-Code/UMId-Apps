@@ -89,7 +89,8 @@ export class MenuComponent implements OnInit {
                   this.userType=this.translate(user.userType);
                   this.photo = 'data:image/jpeg;base64,' + user.picture;
                   this.dataLoaded = true;
-                }
+                },
+                () => {}
               );
             },
             () =>{
@@ -98,12 +99,12 @@ export class MenuComponent implements OnInit {
                 (card) => {
                   const user = JSON.parse(card).user;
                   this.user_t = user.userType;
-                  
                   this.name=user.fullName;
                   this.userType=this.translate(user.userType);
                   this.photo = 'data:image/jpeg;base64,' + user.picture;
                   this.dataLoaded = true;
-                }
+                },
+                () => {}
               );
             }    
           );
@@ -183,10 +184,10 @@ export class MenuComponent implements OnInit {
     const ss = SecureStorage.instantiateSecureStorage();
     SecureStorage.remove('user', ss);
     SecureStorage.remove('userCertificate', ss);
-    SecureStorage.remove('mso', ss),
-    SecureStorage.remove('tickets', ss),
-    SecureStorage.remove('reservations', ss),
-    SecureStorage.remove('dataAuth',ss),
+    SecureStorage.remove('mso', ss);
+    SecureStorage.remove('tickets', ss);
+    SecureStorage.remove('reservations', ss);
+    SecureStorage.remove('dataAuth',ss);
     this.storage.remove('pin');
     this.storage.remove('fingerprint');
     this.router.navigate(['/instructions']);
